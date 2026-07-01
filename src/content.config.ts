@@ -48,4 +48,29 @@ const projects = defineCollection({
     }),
 });
 
-export const collections = { fsae, projects };
+/**
+ * Photography — one markdown entry per frame. `image` stays optional so the
+ * gallery renders on-brand placeholders until real photos (co-located, then
+ * referenced via `image: ./frame.jpg`) are dropped in and optimized by
+ * astro:assets.
+ */
+const photography = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/photography' }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      date: z.coerce.date(),
+      location: z.string().optional(),
+      camera: z.string().optional(),
+      lens: z.string().optional(),
+      /** e.g. "35mm · f/1.8 · 1/500s · ISO 200" */
+      settings: z.string().optional(),
+      /** e.g. "44.97°N 93.23°W" */
+      coords: z.string().optional(),
+      image: image().optional(),
+      ratio: z.enum(['1/1', '4/3', '3/4', '3/2', '2/3', '16/9']).default('3/2'),
+      order: z.number().default(99),
+    }),
+});
+
+export const collections = { fsae, projects, photography };
