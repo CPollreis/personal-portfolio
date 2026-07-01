@@ -19,7 +19,9 @@
   --color-line-soft: #1c1c1f;
   --color-ink: #fafafa;
   --color-muted: #a1a1aa;
-  --color-faint: #52525b;
+  /* Bumped from #52525b for AA-adjacent legibility on the OLED base while
+     preserving the dim "instrument label" tier below --color-muted. */
+  --color-faint: #71717a;
 
   /* Accent triad (blue → cyan → indigo). Use sparingly (<10% of a surface). */
   --color-accent: #2563eb;

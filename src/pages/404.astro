@@ -1,0 +1,26 @@
+---
+import Base from '../layouts/Base.astro';
+import Reticle from '../components/hud/Reticle.astro';
+import Button from '../components/ui/Button.astro';
+import CoordinateAxis from '../components/hud/CoordinateAxis.astro';
+---
+
+<Base title="404 — Signal lost" noindex>
+  <section class="relative flex min-h-[calc(100dvh-4rem)] flex-col items-center justify-center overflow-hidden text-center">
+    <div class="container-hud flex flex-col items-center">
+      <Reticle size={140} color="var(--color-indigo)" />
+      <p class="hud-label mt-8 text-accent">ERR · 404</p>
+      <h1 class="mt-4 font-display text-6xl font-semibold md:text-8xl">Signal lost</h1>
+      <p class="mt-5 max-w-md text-lg text-muted">
+        No telemetry at these coordinates. The page you're looking for isn't on the map.
+      </p>
+      <div class="mt-9 flex flex-wrap justify-center gap-3">
+        <Button href="/">Return home</Button>
+        <Button href="/projects" variant="ghost">Browse projects</Button>
+      </div>
+      <div class="mt-16 w-full max-w-md">
+        <CoordinateAxis startLabel="404" endLabel="NO FIX" />
+      </div>
+    </div>
+  </section>
+</Base>
