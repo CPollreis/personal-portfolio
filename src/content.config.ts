@@ -34,6 +34,8 @@ const projects = defineCollection({
       stack: z.array(z.string()).default([]),
       summary: z.string(),
       cover: image().optional(),
+      /** Optional demo video (YouTube/Vimeo) shown as the lead media. */
+      video: z.url().optional(),
       links: z
         .object({
           repo: z.url().optional(),

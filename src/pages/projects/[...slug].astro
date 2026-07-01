@@ -1,0 +1,90 @@
+---
+import { getCollection, render } from 'astro:content';
+import { Image } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import Button from '../../components/ui/Button.astro';
+import VideoEmbed from '../../components/content/VideoEmbed.astro';
+import Placeholder from '../../components/media/Placeholder.astro';
+import CoordinateAxis from '../../components/hud/CoordinateAxis.astro';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects', ({ data }) => !data.draft);
+  return projects.map((project) => ({ params: { slug: project.id }, props: { project } }));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+const { title, kind, stack, summary, links, cover, video, date } = project.data;
+const dateStr = date.toISOString().slice(0, 7);
+---
+
+<Base title={title} description={summary}>
+  <article class="pb-24">
+    <header class="relative border-b border-line py-14 md:py-20">
+      <div class="container-hud max-w-3xl">
+        <a href="/projects" class="link-hud mb-8 inline-block font-mono text-xs uppercase tracking-widest text-muted hover:text-ink">
+          ← Projects
+        </a>
+        <div class="mb-5 flex flex-wrap items-center gap-3">
+          <span class="hud-label text-accent">{kind}</span>
+          <span class="h-2.5 w-px bg-line"></span>
+          <span class="hud-label tabular">{dateStr}</span>
+        </div>
+        <h1 class="font-display text-4xl font-semibold leading-tight md:text-5xl">{title}</h1>
+        <p class="mt-5 text-lg text-muted">{summary}</p>
+
+        <div class="mt-6 flex flex-wrap gap-1.5">
+          {
+            stack.map((s) => (
+              <span class="border border-line px-2 py-0.5 font-mono text-[0.65rem] uppercase tracking-wider text-muted">
+                {s}
+              </span>
+            ))
+          }
+        </div>
+
+        {
+          (links.repo || links.demo) && (
+            <div class="mt-8 flex flex-wrap gap-3">
+              {links.repo && (
+                <Button href={links.repo} external>
+                  Source
+                </Button>
+              )}
+              {links.demo && (
+                <Button href={links.demo} variant="ghost" external>
+                  Live demo
+                </Button>
+              )}
+            </div>
+          )
+        }
+      </div>
+    </header>
+
+    <div class="container-hud max-w-3xl">
+      <div class="mt-10">
+        {
+          video ? (
+            <VideoEmbed url={video} title={title} />
+          ) : cover ? (
+            <Image src={cover} alt={title} widths={[600, 1000, 1600]} sizes="(min-width: 768px) 768px, 100vw" class="w-full border border-line object-cover" />
+          ) : (
+            <Placeholder ratio="16/9" label={`${kind} · FIG.LEAD`} seed={2} />
+          )
+        }
+      </div>
+
+      <div class="prose-hud mt-12">
+        <Content />
+      </div>
+
+      <div class="mt-16">
+        <CoordinateAxis startLabel="EOF" endLabel="↑ TOP" />
+        <a href="/projects" class="link-hud mt-8 inline-block font-mono text-xs uppercase tracking-widest text-muted hover:text-ink">
+          ← Back to all projects
+        </a>
+      </div>
+    </div>
+  </article>
+</Base>

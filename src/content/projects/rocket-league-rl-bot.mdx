@@ -1,0 +1,42 @@
+---
+title: Rocket League RL Bot
+date: 2024-12-05
+kind: Reinforcement Learning
+stack: [Python, PyTorch, RLGym, PPO]
+summary: A Rocket League agent trained from scratch with deep reinforcement learning — millions of self-play steps, reward shaping, and PPO — that learned to hit the ball on purpose.
+order: 3
+featured: true
+links:
+  repo: https://github.com/
+draft: false
+---
+
+import Gallery from '../../components/content/Gallery.astro';
+
+Reinforcement learning is one of those topics that only clicks when you watch an
+agent go from flailing to competent. So I trained a Rocket League bot with **PPO**
+using **RLGym**, entirely through self-play.
+
+## The setup
+
+- **Environment:** RLGym exposes the game as a Gym-style RL environment — car
+  and ball state in, controller actions out.
+- **Algorithm:** Proximal Policy Optimization in PyTorch, running many parallel
+  instances to collect experience quickly.
+- **Observation & action:** a normalized physical state (positions, velocities,
+  orientations) mapped to continuous throttle/steer/boost/jump actions.
+
+<Gallery labels={['TRAIN · REWARD CURVE', 'AGENT · FIRST GOALS', 'EVAL · VS BOT']} cols={3} />
+
+## Reward shaping is the whole game
+
+Left with only "score a goal," the agent almost never stumbles into reward. The
+real work was designing a reward that guides without dictating: small bonuses
+for moving toward the ball, touching it, and sending it toward the opponent's
+net — then annealing those away so the final policy optimizes for what actually
+matters.
+
+Watching the reward curve climb as the bot discovered ball-chasing, then
+aerials, then actual shots, was the most satisfying feedback loop I've built. It
+also gave me a real, hands-on feel for how sensitive RL is to reward design and
+hyperparameters — lessons that carry straight back to controls work on the car.

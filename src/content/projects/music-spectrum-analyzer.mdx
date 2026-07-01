@@ -1,0 +1,43 @@
+---
+title: Music Spectrum Analyzer
+date: 2025-02-10
+kind: Audio · DSP
+stack: [C++, JUCE, FFT, OpenGL]
+summary: A real-time audio spectrum analyzer that turns live sound into a responsive frequency visualization — FFT on the audio thread, GPU rendering on the paint thread.
+order: 1
+featured: true
+links:
+  repo: https://github.com/
+draft: false
+---
+
+import Gallery from '../../components/content/Gallery.astro';
+
+I wanted to actually *see* music, so I built a real-time spectrum analyzer that
+takes a live audio stream and renders its frequency content as a smooth,
+reactive visualization.
+
+## Signal path
+
+The core is a classic short-time Fourier transform, but the interesting part is
+keeping it glitch-free in real time:
+
+- Audio arrives in small buffers on a high-priority callback — no allocations,
+  no locks on that thread.
+- Each block is windowed (Hann) and run through an FFT to get magnitude per
+  frequency bin.
+- Bins are mapped to a log-frequency scale so bass and treble get perceptually
+  fair space, then smoothed over time so the display moves musically instead of
+  flickering.
+
+<Gallery labels={['UI · LIVE SPECTRUM', 'DEBUG · FFT BINS', 'SETTINGS · SCALE']} cols={3} />
+
+## Making it feel good
+
+A technically-correct analyzer can still look bad. Two tweaks did most of the
+work: an asymmetric attack/decay envelope on each band (fast rise, slow fall,
+like a real VU meter) and a subtle peak-hold line. Rendering runs on the GPU so
+the visualization stays at display refresh even with a fine bin resolution.
+
+It started as a DSP learning project and turned into the thing I leave running
+on a second monitor while I work.

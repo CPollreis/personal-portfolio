@@ -1,0 +1,44 @@
+---
+title: BMS Local Agent
+date: 2025-04-22
+kind: Tooling · Local LLM
+stack: [Python, Ollama, CAN, SQLite]
+summary: An offline AI agent that ingests battery-management telemetry and lets you ask plain-English questions about pack health — running entirely on a local LLM, no cloud.
+order: 2
+featured: true
+links:
+  repo: https://github.com/
+draft: false
+---
+
+import Gallery from '../../components/content/Gallery.astro';
+
+Working on the FSAE accumulator left me buried in battery-management logs — cell
+voltages, temperatures, fault codes, thousands of CAN frames per run. The **BMS
+Local Agent** is my attempt to make that data conversational without sending any
+of it to the cloud.
+
+## What it does
+
+Point it at a log (or a live CAN feed) and ask questions in plain English:
+
+- *"Which cell had the widest voltage swing during the last run?"*
+- *"Did any thermistor cross the warning threshold, and when?"*
+- *"Summarize the faults in this session."*
+
+The agent parses the telemetry into a local **SQLite** store, and a locally-run
+LLM (via **Ollama**) translates questions into queries over that structured
+data, then explains the results in context.
+
+<Gallery labels={['CHAT · PACK Q&A', 'PARSER · CAN → SQL', 'REPORT · SESSION SUMMARY']} cols={3} />
+
+## Why local
+
+Battery data is sensitive and I wanted something that works at the track with no
+connectivity. Everything — parsing, storage, and inference — runs on the laptop.
+The LLM never sees raw frames directly; it works against a compact schema, which
+keeps answers grounded in the actual measurements instead of hallucinated
+numbers.
+
+It's become the fastest way for me to triage a run: instead of scrubbing plots,
+I just ask.
