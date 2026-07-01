@@ -153,7 +153,7 @@
     .container-hud { padding-inline: 3rem; }
   }
 
-  /* Monospace HUD label — the signature small-caps technical tag */
+  /* Monospace HUD label - the signature small-caps technical tag */
   .hud-label {
     font-family: var(--font-mono);
     font-size: 0.6875rem;
@@ -178,7 +178,7 @@
     background: var(--color-line);
   }
 
-  /* Long-form MDX body — on-brand technical prose */
+  /* Long-form MDX body - on-brand technical prose */
   .prose-hud {
     color: var(--color-muted);
     font-size: 1.0625rem;
@@ -311,7 +311,7 @@
 
 /* =========================================================================
    MOTION INITIAL STATES
-   Scoped to html.motion — added by the motion engine ONLY when JS is active and
+   Scoped to html.motion - added by the motion engine ONLY when JS is active and
    reduced-motion is off. Guarantees no-JS / reduced-motion users see content
    immediately with zero layout shift.
    ========================================================================= */

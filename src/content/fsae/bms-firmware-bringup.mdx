@@ -3,7 +3,7 @@ title: BMS Firmware Bring-Up on the Accumulator
 date: 2024-11-02
 subsystem: firmware
 season: 2024 Season
-summary: Bringing the battery-management firmware to life — cell monitoring over isoSPI, fault handling, and the CAN reporting that keeps the rest of the car informed.
+summary: "Bringing the battery-management firmware to life: cell monitoring over isoSPI, fault handling, and the CAN reporting that keeps the rest of the car informed."
 tags: [Embedded C, CAN, BMS, isoSPI]
 draft: false
 ---
@@ -19,7 +19,7 @@ entry walks through bring-up on our segment monitoring boards.
 Each segment uses a monitoring IC that we reach over **isoSPI** for isolation.
 The first milestone was just reading all cell voltages and thermistors reliably:
 
-- Wrote the low-level driver as a small state machine — wake, configure, start
+- Wrote the low-level driver as a small state machine: wake, configure, start
   ADC, read, verify PEC.
 - Every packet is checked against its packet-error code; a bad PEC retries, and
   repeated failures escalate to a fault.
@@ -43,5 +43,5 @@ Finally, the BMS publishes state of charge, min/max cell voltage, and
 temperatures onto the vehicle **CAN bus** so the dash, data logger, and (this
 season) the autonomous system all share the same picture of pack health.
 
-Getting a clean, isolated read of every cell — and trusting it enough to gate
-the contactors — was one of the most satisfying bring-ups I've done.
+Getting a clean, isolated read of every cell, and trusting it enough to gate
+the contactors, was one of the most satisfying bring-ups I've done.

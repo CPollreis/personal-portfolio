@@ -1,0 +1,185 @@
+---
+/**
+ * LensExplode - exploded-view diagram of a prime lens in the HUD language,
+ * animated like the animejs.com hero: the optical stack blows apart on entry
+ * (staggered spring), floats gently, and tilts in 3D toward the pointer.
+ *
+ * Layers are authored at their EXPLODED positions, so no-JS and
+ * reduced-motion users see the finished diagram with zero shift; the script
+ * only collapses them first and springs them out.
+ */
+interface Props {
+  class?: string;
+}
+const { class: className = '' } = Astro.props;
+
+/** Optical stack, front element (top) to mount (bottom). y = exploded position. */
+const layers = [
+  { y: 34,  rx: 52, kind: 'ring',     label: 'FILTER RING · Ø67' },
+  { y: 74,  rx: 48, kind: 'glass',    label: 'FRONT ELEMENT · ASPH' },
+  { y: 118, rx: 38, kind: 'glass',    label: 'FOCUS GROUP · 2E' },
+  { y: 164, rx: 30, kind: 'iris',     label: 'IRIS · f/1.8 · 9 BLADES' },
+  { y: 210, rx: 36, kind: 'glass',    label: 'CORRECTOR · ED' },
+  { y: 252, rx: 42, kind: 'glass',    label: 'REAR ELEMENT' },
+  { y: 292, rx: 50, kind: 'mount',    label: 'MOUNT · CONTACTS' },
+] as const;
+
+const CX = 110;
+const RY = 0.30; // ellipse squash = viewing angle
+const COLLAPSE_Y = 164; // iris plane; everything stacks here before exploding
+---
+
+<div class={`lens-persp ${className}`}>
+  <div data-lens-tilt class="will-change-transform">
+    <svg
+      data-lens
+      viewBox="0 0 285 330"
+      fill="none"
+      class="block h-auto w-full"
+      aria-hidden="true"
+    >
+      <defs>
+        <linearGradient id="lens-glass" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#25c6eb" stop-opacity="0.16" />
+          <stop offset="55%" stop-color="#2563eb" stop-opacity="0.08" />
+          <stop offset="100%" stop-color="#4a25eb" stop-opacity="0.14" />
+        </linearGradient>
+      </defs>
+
+      <!-- optical axis -->
+      <line
+        x1={CX} y1="12" x2={CX} y2="318"
+        stroke="var(--color-line)" stroke-width="0.75" stroke-dasharray="3 4"
+      />
+
+      {layers.map((l, i) => {
+        const ry = l.rx * RY;
+        return (
+          <g class="lens-layer" data-collapse={COLLAPSE_Y - l.y}>
+            {l.kind === 'glass' && (
+              <>
+                {/* element body (thin side profile) */}
+                <ellipse cx={CX} cy={l.y + 4} rx={l.rx} ry={ry} stroke="var(--color-line)" stroke-width="0.8" />
+                <ellipse cx={CX} cy={l.y} rx={l.rx} ry={ry} fill="url(#lens-glass)" stroke="var(--color-cyan)" stroke-width="0.9" stroke-opacity="0.75" />
+                {/* specular glint */}
+                <path
+                  d={`M ${CX - l.rx * 0.55} ${l.y - ry * 0.35} Q ${CX - l.rx * 0.1} ${l.y - ry * 1.15} ${CX + l.rx * 0.45} ${l.y - ry * 0.5}`}
+                  stroke="var(--color-ink)" stroke-width="0.6" stroke-opacity="0.35"
+                />
+              </>
+            )}
+            {l.kind === 'ring' && (
+              <>
+                <ellipse cx={CX} cy={l.y + 6} rx={l.rx} ry={ry} stroke="var(--color-line)" stroke-width="0.8" />
+                <ellipse cx={CX} cy={l.y} rx={l.rx} ry={ry} stroke="var(--color-muted)" stroke-width="1.1" />
+                <ellipse cx={CX} cy={l.y} rx={l.rx - 6} ry={ry - 6 * RY} stroke="var(--color-line)" stroke-width="0.7" />
+              </>
+            )}
+            {l.kind === 'iris' && (
+              <>
+                <ellipse cx={CX} cy={l.y} rx={l.rx} ry={ry} stroke="var(--color-indigo)" stroke-width="1" />
+                {/* blade hints */}
+                <ellipse cx={CX} cy={l.y} rx={l.rx - 5} ry={ry - 5 * RY} stroke="var(--color-indigo)" stroke-width="2.4" stroke-opacity="0.55" stroke-dasharray="4 3" />
+                <ellipse cx={CX} cy={l.y} rx={7} ry={7 * RY} stroke="var(--color-cyan)" stroke-width="0.9" />
+              </>
+            )}
+            {l.kind === 'mount' && (
+              <>
+                <ellipse cx={CX} cy={l.y + 7} rx={l.rx} ry={ry} stroke="var(--color-line)" stroke-width="0.9" />
+                <ellipse cx={CX} cy={l.y} rx={l.rx} ry={ry} stroke="var(--color-muted)" stroke-width="1.1" />
+                {/* electrical contacts */}
+                <ellipse cx={CX} cy={l.y} rx={l.rx - 8} ry={ry - 8 * RY} stroke="var(--color-accent)" stroke-width="1.6" stroke-dasharray="2.5 4" stroke-opacity="0.8" />
+              </>
+            )}
+            {/* leader line + spec label */}
+            <line
+              x1={CX + l.rx + 4} y1={l.y} x2={CX + 78} y2={l.y}
+              stroke="var(--color-line)" stroke-width="0.6" stroke-dasharray="2 3"
+            />
+            <text
+              x={CX + 82}
+              y={l.y + 2}
+              font-size="6"
+              fill={i % 2 ? 'var(--color-faint)' : 'var(--color-muted)'}
+              style="font-family: var(--font-mono); letter-spacing: 0.08em"
+            >
+              {l.label}
+            </text>
+          </g>
+        );
+      })}
+    </svg>
+  </div>
+</div>
+
+<style>
+  .lens-persp {
+    perspective: 900px;
+  }
+  /* SVG text can't wrap; hide labels when the column gets narrow */
+  @media (max-width: 420px) {
+    .lens-persp text { display: none; }
+  }
+</style>
+
+<script>
+  import { animate, stagger, createAnimatable, utils } from 'animejs';
+
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  document.querySelectorAll<HTMLElement>('.lens-persp').forEach((root) => {
+    const tilt = root.querySelector<HTMLElement>('[data-lens-tilt]');
+    const layers = root.querySelectorAll<SVGGElement>('.lens-layer');
+    if (!tilt || !layers.length || reduced) return;
+
+    // Collapse the stack onto the iris plane, then blow it apart on entry.
+    layers.forEach((l) => {
+      utils.set(l, { translateY: Number(l.getAttribute('data-collapse')) || 0, opacity: 0.4 });
+    });
+
+    let played = false;
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (played || !entries.some((e) => e.isIntersecting)) return;
+        played = true;
+        io.disconnect();
+        animate(layers, {
+          translateY: 0,
+          opacity: 1,
+          duration: 1100,
+          delay: stagger(70, { from: 'center' }),
+          ease: 'cubicBezier(0.16, 1, 0.3, 1)',
+          onComplete: () => {
+            // gentle idle float so the diagram stays alive
+            animate(tilt, {
+              translateY: [-4, 4],
+              duration: 3600,
+              alternate: true,
+              loop: true,
+              ease: 'inOut(2)',
+            });
+          },
+        });
+      },
+      { threshold: 0.35 },
+    );
+    io.observe(root);
+
+    // 3D tilt toward the pointer
+    const able = createAnimatable(tilt, { rotateX: 350, rotateY: 350, ease: 'out(2)' });
+    const onMove = (e: PointerEvent) => {
+      const r = root.getBoundingClientRect();
+      const dx = (e.clientX - (r.left + r.width / 2)) / r.width;
+      const dy = (e.clientY - (r.top + r.height / 2)) / r.height;
+      able.rotateY(dx * 14);
+      able.rotateX(-dy * 10);
+    };
+    const onLeave = () => {
+      able.rotateX(0);
+      able.rotateY(0);
+    };
+    const zone = root.closest('header') ?? root;
+    zone.addEventListener('pointermove', onMove as EventListener);
+    zone.addEventListener('pointerleave', onLeave);
+  });
+</script>

@@ -49,7 +49,7 @@ const projects = defineCollection({
 });
 
 /**
- * Photography — one markdown entry per frame. `image` stays optional so the
+ * Photography - one markdown entry per frame. `image` stays optional so the
  * gallery renders on-brand placeholders until real photos (co-located, then
  * referenced via `image: ./frame.jpg`) are dropped in and optimized by
  * astro:assets.

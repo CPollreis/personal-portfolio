@@ -1,6 +1,6 @@
 ---
 /**
- * Nav — persistent top navigation. Mono index + label items, accent active
+ * Nav - persistent top navigation. Mono index + label items, accent active
  * state, and an accessible full-screen mobile drawer (vanilla JS, no island).
  */
 import { nav, site, isActive } from '../../config/site';
@@ -10,7 +10,7 @@ const pathname = Astro.url.pathname;
 
 <header class="fixed inset-x-0 top-0 z-40 border-b border-line bg-bg/80 backdrop-blur-md">
   <nav class="container-hud flex h-16 items-center justify-between" aria-label="Primary">
-    <a href="/" class="group flex items-center gap-2.5" aria-label={`${site.name} — home`}>
+    <a href="/" class="group flex items-center gap-2.5" aria-label={`${site.name}, home`}>
       <span
         class="grid h-7 w-7 place-items-center border border-line text-accent transition-colors group-hover:border-accent"
         aria-hidden="true"
@@ -18,7 +18,7 @@ const pathname = Astro.url.pathname;
         <span class="font-mono text-xs font-bold">C</span>
       </span>
       <span class="hidden font-mono text-sm tracking-wide text-ink sm:block">
-        {site.name.split(' ')[0]}<span class="text-faint">.dev</span>
+        {site.name.replace(/\s+/g, '').toLowerCase()}<span class="text-faint">.dev</span>
       </span>
     </a>
 

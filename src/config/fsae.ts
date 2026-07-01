@@ -1,4 +1,4 @@
-/** Subsystem metadata — shared color-coding + copy across the FSAE section. */
+/** Subsystem metadata - shared color-coding + copy across the FSAE section. */
 export type Subsystem = 'firmware' | 'manufacturing' | 'autonomous';
 
 export interface SubsystemMeta {
@@ -20,7 +20,7 @@ export const subsystems: Record<Subsystem, SubsystemMeta> = {
     code: 'FW',
     color: 'var(--color-accent)',
     text: 'text-accent',
-    blurb: 'Embedded C on the vehicle control units — CAN networking, sensor drivers, and the battery-management stack.',
+    blurb: 'Embedded C on the vehicle control units: CAN networking, sensor drivers, and the battery-management stack.',
     focus: ['Embedded C', 'RTOS', 'CAN bus', 'BMS', 'Sensor drivers'],
   },
   manufacturing: {
@@ -29,8 +29,8 @@ export const subsystems: Record<Subsystem, SubsystemMeta> = {
     code: 'MFG',
     color: 'var(--color-cyan)',
     text: 'text-cyan',
-    blurb: 'Turning CAD into carbon and aluminum — composites layup, CNC machining, and design-for-manufacture.',
-    focus: ['Composites', 'CNC', 'DFM', 'Assembly', 'Tolerancing'],
+    blurb: 'Building and validating the HV accumulator: cell tab testing, segment assembly, and the wire harnessing and safety discipline that a 400V pack demands.',
+    focus: ['Accumulator', 'HV safety', 'Tab testing', 'Harnessing', 'BMS integration'],
   },
   autonomous: {
     id: 'autonomous',
@@ -38,7 +38,7 @@ export const subsystems: Record<Subsystem, SubsystemMeta> = {
     code: 'AV',
     color: 'var(--color-indigo)',
     text: 'text-indigo',
-    blurb: 'The driverless stack — perception, state estimation, path planning, and vehicle controls for the autonomous events.',
+    blurb: 'The driverless stack: perception, state estimation, path planning, and vehicle controls for the autonomous events.',
     focus: ['Perception', 'SLAM', 'Planning', 'Controls', 'ROS 2'],
   },
 };

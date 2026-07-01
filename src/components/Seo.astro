@@ -1,6 +1,6 @@
 ---
 /**
- * Seo — centralizes head meta: title, description, canonical, Open Graph,
+ * Seo - centralizes head meta: title, description, canonical, Open Graph,
  * and Twitter cards. OG image generation is finalized in Phase 8.
  */
 import { site } from '../config/site';
@@ -21,7 +21,7 @@ const {
   noindex = false,
 } = Astro.props;
 
-const fullTitle = title ? `${title} — ${site.name}` : `${site.name} · ${site.role}`;
+const fullTitle = title ? `${title} · ${site.name}` : `${site.name} · ${site.role}`;
 const canonical = new URL(Astro.url.pathname, site.url).href;
 const ogImage = new URL(image, site.url).href;
 ---

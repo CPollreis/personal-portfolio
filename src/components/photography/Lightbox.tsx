@@ -20,7 +20,7 @@ interface Props {
 }
 
 /**
- * Lightbox — the site's one interactive island. Delegates clicks from the
+ * Lightbox - the site's one interactive island. Delegates clicks from the
  * Astro-rendered [data-photo-index] tiles, then owns overlay + keyboard nav.
  */
 export default function Lightbox({ photos }: Props) {

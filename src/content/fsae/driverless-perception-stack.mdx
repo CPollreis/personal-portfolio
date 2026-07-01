@@ -3,7 +3,7 @@ title: Building the Driverless Perception Stack
 date: 2025-05-18
 subsystem: autonomous
 season: 2025 Season
-summary: How we went from a blank ROS 2 workspace to reliable cone detection and a mapped track — the perception pipeline behind our first autonomous laps.
+summary: "How we went from a blank ROS 2 workspace to reliable cone detection and a mapped track: the perception pipeline behind our first autonomous laps."
 tags: [ROS 2, perception, SLAM, computer vision]
 draft: false
 ---
@@ -12,8 +12,8 @@ import Gallery from '../../components/content/Gallery.astro';
 
 As Autonomous Systems Lead, my first mandate for the season was deceptively
 simple: **the car has to see the track.** In Formula Student Driverless the
-course is defined entirely by traffic cones — blue on the left, yellow on the
-right — and everything downstream (planning, controls, the whole race) depends
+course is defined entirely by traffic cones, blue on the left and yellow on the
+right, and everything downstream (planning, controls, the whole race) depends
 on turning a stream of camera and LiDAR frames into a trustworthy map of those
 cones.
 
@@ -21,11 +21,11 @@ cones.
 
 We settled on a fairly classic architecture, tuned hard for latency:
 
-1. **Detection** — a YOLO-based detector running on the onboard Jetson,
+1. **Detection:** a YOLO-based detector running on the onboard Jetson,
    quantized to hit our frame-time budget.
-2. **Depth & association** — stereo depth fused with LiDAR returns to place
+2. **Depth & association:** stereo depth fused with LiDAR returns to place
    each cone in the vehicle frame.
-3. **SLAM** — a graph-based back end that stitches per-frame detections into a
+3. **SLAM:** a graph-based back end that stitches per-frame detections into a
    consistent global map as we complete the first exploration lap.
 
 <Gallery
@@ -53,6 +53,6 @@ The interesting engineering is always in the failure modes. Two stand out:
 ## Results
 
 By the end of the season the stack was mapping a full autocross layout on the
-exploration lap and holding localization through the timed laps — enough to put
+exploration lap and holding localization through the timed laps, enough to put
 the car through its first fully autonomous runs. Next season's focus is pushing
 the detection range so planning has more lookahead at speed.

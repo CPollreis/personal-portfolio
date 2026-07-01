@@ -1,5 +1,5 @@
 /**
- * Motion engine — one shared, declarative anime.js runtime for the whole site.
+ * Motion engine - one shared, declarative anime.js runtime for the whole site.
  *
  * Markup opts in with data-attributes; this script wires IntersectionObserver +
  * anime.js so pages ship zero per-effect JS. Everything degrades gracefully:
@@ -150,7 +150,7 @@ function init() {
 
   if (prefersReduced) {
     nodes.forEach(settle);
-    // scroll-drawn SVGs still want a live scroll bind? No — settle to full.
+    // scroll-drawn SVGs still want a live scroll bind? No - settle to full.
     return;
   }
 

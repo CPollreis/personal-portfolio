@@ -9,6 +9,7 @@ import Reveal from '../../components/motion/Reveal.astro';
 import SpecLabel from '../../components/hud/SpecLabel.astro';
 import DimensionLine from '../../components/hud/DimensionLine.astro';
 import CoordinateAxis from '../../components/hud/CoordinateAxis.astro';
+import LensExplode from '../../components/photography/LensExplode.astro';
 
 const frames = (await getCollection('photography')).sort(
   (a, b) => a.data.order - b.data.order || b.data.date.getTime() - a.data.date.getTime(),
@@ -28,22 +29,32 @@ const photos: Photo[] = frames.map((f) => ({
 }));
 ---
 
-<Base title="Photography" description="Photography by Caleb Pollreis — motorsport, engineering detail, and the world in between.">
-  <header class="relative border-b border-line py-20 md:py-28">
-    <div class="container-hud">
-      <SpecLabel code="DIV.03" text="OPTICS · PHOTOGRAPHY" accent />
-      <Reveal>
-        <h1 class="mt-6 font-display text-5xl font-semibold leading-[0.95] md:text-7xl">
-          Through the <span class="text-grad">lens</span>
-        </h1>
-      </Reveal>
-      <div class="mt-6 max-w-xl"><DimensionLine value="MOTORSPORT · DETAIL · LANDSCAPE" /></div>
-      <Reveal delay={140}>
-        <p class="mt-6 max-w-2xl text-lg text-muted">
-          The same eye for systems, pointed at light. Track days, bench macros, and whatever
-          catches me between. Click any frame to enlarge.
-        </p>
-      </Reveal>
+<Base title="Photography" description="Photography by Caleb Pollreis: motorsport, engineering detail, and the world in between.">
+  <header class="relative overflow-hidden border-b border-line py-20 md:py-28">
+    <div class="container-hud grid items-center gap-12 lg:grid-cols-[1fr_400px]">
+      <div>
+        <SpecLabel code="DIV.03" text="OPTICS · PHOTOGRAPHY" accent />
+        <Reveal>
+          <h1 class="mt-6 font-display text-5xl font-semibold leading-[0.95] md:text-7xl">
+            Through the <span class="text-grad">lens</span>
+          </h1>
+        </Reveal>
+        <div class="mt-6 max-w-xl"><DimensionLine value="MOTORSPORT · DETAIL · LANDSCAPE" /></div>
+        <Reveal delay={140}>
+          <p class="mt-6 max-w-2xl text-lg text-muted">
+            The same eye for systems, pointed at light. Track days, bench macros, and whatever
+            catches me between. Click any frame to enlarge.
+          </p>
+        </Reveal>
+      </div>
+
+      <!-- exploded optical formula, animejs.com-style blowup -->
+      <div class="relative hidden lg:block">
+        <LensExplode class="mx-auto w-full max-w-[400px]" />
+        <span class="hud-label absolute -bottom-4 left-1/2 -translate-x-1/2">
+          FIG.03 · OPTICAL FORMULA 5E/4G
+        </span>
+      </div>
     </div>
   </header>
 

@@ -8,7 +8,7 @@ export const site = {
   role: 'Autonomous Systems Lead · FSAE Electric',
   tagline: 'Computer engineering student building autonomous race systems.',
   description:
-    'Portfolio of Caleb Pollreis — computer engineering student and FSAE Electric autonomous systems lead. Firmware, manufacturing, autonomy, personal projects, and photography.',
+    'Portfolio of Caleb Pollreis, computer engineering student and FSAE Electric autonomous systems lead. Firmware, manufacturing, autonomy, personal projects, and photography.',
   url: 'https://calebpollreis.com',
   locale: 'en',
   email: 'calebpollreis@gmail.com',

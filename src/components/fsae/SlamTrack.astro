@@ -1,0 +1,202 @@
+---
+/**
+ * SlamTrack - isometric pose-graph map of a driverless track, rendered like
+ * the live output of the SLAM stack: cone landmarks as dots (colored along
+ * the accent triad), a dashed estimated trajectory, pose nodes, and the car
+ * lapping the circuit with a scan pulse. Decorative background element.
+ *
+ * All geometry is computed at build time; the only client JS drives the car
+ * along the projected path with anime.js (skipped under reduced motion).
+ */
+interface Props {
+  class?: string;
+}
+const { class: className = '' } = Astro.props;
+
+/* ---- world-space centerline (closed circuit with an S-section) ---- */
+const ctrl: [number, number][] = [
+  [12, 30], [20, 10], [45, 5], [70, 8], [88, 18], [90, 38],
+  [78, 50], [62, 46], [50, 34], [38, 36], [34, 52], [22, 58],
+];
+
+/* isometric projection (linear, so it commutes with the spline math) */
+const ISO_X = Math.cos(Math.PI / 6);
+const ISO_Y = Math.sin(Math.PI / 6);
+const iso = ([x, y]: [number, number]): [number, number] => [
+  (x - y) * ISO_X,
+  (x + y) * ISO_Y,
+];
+
+/* closed Catmull-Rom -> cubic bezier segments, sampled for cones/normals */
+const n = ctrl.length;
+const at = (i: number) => ctrl[((i % n) + n) % n];
+type Seg = { p1: [number, number]; c1: [number, number]; c2: [number, number]; p2: [number, number] };
+const segs: Seg[] = ctrl.map((_, i) => {
+  const p0 = at(i - 1), p1 = at(i), p2 = at(i + 1), p3 = at(i + 2);
+  return {
+    p1,
+    c1: [p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6],
+    c2: [p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6],
+    p2,
+  };
+});
+
+function bezier(s: Seg, t: number): [number, number] {
+  const u = 1 - t;
+  const w = [u * u * u, 3 * u * u * t, 3 * u * t * t, t * t * t];
+  return [
+    w[0] * s.p1[0] + w[1] * s.c1[0] + w[2] * s.c2[0] + w[3] * s.p2[0],
+    w[0] * s.p1[1] + w[1] * s.c1[1] + w[2] * s.c2[1] + w[3] * s.p2[1],
+  ];
+}
+
+const STEPS = 10;
+const samples: [number, number][] = segs.flatMap((s) =>
+  Array.from({ length: STEPS }, (_, k) => bezier(s, k / STEPS)),
+);
+const m = samples.length;
+
+/* cone landmarks: offset from the centerline along world-space normals */
+const HALF_W = 4.2;
+const CONE_EVERY = 3;
+const TRIAD = ['#4a25eb', '#2563eb', '#25c6eb'];
+
+function lerpColor(a: string, b: string, t: number): string {
+  const ah = parseInt(a.slice(1), 16), bh = parseInt(b.slice(1), 16);
+  const ch = [16, 8, 0].map((sh) => {
+    const av = (ah >> sh) & 255, bv = (bh >> sh) & 255;
+    return Math.round(av + (bv - av) * t);
+  });
+  return `#${ch.map((v) => v.toString(16).padStart(2, '0')).join('')}`;
+}
+/** Seamless cyclic sweep across the triad: indigo -> blue -> cyan -> indigo. */
+function triadAt(t: number): string {
+  const mirrored = t < 0.5 ? t * 2 : (1 - t) * 2;
+  const x = mirrored * (TRIAD.length - 1);
+  const i = Math.min(Math.floor(x), TRIAD.length - 2);
+  return lerpColor(TRIAD[i], TRIAD[i + 1], x - i);
+}
+
+interface Cone { x: number; y: number; color: string }
+const cones: Cone[] = [];
+for (let i = 0; i < m; i += CONE_EVERY) {
+  const prev = samples[(i - 1 + m) % m];
+  const next = samples[(i + 1) % m];
+  const [dx, dy] = [next[0] - prev[0], next[1] - prev[1]];
+  const len = Math.hypot(dx, dy) || 1;
+  const nx = -dy / len, ny = dx / len;
+  const p = samples[i];
+  const color = triadAt(i / m);
+  for (const side of [1, -1]) {
+    const [px, py] = iso([p[0] + nx * HALF_W * side, p[1] + ny * HALF_W * side]);
+    cones.push({ x: px, y: py, color });
+  }
+}
+
+/* pose-graph nodes along the trajectory */
+const poses = samples.filter((_, i) => i % 8 === 0).map(iso);
+
+/* projected trajectory path */
+const P = (pt: [number, number]) => `${pt[0].toFixed(2)} ${pt[1].toFixed(2)}`;
+const pathD =
+  `M ${P(iso(segs[0].p1))} ` +
+  segs.map((s) => `C ${P(iso(s.c1))}, ${P(iso(s.c2))}, ${P(iso(s.p2))}`).join(' ') +
+  ' Z';
+
+/* faint iso floor grid */
+const gridLines: string[] = [];
+for (let g = -10; g <= 110; g += 20) {
+  gridLines.push(`M ${P(iso([g, -15]))} L ${P(iso([g, 80]))}`);
+  if (g <= 80) gridLines.push(`M ${P(iso([-10, g - 10]))} L ${P(iso([105, g - 10]))}`);
+}
+
+/* viewBox from projected extents */
+const allPts = [...samples.map(iso), ...cones.map((c) => [c.x, c.y] as [number, number])];
+const xs = allPts.map((p) => p[0]), ys = allPts.map((p) => p[1]);
+const PAD = 10;
+const minX = Math.min(...xs) - PAD, minY = Math.min(...ys) - PAD;
+const vbW = Math.max(...xs) - minX + PAD, vbH = Math.max(...ys) - minY + PAD;
+
+const start = iso(samples[0]);
+const startAngle =
+  (Math.atan2(iso(samples[1])[1] - start[1], iso(samples[1])[0] - start[0]) * 180) / Math.PI;
+---
+
+<svg
+  data-slam-track
+  viewBox={`${minX.toFixed(1)} ${minY.toFixed(1)} ${vbW.toFixed(1)} ${vbH.toFixed(1)}`}
+  preserveAspectRatio="xMidYMid slice"
+  class={className}
+  fill="none"
+  aria-hidden="true"
+>
+  <!-- iso floor grid -->
+  <g stroke="var(--color-line-soft)" stroke-width="0.15" opacity="0.6">
+    {gridLines.map((d) => <path d={d} />)}
+  </g>
+
+  <!-- estimated trajectory (dashed, SLAM-style) -->
+  <path
+    data-slam-path
+    d={pathD}
+    stroke="var(--color-faint)"
+    stroke-width="0.4"
+    stroke-dasharray="1.6 1.6"
+    opacity="0.8"
+  />
+
+  <!-- pose-graph nodes -->
+  <g fill="var(--color-muted)" opacity="0.5">
+    {poses.map(([x, y]) => <rect x={x - 0.5} y={y - 0.5} width="1" height="1" />)}
+  </g>
+
+  <!-- cone landmarks, accent-triad gradient around the lap -->
+  <g data-slam-cones>
+    {cones.map((c) => <circle cx={c.x} cy={c.y} r="0.9" fill={c.color} opacity="0.85" />)}
+  </g>
+
+  <!-- the car + scan pulse -->
+  <g data-slam-car transform={`translate(${P(start).replace(' ', ', ')}) rotate(${startAngle.toFixed(1)})`}>
+    <circle class="slam-scan" r="6" stroke="var(--color-cyan)" stroke-width="0.3" />
+    <rect x="-2" y="-1" width="4" height="2" rx="0.5" fill="var(--color-cyan)" />
+    <path d="M2 0 L4.4 0" stroke="var(--color-cyan)" stroke-width="0.4" />
+  </g>
+</svg>
+
+<style>
+  .slam-scan {
+    transform-origin: center;
+    transform-box: fill-box;
+    animation: slam-scan 2.4s var(--ease-out-hud, ease-out) infinite;
+  }
+  @keyframes slam-scan {
+    0% { transform: scale(0.2); opacity: 0.8; }
+    100% { transform: scale(1); opacity: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .slam-scan { animation: none; opacity: 0.25; }
+  }
+</style>
+
+<script>
+  import { animate, createMotionPath } from 'animejs';
+
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  document.querySelectorAll<SVGSVGElement>('[data-slam-track]').forEach((svgEl) => {
+    const path = svgEl.querySelector<SVGPathElement>('[data-slam-path]');
+    const car = svgEl.querySelector<SVGGElement>('[data-slam-car]');
+    if (!path || !car || reduced) return;
+
+    // The static transform is only the no-JS / reduced-motion resting pose.
+    car.removeAttribute('transform');
+    const motionPath = createMotionPath(path);
+    if (!motionPath) return;
+    animate(car, {
+      ...motionPath,
+      duration: 26000,
+      ease: 'linear',
+      loop: true,
+    });
+  });
+</script>

@@ -1,7 +1,9 @@
 ---
 /**
- * Hero — full-height HUD landing. Reticle + scramble tagline + dimensioned
- * name block, framed like an instrument readout.
+ * Hero - full-height HUD landing over a looping background video of the car
+ * (MIT FSAE style: footage behind, text in focus). Drop the clip at
+ * public/videos/hero-loop.mp4; until then the layer is simply black.
+ * Reticle + scramble tagline + dimensioned name block on top.
  */
 import Reticle from '../hud/Reticle.astro';
 import SpecLabel from '../hud/SpecLabel.astro';
@@ -15,7 +17,28 @@ import { site } from '../../config/site';
 const year = new Date().getFullYear();
 ---
 
-<section class="relative flex min-h-[calc(100dvh-4rem)] flex-col justify-center overflow-hidden">
+<section class="relative flex min-h-[100dvh] flex-col justify-center overflow-hidden pt-16">
+  <!-- background footage layer -->
+  <div class="absolute inset-0" aria-hidden="true">
+    <video
+      id="hero-video"
+      class="h-full w-full object-cover"
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="metadata"
+      tabindex="-1"
+    >
+      <source src="/videos/hero-loop.mp4" type="video/mp4" />
+    </video>
+    <!-- dimming + focus gradient so the type stays legible over footage -->
+    <div class="absolute inset-0 bg-bg/55"></div>
+    <div class="absolute inset-0 bg-gradient-to-r from-bg/80 via-bg/35 to-bg/20"></div>
+    <!-- fade the footage into the page background so sections meet seamlessly -->
+    <div class="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-bg to-transparent"></div>
+  </div>
+
   <!-- faint corner coordinates -->
   <div class="pointer-events-none absolute inset-0 hidden md:block" aria-hidden="true">
     <span class="hud-label absolute left-6 top-6">44.97°N</span>
@@ -24,7 +47,7 @@ const year = new Date().getFullYear();
     <span class="hud-label absolute bottom-6 right-6 text-accent">CTRL·{year}</span>
   </div>
 
-  <div class="container-hud">
+  <div class="container-hud relative">
     <!-- top status row -->
     <div class="mb-8 flex items-center gap-4">
       <span class="relative flex h-2 w-2">
@@ -75,3 +98,19 @@ const year = new Date().getFullYear();
     <SpecLabel class="mt-6" code="FIG.00" text="INDEX · COMPUTER ENGINEERING × AUTONOMY" />
   </div>
 </section>
+
+<script>
+  // Respect reduced motion: hold the footage on its first frame.
+  const video = document.getElementById('hero-video') as HTMLVideoElement | null;
+  const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+  function applyMotionPref() {
+    if (!video) return;
+    if (mq.matches) {
+      video.pause();
+    } else if (video.paused) {
+      video.play().catch(() => {});
+    }
+  }
+  applyMotionPref();
+  mq.addEventListener('change', applyMotionPref);
+</script>

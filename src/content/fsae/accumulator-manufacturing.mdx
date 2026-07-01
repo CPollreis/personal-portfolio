@@ -1,0 +1,68 @@
+---
+title: Building the Accumulator, Safely
+date: 2024-07-14
+subsystem: manufacturing
+season: 2024 Season
+summary: "Manufacturing the HV accumulator: qualifying every cell through tab testing, assembling segments, and the harnessing and safety discipline that a 400V pack demands."
+tags: [Accumulator, HV safety, Tab testing, Harnessing]
+draft: false
+---
+
+import Gallery from '../../components/content/Gallery.astro';
+
+The accumulator is the densest concentration of energy, cost, and risk on the
+car, and building one is as much about process as it is about parts. This entry
+covers how we manufacture the pack: qualifying cells, assembling segments, and
+the high-voltage safety habits that make it routine instead of scary.
+
+## Qualifying every cell
+
+Before a cell earns a spot in the pack, its tabs get tested. Our tab testing
+procedure puts each connection under a high current load while we watch for
+voltage drop and heating, because a weak joint that survives the bench will not
+survive an endurance run.
+
+To make the data trustworthy I wrote a **Python script that reads current
+measurements from the high current supply through an ADC**, logging every test
+so a marginal tab is a number in a spreadsheet, not a judgment call at the
+bench.
+
+<Gallery
+  labels={['BENCH · TAB TEST RIG', 'DATA · CURRENT LOG', 'SEGMENT · CELL STACK', 'PACK · FINAL ASSEMBLY']}
+  cols={2}
+/>
+
+## Segment assembly
+
+Cells stack into segments with the monitoring hardware built in from the start:
+thermistors bonded where the thermal model wants them, sense leads dressed away
+from power paths, and the BMS segment boards mounted so **isoSPI** wiring stays
+short and serviceable. Torque values are written down, witnessed, and checked,
+because a loose busbar connection is a hot spot waiting for competition.
+
+## HV and LV harnessing
+
+Wiring the pack is two disciplines in one box. The **HV side** is busbars,
+maintenance plugs, and the interlock loop, routed with creepage and clearance in
+mind. The **LV side** is the BMS sense and isoSPI network, kept physically
+separated from HV runs so a chafed wire can never bridge the two. Everything is
+labeled and strain-relieved before the lid goes on, since the inside of a sealed
+accumulator is the last place you want a mystery.
+
+## Working at 400 volts
+
+The rules that keep the team safe are boring on purpose:
+
+- The pack is treated as live until it is measured dead. Verify with a meter,
+  not with an assumption.
+- Insulated tools, HV gloves, and a second person present for any energized
+  work.
+- Contactors, precharge, and the insulation monitoring device stay in the loop
+  during every test. Bypassing safety hardware to save time is how teams end up
+  on the news.
+- The **BMS gates the contactors**: over-voltage, under-voltage, or
+  over-temperature on any cell opens the pack, no exceptions.
+
+The payoff of all this discipline is speed. A pack you trust is a pack you can
+work on quickly, and by the end of the build we could pull, service, and requal
+a segment in an afternoon.

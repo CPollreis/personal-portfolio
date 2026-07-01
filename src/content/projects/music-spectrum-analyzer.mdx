@@ -3,7 +3,7 @@ title: Music Spectrum Analyzer
 date: 2025-02-10
 kind: Audio · DSP
 stack: [C++, JUCE, FFT, OpenGL]
-summary: A real-time audio spectrum analyzer that turns live sound into a responsive frequency visualization — FFT on the audio thread, GPU rendering on the paint thread.
+summary: "A real-time audio spectrum analyzer that turns live sound into a responsive frequency visualization: FFT on the audio thread, GPU rendering on the paint thread."
 order: 1
 featured: true
 links:
@@ -22,8 +22,8 @@ reactive visualization.
 The core is a classic short-time Fourier transform, but the interesting part is
 keeping it glitch-free in real time:
 
-- Audio arrives in small buffers on a high-priority callback — no allocations,
-  no locks on that thread.
+- Audio arrives in small buffers on a high-priority callback, with no
+  allocations and no locks on that thread.
 - Each block is windowed (Hann) and run through an FFT to get magnitude per
   frequency bin.
 - Bins are mapped to a log-frequency scale so bass and treble get perceptually

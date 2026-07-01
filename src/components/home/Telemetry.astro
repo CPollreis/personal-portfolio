@@ -1,6 +1,6 @@
 ---
 /**
- * Telemetry — animated stat row over a scroll-drawn circuit trace. Numbers are
+ * Telemetry - animated stat row over a scroll-drawn circuit trace. Numbers are
  * placeholders; tune once real figures are known.
  */
 import DataReadout from '../hud/DataReadout.astro';
@@ -15,7 +15,7 @@ const stats = [
 ];
 ---
 
-<section class="relative overflow-hidden border-y border-line bg-surface/40 py-16 md:py-20">
+<section class="relative overflow-hidden py-16 md:py-20">
   <div class="pointer-events-none absolute -right-10 top-1/2 hidden w-[420px] -translate-y-1/2 text-accent opacity-30 lg:block">
     <CircuitTrace mode="scroll" />
   </div>

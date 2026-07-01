@@ -9,6 +9,7 @@ import Reveal from '../../components/motion/Reveal.astro';
 import DimensionLine from '../../components/hud/DimensionLine.astro';
 import SpecLabel from '../../components/hud/SpecLabel.astro';
 import CoordinateAxis from '../../components/hud/CoordinateAxis.astro';
+import SlamTrack from '../../components/fsae/SlamTrack.astro';
 
 const all = (await getCollection('fsae', ({ data }) => !data.draft)).sort(
   (a, b) => b.data.date.getTime() - a.data.date.getTime(),
@@ -32,16 +33,16 @@ const posts = all.map((p) => ({
 const timeline = [
   {
     marker: '2023',
-    title: 'Joined the team — firmware',
+    title: 'Joined the team on firmware',
     detail:
       'Started on embedded software, writing sensor drivers and CAN handlers for the vehicle control units and learning the accumulator inside out.',
     tag: 'FW',
   },
   {
     marker: '2024',
-    title: 'Manufacturing rotation + BMS ownership',
+    title: 'Accumulator build + BMS ownership',
     detail:
-      'Split time between composites manufacturing and taking ownership of the battery-management firmware through a full bring-up.',
+      'Built and validated the HV accumulator, from cell tab testing to segment assembly and harnessing, while taking ownership of the battery-management firmware through a full bring-up.',
     tag: 'FW · MFG',
   },
   {
@@ -54,10 +55,16 @@ const timeline = [
 ];
 ---
 
-<Base title="FSAE" description="FSAE Electric build log — firmware, manufacturing, and autonomous systems.">
+<Base title="FSAE" description="FSAE Electric build log: firmware, manufacturing, and autonomous systems.">
   <!-- Header -->
   <header class="relative overflow-hidden border-b border-line py-20 md:py-28">
-    <div class="container-hud">
+    <!-- SLAM pose-graph map, slightly out of focus behind the title -->
+    <div class="pointer-events-none absolute inset-0 blur-[2.5px]" aria-hidden="true">
+      <SlamTrack class="h-full w-full opacity-45" />
+      <!-- keep the left edge quiet so the title stays in focus -->
+      <div class="absolute inset-0 bg-gradient-to-r from-bg/85 via-bg/40 to-bg/20"></div>
+    </div>
+    <div class="container-hud relative">
       <SpecLabel code="DIV.01" text="FORMULA SAE · ELECTRIC" accent />
       <Reveal>
         <h1 class="mt-6 font-display text-5xl font-semibold leading-[0.95] md:text-7xl">
@@ -67,8 +74,8 @@ const timeline = [
       <div class="mt-6 max-w-xl"><DimensionLine value="AUTONOMOUS SYSTEMS LEAD" /></div>
       <Reveal delay={140}>
         <p class="mt-6 max-w-2xl text-lg text-muted">
-          Three seasons building a Formula Student car — from embedded firmware and
-          carbon manufacturing to the driverless stack that now puts it on track by itself.
+          Three seasons building a Formula Student car, from embedded firmware and
+          accumulator manufacturing to the driverless stack that now puts it on track by itself.
           This is the build log.
         </p>
       </Reveal>
