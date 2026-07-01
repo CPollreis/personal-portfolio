@@ -201,6 +201,18 @@
 }
 
 /* =========================================================================
+   MOTION INITIAL STATES
+   Scoped to html.motion — added by the motion engine ONLY when JS is active and
+   reduced-motion is off. Guarantees no-JS / reduced-motion users see content
+   immediately with zero layout shift.
+   ========================================================================= */
+.motion [data-reveal],
+.motion [data-stagger] > *,
+.motion [data-stagger-item] {
+  opacity: 0;
+}
+
+/* =========================================================================
    MOTION SAFETY
    ========================================================================= */
 @media (prefers-reduced-motion: reduce) {

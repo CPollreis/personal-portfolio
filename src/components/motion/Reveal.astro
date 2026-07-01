@@ -1,0 +1,19 @@
+---
+/**
+ * Reveal — fade + slide a block into view on scroll. Powered by the shared
+ * motion engine (data-reveal). Degrades to visible when JS/motion is off.
+ */
+interface Props {
+  as?: keyof HTMLElementTagNameMap;
+  direction?: 'up' | 'down' | 'left' | 'right';
+  delay?: number;
+  class?: string;
+}
+
+const { as = 'div', direction = 'up', delay, class: className = '' } = Astro.props as Props;
+const Tag = as;
+---
+
+<Tag class={className} data-reveal={direction} data-reveal-delay={delay}>
+  <slot />
+</Tag>

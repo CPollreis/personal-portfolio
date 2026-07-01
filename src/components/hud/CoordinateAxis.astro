@@ -1,0 +1,53 @@
+---
+/**
+ * CoordinateAxis — a thin ruler strip of ticks with optional end labels.
+ * Use horizontally under headings or vertically along a section edge.
+ */
+interface Props {
+  orientation?: 'horizontal' | 'vertical';
+  /** Number of minor ticks. */
+  ticks?: number;
+  startLabel?: string;
+  endLabel?: string;
+  class?: string;
+}
+
+const {
+  orientation = 'horizontal',
+  ticks = 24,
+  startLabel,
+  endLabel,
+  class: className = '',
+} = Astro.props;
+
+const tickArr = Array.from({ length: ticks + 1 }, (_, i) => i);
+const isH = orientation === 'horizontal';
+---
+
+<div class={`flex items-center gap-3 ${isH ? 'w-full' : 'h-full flex-col'} ${className}`}>
+  {startLabel && <span class="hud-label shrink-0">{startLabel}</span>}
+  <div
+    class:list={[
+      'relative flex justify-between',
+      isH ? 'h-3 w-full items-end' : 'w-3 flex-col',
+    ]}
+    aria-hidden="true"
+  >
+    {
+      tickArr.map((i) => {
+        const major = i % 6 === 0;
+        return (
+          <span
+            class:list={[
+              'block bg-line',
+              isH ? 'w-px' : 'h-px',
+              isH ? (major ? 'h-3' : 'h-1.5') : major ? 'w-3' : 'w-1.5',
+              major ? 'opacity-90' : 'opacity-50',
+            ]}
+          />
+        );
+      })
+    }
+  </div>
+  {endLabel && <span class="hud-label shrink-0 text-accent">{endLabel}</span>}
+</div>

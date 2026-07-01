@@ -1,0 +1,18 @@
+---
+/**
+ * Counter — counts up to `value` when scrolled into view (tabular figures).
+ */
+interface Props {
+  value: number;
+  suffix?: string;
+  class?: string;
+}
+
+const { value, suffix = '', class: className = '' } = Astro.props;
+---
+
+<span
+  class={`tabular ${className}`}
+  data-counter={value}
+  data-counter-suffix={suffix}
+>0{suffix}</span>

@@ -1,0 +1,23 @@
+---
+/**
+ * SpecLabel — mono part-number / figure tag, e.g. "FIG.01 — DRIVERLESS STACK".
+ * The small technical caption that makes the whole thing read like a datasheet.
+ */
+interface Props {
+  /** Left token, e.g. "FIG.01" or "REF". */
+  code?: string;
+  /** Descriptive text. */
+  text: string;
+  /** Accent the code token. */
+  accent?: boolean;
+  class?: string;
+}
+
+const { code, text, accent = false, class: className = '' } = Astro.props;
+---
+
+<span class={`inline-flex items-center gap-2 ${className}`}>
+  {code && <span class:list={['hud-label', accent ? 'text-accent' : 'text-faint']}>{code}</span>}
+  {code && <span class="h-2.5 w-px bg-line" aria-hidden="true" />}
+  <span class="hud-label text-muted">{text}</span>
+</span>

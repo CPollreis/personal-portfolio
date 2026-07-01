@@ -1,0 +1,21 @@
+---
+/**
+ * DimensionLine — engineering measurement callout: |—— value ——| with end
+ * ticks. Sits above/below an element to give it a "dimensioned" datasheet feel.
+ */
+interface Props {
+  value: string;
+  color?: string;
+  class?: string;
+}
+
+const { value, color = 'var(--color-faint)', class: className = '' } = Astro.props;
+---
+
+<div class={`flex items-center gap-2 ${className}`} style={`--c:${color}`} aria-hidden="true">
+  <span class="h-2.5 w-px" style="background:var(--c)"></span>
+  <span class="h-px flex-1" style="background:var(--c)"></span>
+  <span class="hud-label whitespace-nowrap" style="color:var(--c)">{value}</span>
+  <span class="h-px flex-1" style="background:var(--c)"></span>
+  <span class="h-2.5 w-px" style="background:var(--c)"></span>
+</div>

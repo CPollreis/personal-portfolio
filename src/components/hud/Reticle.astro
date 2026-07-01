@@ -1,0 +1,50 @@
+---
+/**
+ * Reticle — targeting crosshair. A nod to computer vision / autonomy. Decorative
+ * (aria-hidden). Optional slow pulse ring (respects reduced motion via CSS).
+ */
+interface Props {
+  size?: number;
+  color?: string;
+  pulse?: boolean;
+  class?: string;
+}
+
+const { size = 120, color = 'var(--color-cyan)', pulse = true, class: className = '' } = Astro.props;
+---
+
+<svg
+  width={size}
+  height={size}
+  viewBox="0 0 120 120"
+  fill="none"
+  class={`reticle ${className}`}
+  style={`--c:${color}`}
+  aria-hidden="true"
+>
+  <!-- outer ticks -->
+  <path d="M60 4 V18 M60 102 V116 M4 60 H18 M102 60 H116" stroke="var(--c)" stroke-width="1" />
+  <!-- corner brackets -->
+  <path d="M20 12 H12 V20 M100 12 H108 V20 M20 108 H12 V100 M100 108 H108 V100" stroke="var(--color-line)" stroke-width="1" />
+  <!-- ring -->
+  <circle cx="60" cy="60" r="30" stroke="var(--c)" stroke-width="1" opacity="0.7" />
+  {pulse && <circle class="pulse" cx="60" cy="60" r="30" stroke="var(--c)" stroke-width="1" />}
+  <!-- center cross -->
+  <path d="M60 48 V72 M48 60 H72" stroke="var(--c)" stroke-width="1" />
+  <circle cx="60" cy="60" r="2" fill="var(--c)" />
+</svg>
+
+<style>
+  .pulse {
+    transform-origin: center;
+    animation: reticle-pulse 3.2s var(--ease-out-hud, ease-out) infinite;
+  }
+  @keyframes reticle-pulse {
+    0% { transform: scale(1); opacity: 0.5; }
+    70% { transform: scale(1.7); opacity: 0; }
+    100% { transform: scale(1.7); opacity: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .pulse { animation: none; opacity: 0.2; }
+  }
+</style>
