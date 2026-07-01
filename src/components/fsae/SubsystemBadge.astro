@@ -1,0 +1,19 @@
+---
+/** SubsystemBadge — small color-coded tag for a subsystem. */
+import { subsystems, type Subsystem } from '../../config/fsae';
+
+interface Props {
+  subsystem: Subsystem;
+  class?: string;
+}
+const { subsystem, class: className = '' } = Astro.props;
+const meta = subsystems[subsystem];
+---
+
+<span
+  class={`inline-flex items-center gap-1.5 border px-2 py-1 font-mono text-[0.65rem] uppercase tracking-wider ${className}`}
+  style={`border-color:color-mix(in srgb, ${meta.color} 45%, transparent); color:${meta.color}`}
+>
+  <span class="h-1.5 w-1.5" style={`background:${meta.color}`}></span>
+  {meta.label}
+</span>

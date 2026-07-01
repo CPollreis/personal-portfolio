@@ -1,0 +1,46 @@
+---
+/**
+ * VideoEmbed — responsive, lazy YouTube/Vimeo embed framed in HUD brackets.
+ */
+import CornerBrackets from '../hud/CornerBrackets.astro';
+
+interface Props {
+  url: string;
+  title?: string;
+}
+const { url, title = 'Video' } = Astro.props;
+
+function toEmbed(raw: string): string | null {
+  try {
+    const u = new URL(raw);
+    if (u.hostname.includes('youtu.be')) return `https://www.youtube-nocookie.com/embed/${u.pathname.slice(1)}`;
+    if (u.hostname.includes('youtube.com')) {
+      const id = u.searchParams.get('v');
+      return id ? `https://www.youtube-nocookie.com/embed/${id}` : null;
+    }
+    if (u.hostname.includes('vimeo.com')) return `https://player.vimeo.com/video/${u.pathname.split('/').filter(Boolean).pop()}`;
+    return raw;
+  } catch {
+    return null;
+  }
+}
+const embed = toEmbed(url);
+---
+
+{
+  embed && (
+    <div class="not-prose relative my-8 border border-line bg-black">
+      <div class="aspect-video">
+        <iframe
+          src={embed}
+          title={title}
+          loading="lazy"
+          class="h-full w-full"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+        />
+      </div>
+      <CornerBrackets size={14} inset={-1} color="var(--color-cyan)" />
+    </div>
+  )
+}

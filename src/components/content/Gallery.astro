@@ -1,0 +1,29 @@
+---
+/**
+ * Gallery — grid of figures for use inside MDX posts. Pass `labels` for
+ * placeholder frames (until real screenshots exist) or `images` for real
+ * optimized assets.
+ */
+import { Image } from 'astro:assets';
+import Placeholder from '../media/Placeholder.astro';
+
+interface Props {
+  labels?: string[];
+  images?: { src: ImageMetadata; alt: string }[];
+  cols?: 2 | 3;
+  ratio?: string;
+}
+const { labels = [], images = [], cols = 2, ratio = '4/3' } = Astro.props;
+const colClass = cols === 3 ? 'sm:grid-cols-3' : 'sm:grid-cols-2';
+---
+
+<div class={`not-prose my-8 grid grid-cols-1 gap-3 ${colClass}`}>
+  {
+    images.map((im) => (
+      <figure class="overflow-hidden border border-line">
+        <Image src={im.src} alt={im.alt} widths={[400, 800]} class="w-full object-cover" />
+      </figure>
+    ))
+  }
+  {labels.map((l, i) => <Placeholder ratio={ratio} label={l} seed={i} />)}
+</div>

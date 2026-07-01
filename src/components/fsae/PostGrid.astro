@@ -1,0 +1,87 @@
+---
+/**
+ * PostGrid — filterable grid of FSAE entries. Filter tabs toggle visibility
+ * client-side (vanilla, no island). Lanes above can deep-jump a filter via
+ * [data-jump-filter].
+ */
+import { subsystemOrder, subsystems } from '../../config/fsae';
+import PostCard from './PostCard.astro';
+import Stagger from '../motion/Stagger.astro';
+
+interface PostEntry {
+  href: string;
+  title: string;
+  summary: string;
+  subsystem: 'firmware' | 'manufacturing' | 'autonomous';
+  date: Date;
+  season?: string;
+  cover?: ImageMetadata;
+}
+interface Props {
+  posts: PostEntry[];
+}
+const { posts } = Astro.props;
+const filters = ['all', ...subsystemOrder] as const;
+---
+
+<div id="log" class="scroll-mt-24">
+  <div class="mb-8 flex flex-wrap items-center gap-2" role="tablist" aria-label="Filter entries">
+    {
+      filters.map((f) => (
+        <button
+          type="button"
+          class="filter-btn border border-line px-3 py-1.5 font-mono text-[0.7rem] uppercase tracking-widest text-muted transition-colors hover:text-ink data-[active=true]:border-cyan data-[active=true]:bg-cyan/10 data-[active=true]:text-cyan"
+          data-filter={f}
+          data-active={f === 'all'}
+        >
+          {f === 'all' ? 'All' : subsystems[f].label}
+        </button>
+      ))
+    }
+  </div>
+
+  <Stagger id="post-grid" class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3" gap={60}>
+    {
+      posts.map((p) => (
+        <PostCard
+          href={p.href}
+          title={p.title}
+          summary={p.summary}
+          subsystem={p.subsystem}
+          date={p.date}
+          season={p.season}
+          cover={p.cover}
+        />
+      ))
+    }
+  </Stagger>
+
+  <p id="post-empty" class="hidden py-16 text-center hud-label">No entries in this subsystem yet.</p>
+</div>
+
+<script>
+  const buttons = Array.from(document.querySelectorAll<HTMLButtonElement>('.filter-btn'));
+  const cards = Array.from(document.querySelectorAll<HTMLElement>('#post-grid [data-subsystem]'));
+  const empty = document.getElementById('post-empty');
+
+  function apply(filter: string) {
+    let shown = 0;
+    for (const card of cards) {
+      const match = filter === 'all' || card.dataset.subsystem === filter;
+      card.style.display = match ? '' : 'none';
+      if (match) shown++;
+    }
+    buttons.forEach((b) => (b.dataset.active = String(b.dataset.filter === filter)));
+    empty?.classList.toggle('hidden', shown > 0);
+  }
+
+  buttons.forEach((b) => b.addEventListener('click', () => apply(b.dataset.filter || 'all')));
+
+  // Deep-jump from subsystem lanes.
+  document.querySelectorAll<HTMLElement>('[data-jump-filter]').forEach((el) => {
+    el.addEventListener('click', () => {
+      const f = el.dataset.jumpFilter;
+      if (f) apply(f);
+    });
+  });
+</script>

@@ -176,6 +176,113 @@
     background: var(--color-line);
   }
 
+  /* Long-form MDX body — on-brand technical prose */
+  .prose-hud {
+    color: var(--color-muted);
+    font-size: 1.0625rem;
+    line-height: 1.75;
+    max-width: 68ch;
+  }
+  .prose-hud > * + * {
+    margin-top: 1.25em;
+  }
+  .prose-hud h2 {
+    color: var(--color-ink);
+    font-size: 1.6rem;
+    margin-top: 2.4em;
+    padding-top: 1.2em;
+    border-top: 1px solid var(--color-line);
+  }
+  .prose-hud h2::before {
+    content: '// ';
+    color: var(--color-accent);
+    font-family: var(--font-mono);
+    font-size: 0.8em;
+  }
+  .prose-hud h3 {
+    color: var(--color-ink);
+    font-size: 1.25rem;
+    margin-top: 1.8em;
+  }
+  .prose-hud strong {
+    color: var(--color-ink);
+    font-weight: 600;
+  }
+  .prose-hud a {
+    color: var(--color-cyan);
+    text-underline-offset: 3px;
+    text-decoration-line: underline;
+    text-decoration-color: color-mix(in srgb, var(--color-cyan) 40%, transparent);
+  }
+  .prose-hud a:hover {
+    text-decoration-color: var(--color-cyan);
+  }
+  .prose-hud ul,
+  .prose-hud ol {
+    padding-left: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .prose-hud ul {
+    list-style: none;
+    padding-left: 0;
+  }
+  .prose-hud ul > li {
+    position: relative;
+    padding-left: 1.5rem;
+  }
+  .prose-hud ul > li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.7em;
+    width: 6px;
+    height: 6px;
+    background: var(--color-accent);
+  }
+  .prose-hud ol {
+    list-style: decimal;
+    color: var(--color-muted);
+  }
+  .prose-hud ol::marker {
+    color: var(--color-faint);
+  }
+  .prose-hud code {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    color: var(--color-cyan);
+    background: var(--color-raised);
+    padding: 0.1em 0.4em;
+    border: 1px solid var(--color-line);
+    border-radius: 3px;
+  }
+  .prose-hud pre {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-line);
+    padding: 1rem 1.25rem;
+    overflow-x: auto;
+    line-height: 1.6;
+  }
+  .prose-hud pre code {
+    background: transparent;
+    border: 0;
+    padding: 0;
+    color: var(--color-ink);
+  }
+  .prose-hud blockquote {
+    border-left: 2px solid var(--color-cyan);
+    padding-left: 1.25rem;
+    color: var(--color-ink);
+    font-style: italic;
+  }
+  .prose-hud img {
+    border: 1px solid var(--color-line);
+    width: 100%;
+  }
+
   /* Thin interactive link underline that draws in on hover */
   .link-hud {
     position: relative;

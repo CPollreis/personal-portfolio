@@ -1,10 +1,90 @@
 ---
+import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import Section from '../../components/layout/Section.astro';
+import SubsystemLanes from '../../components/fsae/SubsystemLanes.astro';
+import Timeline from '../../components/fsae/Timeline.astro';
+import PostGrid from '../../components/fsae/PostGrid.astro';
+import Reveal from '../../components/motion/Reveal.astro';
+import DimensionLine from '../../components/hud/DimensionLine.astro';
+import SpecLabel from '../../components/hud/SpecLabel.astro';
+import CoordinateAxis from '../../components/hud/CoordinateAxis.astro';
+
+const all = (await getCollection('fsae', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime(),
+);
+
+const counts = all.reduce<Record<string, number>>((acc, p) => {
+  acc[p.data.subsystem] = (acc[p.data.subsystem] ?? 0) + 1;
+  return acc;
+}, {});
+
+const posts = all.map((p) => ({
+  href: `/fsae/${p.id}`,
+  title: p.data.title,
+  summary: p.data.summary,
+  subsystem: p.data.subsystem,
+  date: p.data.date,
+  season: p.data.season,
+  cover: p.data.cover,
+}));
+
+const timeline = [
+  {
+    marker: '2023',
+    title: 'Joined the team — firmware',
+    detail:
+      'Started on embedded software, writing sensor drivers and CAN handlers for the vehicle control units and learning the accumulator inside out.',
+    tag: 'FW',
+  },
+  {
+    marker: '2024',
+    title: 'Manufacturing rotation + BMS ownership',
+    detail:
+      'Split time between composites manufacturing and taking ownership of the battery-management firmware through a full bring-up.',
+    tag: 'FW · MFG',
+  },
+  {
+    marker: '2025',
+    title: 'Autonomous Systems Lead',
+    detail:
+      'Stood up the driverless perception + SLAM stack and led the autonomy subteam to the car’s first fully autonomous laps.',
+    tag: 'AV',
+  },
+];
 ---
 
-<Base title="FSAE">
-  <Section index="01" label="FSAE Electric" title="Autonomous Systems" framed>
-    <p class="max-w-xl text-muted">Build log &amp; write-ups land in Phase 4.</p>
+<Base title="FSAE" description="FSAE Electric build log — firmware, manufacturing, and autonomous systems.">
+  <!-- Header -->
+  <header class="relative overflow-hidden border-b border-line py-20 md:py-28">
+    <div class="container-hud">
+      <SpecLabel code="DIV.01" text="FORMULA SAE · ELECTRIC" accent />
+      <Reveal>
+        <h1 class="mt-6 font-display text-5xl font-semibold leading-[0.95] md:text-7xl">
+          FSAE <span class="text-grad">Electric</span>
+        </h1>
+      </Reveal>
+      <div class="mt-6 max-w-xl"><DimensionLine value="AUTONOMOUS SYSTEMS LEAD" /></div>
+      <Reveal delay={140}>
+        <p class="mt-6 max-w-2xl text-lg text-muted">
+          Three seasons building a Formula Student car — from embedded firmware and
+          carbon manufacturing to the driverless stack that now puts it on track by itself.
+          This is the build log.
+        </p>
+      </Reveal>
+    </div>
+  </header>
+
+  <Section index="A" label="Domains" title="Three subsystems, one car">
+    <SubsystemLanes counts={counts} />
+  </Section>
+
+  <Section index="B" label="Trajectory" title="How I got here" class="border-y border-line bg-surface/30">
+    <Timeline items={timeline} />
+  </Section>
+
+  <Section index="C" label="Build log" title="Entries">
+    <div class="mb-10"><CoordinateAxis startLabel="LOG" endLabel={`${posts.length} REC`} /></div>
+    <PostGrid posts={posts} />
   </Section>
 </Base>

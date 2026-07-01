@@ -1,0 +1,87 @@
+---
+import { getCollection, render } from 'astro:content';
+import { Image } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import SubsystemBadge from '../../components/fsae/SubsystemBadge.astro';
+import VideoEmbed from '../../components/content/VideoEmbed.astro';
+import Placeholder from '../../components/media/Placeholder.astro';
+import CoordinateAxis from '../../components/hud/CoordinateAxis.astro';
+import { subsystems } from '../../config/fsae';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('fsae', ({ data }) => !data.draft);
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const meta = subsystems[post.data.subsystem];
+const dateStr = post.data.date.toISOString().slice(0, 10);
+---
+
+<Base title={post.data.title} description={post.data.summary}>
+  <article class="pb-24">
+    <!-- header -->
+    <header class="relative border-b border-line py-14 md:py-20" style={`--sc:${meta.color}`}>
+      <div class="container-hud max-w-3xl">
+        <a href="/fsae" class="link-hud mb-8 inline-block font-mono text-xs uppercase tracking-widest text-muted hover:text-ink">
+          ← Build log
+        </a>
+        <div class="mb-5 flex flex-wrap items-center gap-3">
+          <SubsystemBadge subsystem={post.data.subsystem} />
+          <span class="hud-label tabular">{dateStr}</span>
+          {post.data.season && <span class="hud-label">· {post.data.season}</span>}
+        </div>
+        <h1 class="font-display text-4xl font-semibold leading-tight md:text-5xl">
+          {post.data.title}
+        </h1>
+        <p class="mt-5 text-lg text-muted">{post.data.summary}</p>
+        {
+          post.data.tags.length > 0 && (
+            <div class="mt-6 flex flex-wrap gap-2">
+              {post.data.tags.map((t) => (
+                <span class="font-mono text-[0.65rem] uppercase tracking-wider text-faint">#{t}</span>
+              ))}
+            </div>
+          )
+        }
+      </div>
+    </header>
+
+    <div class="container-hud max-w-3xl">
+      <!-- lead media: video > cover > placeholder -->
+      <div class="mt-10">
+        {
+          post.data.video ? (
+            <VideoEmbed url={post.data.video} title={post.data.title} />
+          ) : post.data.cover ? (
+            <Image
+              src={post.data.cover}
+              alt={post.data.title}
+              widths={[600, 1000, 1600]}
+              sizes="(min-width: 768px) 768px, 100vw"
+              class="w-full border border-line object-cover"
+            />
+          ) : (
+            <Placeholder ratio="16/9" label={`${meta.code} · FIG.LEAD`} seed={0} />
+          )
+        }
+      </div>
+
+      <!-- MDX body -->
+      <div class="prose-hud mt-12">
+        <Content />
+      </div>
+
+      <div class="mt-16">
+        <CoordinateAxis startLabel="EOF" endLabel="↑ TOP" />
+        <a
+          href="/fsae"
+          class="link-hud mt-8 inline-block font-mono text-xs uppercase tracking-widest text-muted hover:text-ink"
+        >
+          ← Back to all entries
+        </a>
+      </div>
+    </div>
+  </article>
+</Base>
