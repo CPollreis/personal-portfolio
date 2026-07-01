@@ -1,15 +1,19 @@
 ---
 import '../styles/global.css';
+import Seo from '../components/Seo.astro';
+import Nav from '../components/layout/Nav.astro';
+import Footer from '../components/layout/Footer.astro';
 
 interface Props {
   title?: string;
   description?: string;
+  image?: string;
+  noindex?: boolean;
+  /** Set false on full-bleed pages that manage their own top spacing. */
+  padTop?: boolean;
 }
 
-const {
-  title = 'Caleb Pollreis',
-  description = 'Computer engineering student and FSAE Electric autonomous systems lead.',
-} = Astro.props;
+const { title, description, image, noindex, padTop = true } = Astro.props;
 ---
 
 <!doctype html>
@@ -17,12 +21,23 @@ const {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
-    <title>{title}</title>
-    <meta name="description" content={description} />
+    <meta name="theme-color" content="#09090b" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <Seo title={title} description={description} image={image} noindex={noindex} />
   </head>
   <body>
-    <slot />
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-80 focus:border focus:border-cyan focus:bg-bg focus:px-4 focus:py-2 focus:font-mono focus:text-sm focus:text-ink"
+    >
+      Skip to content
+    </a>
+    <Nav />
+    <main id="main" class={padTop ? 'pt-16' : ''}>
+      <slot />
+    </main>
+    <Footer />
   </body>
 </html>

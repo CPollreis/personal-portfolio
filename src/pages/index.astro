@@ -1,11 +1,12 @@
 ---
 import Base from '../layouts/Base.astro';
+import Section from '../components/layout/Section.astro';
+import { site } from '../config/site';
 ---
 
 <Base>
-  <main class="min-h-dvh grid place-items-center bg-black text-white">
-    <p class="font-mono text-sm tracking-widest uppercase">
-      Caleb Pollreis — scaffold online
-    </p>
-  </main>
+  <Section index="00" label="Index" title={site.name} framed headingLevel="h1">
+    <p class="max-w-xl text-lg text-muted">{site.tagline}</p>
+    <p class="mt-6 hud-label">Phase 1 shell online — hero &amp; content land in Phase 3.</p>
+  </Section>
 </Base>

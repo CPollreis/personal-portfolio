@@ -1,0 +1,61 @@
+---
+/**
+ * CornerBrackets — registration marks that frame a card or section like a
+ * viewfinder. Purely decorative (aria-hidden). Full HUD kit expands in Phase 2.
+ */
+interface Props {
+  /** Bracket arm length in px. */
+  size?: number;
+  /** Stroke color (defaults to hairline). */
+  color?: string;
+  /** Inset from the edges in px. */
+  inset?: number;
+  class?: string;
+}
+
+const { size = 14, color = 'var(--color-line)', inset = 0, class: className = '' } = Astro.props;
+const s = `${size}px`;
+const i = `${inset}px`;
+---
+
+<div class={`pointer-events-none absolute inset-0 ${className}`} aria-hidden="true">
+  <span class="corner tl" style={`--s:${s};--i:${i};--c:${color}`}></span>
+  <span class="corner tr" style={`--s:${s};--i:${i};--c:${color}`}></span>
+  <span class="corner bl" style={`--s:${s};--i:${i};--c:${color}`}></span>
+  <span class="corner br" style={`--s:${s};--i:${i};--c:${color}`}></span>
+</div>
+
+<style>
+  .corner {
+    position: absolute;
+    width: var(--s);
+    height: var(--s);
+  }
+  .corner::before,
+  .corner::after {
+    content: '';
+    position: absolute;
+    background: var(--c);
+  }
+  /* horizontal arm */
+  .corner::before {
+    height: 1px;
+    width: var(--s);
+    top: 0;
+  }
+  /* vertical arm */
+  .corner::after {
+    width: 1px;
+    height: var(--s);
+    left: 0;
+  }
+  .tl { top: var(--i); left: var(--i); }
+  .tr { top: var(--i); right: var(--i); }
+  .tr::before { right: 0; left: auto; }
+  .tr::after { right: 0; left: auto; }
+  .bl { bottom: var(--i); left: var(--i); }
+  .bl::before { bottom: 0; top: auto; }
+  .br { bottom: var(--i); right: var(--i); }
+  .br::before { bottom: 0; top: auto; right: 0; left: auto; }
+  .br::after { bottom: 0; top: auto; right: 0; left: auto; }
+</style>

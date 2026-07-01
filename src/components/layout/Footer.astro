@@ -1,0 +1,70 @@
+---
+/**
+ * Footer — contact, socials, and a final micrographic flourish (telemetry
+ * readout strip). Keeps the HUD language consistent to the last pixel.
+ */
+import { site, socials, nav } from '../../config/site';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="relative border-t border-line bg-surface/40">
+  <div class="container-hud py-14">
+    <!-- Telemetry readout strip -->
+    <div class="mb-12 flex flex-wrap items-center gap-x-8 gap-y-3">
+      <span class="hud-label text-accent">SYS.STATUS</span>
+      <span class="hud-label">ONLINE</span>
+      <span class="h-px flex-1 bg-line" aria-hidden="true"></span>
+      <span class="hud-label tabular">LAT 44.97°</span>
+      <span class="hud-label tabular">LON -93.23°</span>
+      <span class="hud-label tabular">v{year}.1</span>
+    </div>
+
+    <div class="grid gap-10 md:grid-cols-[1.5fr_1fr_1fr]">
+      <div>
+        <p class="font-display text-2xl text-ink">{site.name}</p>
+        <p class="mt-2 max-w-sm text-sm text-muted">{site.tagline}</p>
+      </div>
+
+      <nav aria-label="Footer">
+        <p class="hud-label mb-4">Index</p>
+        <ul class="space-y-2">
+          {
+            nav.map((item) => (
+              <li>
+                <a href={item.href} class="link-hud text-sm text-muted hover:text-ink">
+                  {item.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      <div>
+        <p class="hud-label mb-4">Connect</p>
+        <ul class="space-y-2">
+          {
+            socials.map((s) => (
+              <li>
+                <a
+                  href={s.href}
+                  class="link-hud text-sm text-muted hover:text-ink"
+                  rel={s.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                  target={s.href.startsWith('http') ? '_blank' : undefined}
+                >
+                  {s.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+
+    <div class="mt-12 flex flex-col gap-2 border-t border-line-soft pt-6 sm:flex-row sm:items-center sm:justify-between">
+      <p class="hud-label">© {year} {site.name} — All systems nominal</p>
+      <p class="hud-label">Built with Astro · anime.js</p>
+    </div>
+  </div>
+</footer>

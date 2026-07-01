@@ -1,0 +1,60 @@
+---
+/**
+ * Section — standard content band with an optional HUD label header and
+ * corner-bracket framing. Establishes vertical rhythm across pages.
+ */
+import CornerBrackets from '../hud/CornerBrackets.astro';
+
+interface Props {
+  /** Mono index tag, e.g. "01". */
+  index?: string;
+  /** Small uppercase label, e.g. "AUTONOMY". */
+  label?: string;
+  /** Large section heading. */
+  title?: string;
+  /** Frame the section with corner brackets. */
+  framed?: boolean;
+  /** Optional id for deep-linking. */
+  id?: string;
+  class?: string;
+  headingLevel?: 'h1' | 'h2';
+}
+
+const {
+  index,
+  label,
+  title,
+  framed = false,
+  id,
+  class: className = '',
+  headingLevel = 'h2',
+} = Astro.props;
+
+const Heading = headingLevel;
+const hasHeader = Boolean(label || title);
+---
+
+<section id={id} class={`relative py-16 md:py-24 ${className}`}>
+  {framed && <CornerBrackets size={16} inset={4} />}
+  <div class="container-hud">
+    {
+      hasHeader && (
+        <header class="mb-10 md:mb-14">
+          {(index || label) && (
+            <div class="mb-3 flex items-center gap-3">
+              {index && <span class="hud-label text-accent">{index}</span>}
+              {index && label && <span class="h-px w-8 bg-line" aria-hidden="true" />}
+              {label && <span class="hud-label">{label}</span>}
+            </div>
+          )}
+          {title && (
+            <Heading class="text-3xl md:text-5xl font-semibold text-ink">
+              {title}
+            </Heading>
+          )}
+        </header>
+      )
+    }
+    <slot />
+  </div>
+</section>
