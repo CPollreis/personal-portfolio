@@ -1,0 +1,32 @@
+---
+/**
+ * Telemetry — animated stat row over a scroll-drawn circuit trace. Numbers are
+ * placeholders; tune once real figures are known.
+ */
+import DataReadout from '../hud/DataReadout.astro';
+import CircuitTrace from '../hud/CircuitTrace.astro';
+import SpecLabel from '../hud/SpecLabel.astro';
+
+const stats = [
+  { label: 'Seasons on team', value: 3, suffix: '+', unit: 'yrs' },
+  { label: 'Subsystems led', value: 3, unit: 'lanes' },
+  { label: 'Projects shipped', value: 4, unit: 'repos' },
+  { label: 'Frames captured', value: 5000, suffix: '+', unit: 'shots' },
+];
+---
+
+<section class="relative overflow-hidden border-y border-line bg-surface/40 py-16 md:py-20">
+  <div class="pointer-events-none absolute -right-10 top-1/2 hidden w-[420px] -translate-y-1/2 text-accent opacity-30 lg:block">
+    <CircuitTrace mode="scroll" />
+  </div>
+  <div class="container-hud">
+    <SpecLabel code="TLM" text="SYSTEM TELEMETRY" accent class="mb-10" />
+    <div class="grid grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-4">
+      {
+        stats.map((s) => (
+          <DataReadout label={s.label} value={s.value} suffix={s.suffix ?? ''} unit={s.unit} />
+        ))
+      }
+    </div>
+  </div>
+</section>

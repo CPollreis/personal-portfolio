@@ -1,0 +1,77 @@
+---
+/**
+ * Hero — full-height HUD landing. Reticle + scramble tagline + dimensioned
+ * name block, framed like an instrument readout.
+ */
+import Reticle from '../hud/Reticle.astro';
+import SpecLabel from '../hud/SpecLabel.astro';
+import CoordinateAxis from '../hud/CoordinateAxis.astro';
+import DimensionLine from '../hud/DimensionLine.astro';
+import ScrambleText from '../motion/ScrambleText.astro';
+import Reveal from '../motion/Reveal.astro';
+import Button from '../ui/Button.astro';
+import { site } from '../../config/site';
+
+const year = new Date().getFullYear();
+---
+
+<section class="relative flex min-h-[calc(100dvh-4rem)] flex-col justify-center overflow-hidden">
+  <!-- faint corner coordinates -->
+  <div class="pointer-events-none absolute inset-0 hidden md:block" aria-hidden="true">
+    <span class="hud-label absolute left-6 top-6">44.97°N</span>
+    <span class="hud-label absolute right-6 top-6">93.23°W</span>
+    <span class="hud-label absolute bottom-6 left-6">SYS/READY</span>
+    <span class="hud-label absolute bottom-6 right-6 text-accent">CTRL·{year}</span>
+  </div>
+
+  <div class="container-hud">
+    <!-- top status row -->
+    <div class="mb-8 flex items-center gap-4">
+      <span class="relative flex h-2 w-2">
+        <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan opacity-60"></span>
+        <span class="relative inline-flex h-2 w-2 rounded-full bg-cyan"></span>
+      </span>
+      <span class="hud-label text-ink">PORTFOLIO</span>
+      <span class="h-px w-10 bg-line"></span>
+      <span class="hud-label">EST. 2025</span>
+    </div>
+
+    <div class="grid items-center gap-10 lg:grid-cols-[1fr_auto]">
+      <div>
+        <Reveal>
+          <h1 class="font-display text-[3.25rem] font-semibold leading-[0.95] tracking-tight sm:text-7xl lg:text-8xl">
+            Caleb
+            <br />
+            <span class="text-grad">Pollreis</span>
+          </h1>
+        </Reveal>
+
+        <div class="mt-6 max-w-xl">
+          <DimensionLine value={site.role} />
+        </div>
+
+        <Reveal delay={160}>
+          <p class="mt-6 max-w-lg text-lg text-muted">
+            <ScrambleText as="span" text={site.tagline} />
+          </p>
+        </Reveal>
+
+        <Reveal delay={260} class="mt-9 flex flex-wrap gap-3">
+          <Button href="/fsae">View FSAE work</Button>
+          <Button href="/projects" variant="ghost">Personal projects</Button>
+        </Reveal>
+      </div>
+
+      <!-- Reticle instrument -->
+      <div class="relative hidden justify-self-end lg:block">
+        <Reticle size={260} />
+        <span class="hud-label absolute -bottom-2 left-1/2 -translate-x-1/2">TRACKING · LOCK</span>
+      </div>
+    </div>
+
+    <div class="mt-16">
+      <CoordinateAxis startLabel="00.0" endLabel="SCROLL ↓" />
+    </div>
+    <SpecLabel class="mt-6" code="FIG.00" text="INDEX · COMPUTER ENGINEERING × AUTONOMY" />
+  </div>
+</section>

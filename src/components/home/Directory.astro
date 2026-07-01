@@ -1,0 +1,106 @@
+---
+/**
+ * Directory — bento grid routing into the site's main sections. Each cell is a
+ * framed HUD panel with a spec code, hover lift, and corner brackets.
+ */
+import Section from '../layout/Section.astro';
+import Stagger from '../motion/Stagger.astro';
+import CornerBrackets from '../hud/CornerBrackets.astro';
+import Placeholder from '../media/Placeholder.astro';
+
+const subsystems = ['Firmware', 'Manufacturing', 'Autonomy'];
+const projects = ['Music Spectrum Analyzer', 'BMS Local Agent', 'Rocket League RL Bot'];
+---
+
+<Section index="01" label="Directory" title="Where the work lives">
+  <Stagger
+    class="grid auto-rows-[minmax(180px,auto)] grid-cols-1 gap-4 md:grid-cols-4 md:gap-5"
+    gap={70}
+  >
+    <!-- FSAE — hero cell -->
+    <a
+      href="/fsae"
+      data-stagger-item
+      class="group relative flex flex-col justify-between overflow-hidden border border-line bg-surface p-6 transition-all duration-300 hover:border-cyan/60 md:col-span-2 md:row-span-2"
+    >
+      <CornerBrackets size={16} inset={10} color="var(--color-line)" />
+      <div class="flex items-start justify-between">
+        <span class="hud-label text-accent">01 · FSAE ELECTRIC</span>
+        <span class="hud-label opacity-0 transition-opacity group-hover:opacity-100">OPEN →</span>
+      </div>
+      <div class="my-6 grow">
+        <Placeholder ratio="16/10" label="FSAE · DV STACK" seed={0} class="h-full" />
+      </div>
+      <div>
+        <h3 class="font-display text-2xl text-ink md:text-3xl">Autonomous Systems Lead</h3>
+        <p class="mt-2 max-w-md text-sm text-muted">
+          Multi-season build log across firmware, manufacturing, and driverless autonomy —
+          screenshots, video, and deep-dive write-ups.
+        </p>
+        <div class="mt-4 flex flex-wrap gap-2">
+          {
+            subsystems.map((s) => (
+              <span class="border border-line px-2.5 py-1 font-mono text-[0.65rem] uppercase tracking-wider text-muted">
+                {s}
+              </span>
+            ))
+          }
+        </div>
+      </div>
+    </a>
+
+    <!-- Projects -->
+    <a
+      href="/projects"
+      data-stagger-item
+      class="group relative flex flex-col justify-between overflow-hidden border border-line bg-surface p-6 transition-all duration-300 hover:border-cyan/60 md:col-span-2"
+    >
+      <CornerBrackets size={16} inset={10} color="var(--color-line)" />
+      <div class="flex items-start justify-between">
+        <span class="hud-label text-accent">02 · PROJECTS</span>
+        <span class="hud-label opacity-0 transition-opacity group-hover:opacity-100">OPEN →</span>
+      </div>
+      <ul class="mt-6 space-y-2.5">
+        {
+          projects.map((p, i) => (
+            <li class="flex items-center gap-3 border-b border-line-soft pb-2.5 last:border-0">
+              <span class="font-mono text-[0.65rem] text-faint">{String(i + 1).padStart(2, '0')}</span>
+              <span class="font-display text-lg text-ink transition-colors group-hover:text-cyan">{p}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </a>
+
+    <!-- Photography -->
+    <a
+      href="/photography"
+      data-stagger-item
+      class="group relative flex flex-col justify-between overflow-hidden border border-line bg-surface p-6 transition-all duration-300 hover:border-cyan/60"
+    >
+      <CornerBrackets size={16} inset={10} color="var(--color-line)" />
+      <div class="flex items-start justify-between">
+        <span class="hud-label text-accent">03 · PHOTO</span>
+      </div>
+      <div class="mt-5 grow">
+        <Placeholder ratio="4/3" label="F/2.8 · 1/500" seed={1} class="h-full" />
+      </div>
+      <h3 class="mt-4 font-display text-xl text-ink">Photography</h3>
+    </a>
+
+    <!-- About -->
+    <a
+      href="/about"
+      data-stagger-item
+      class="group relative flex flex-col justify-between overflow-hidden border border-line bg-surface p-6 transition-all duration-300 hover:border-cyan/60"
+    >
+      <CornerBrackets size={16} inset={10} color="var(--color-line)" />
+      <span class="hud-label text-accent">04 · ABOUT</span>
+      <div>
+        <h3 class="mt-6 font-display text-xl text-ink">Profile &amp; contact</h3>
+        <p class="mt-2 text-sm text-muted">Bio, stack, résumé.</p>
+      </div>
+      <span class="hud-label mt-4 transition-colors group-hover:text-cyan">CONNECT →</span>
+    </a>
+  </Stagger>
+</Section>

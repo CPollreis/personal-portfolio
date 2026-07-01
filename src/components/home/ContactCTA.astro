@@ -1,0 +1,26 @@
+---
+/**
+ * ContactCTA — closing band inviting contact, framed as a comms handshake.
+ */
+import Reveal from '../motion/Reveal.astro';
+import Button from '../ui/Button.astro';
+import CoordinateAxis from '../hud/CoordinateAxis.astro';
+import { site } from '../../config/site';
+---
+
+<section class="relative overflow-hidden py-24 md:py-32">
+  <div class="container-hud">
+    <CoordinateAxis startLabel="COMMS" endLabel="OPEN" class="mb-12 opacity-70" />
+    <Reveal>
+      <p class="hud-label text-accent">// LET'S BUILD SOMETHING</p>
+      <h2 class="mt-5 max-w-3xl font-display text-4xl font-semibold leading-tight md:text-6xl">
+        Open to internships, collaborations, and hard autonomy problems.
+      </h2>
+    </Reveal>
+    <Reveal delay={140} class="mt-10 flex flex-wrap items-center gap-4">
+      <Button href={`mailto:${site.email}`}>Get in touch</Button>
+      <Button href="/about" variant="ghost">More about me</Button>
+      <span class="hud-label tabular">{site.email}</span>
+    </Reveal>
+  </div>
+</section>
