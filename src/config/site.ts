@@ -6,9 +6,13 @@
 export const site = {
   name: 'Caleb Pollreis',
   role: 'Autonomous Systems Lead · FSAE Electric',
-  tagline: 'Computer engineering student building autonomous race systems.',
+  tagline: 'Building the systems to make a race car drive itself.',
+  /** Plain-English one-liner for people who don't know what FSAE is. */
+  intro:
+    'Computer engineering student at the University of Manitoba, leading a 10-person team building the driverless system for our Formula SAE electric race car. Target: autonomous by 2028.',
+  availability: 'Open to internships · Jan to Aug 2027',
   description:
-    'Portfolio of Caleb Pollreis, computer engineering student and FSAE Electric autonomous systems lead. Firmware, manufacturing, autonomy, personal projects, and photography.',
+    'Portfolio of Caleb Pollreis, computer engineering student at the University of Manitoba and FSAE Electric autonomous systems lead. Firmware, HV accumulator work, driverless autonomy, personal projects, and photography.',
   url: 'https://calebpollreis.com',
   locale: 'en',
   email: 'calebpollreis@gmail.com',

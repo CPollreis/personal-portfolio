@@ -1,0 +1,51 @@
+---
+title: "Wiring the Car's Nervous System: CAN, the BMS, and the Motor Controller"
+date: 2024-11-02
+subsystem: firmware
+season: 2025 Season
+summary: "Developing CAN 2.0 communication between our custom PCBs, the battery-management system, and the PM100DX motor controller, on STM32, where a dropped frame is a safety problem."
+tags: [Embedded C, CAN 2.0, STM32, BMS, PM100DX]
+draft: false
+---
+
+import Gallery from '../../components/content/Gallery.astro';
+
+An electric FSAE car is a distributed system: custom PCBs, a battery-management
+system watching every cell, and a 3-phase motor controller that turns pack
+energy into lap time. As Software System Lead I developed the **CAN 2.0
+communication** that lets all of them share one picture of the car, running on
+**STM32 microcontrollers** across our custom boards.
+
+## One bus, three dialects
+
+The interesting part of vehicle networking isn't sending frames, it's agreeing
+on what they mean. The work spanned three interfaces:
+
+- **Custom PCBs to each other:** defining the message set for our own boards so
+  pedal position, vehicle state, and fault flags arrive predictably.
+- **The BMS:** decoding pack state (voltages, temperatures, fault status) so the
+  rest of the car can react to the accumulator's health.
+- **The PM100DX motor controller:** command and telemetry framing for the
+  3-phase inverter, where a misunderstood message doesn't just log an error, it
+  moves the car.
+
+<Gallery
+  labels={['BENCH · STM32 NODES', 'CANDB · MESSAGE SET', 'TRACE · BUS CAPTURE']}
+  cols={3}
+/>
+
+## Why this is safety work
+
+The BMS exists to keep a high-voltage pack inside its safe envelope, and the
+vehicle's response to a BMS fault travels over this bus. That framing shaped
+the engineering: predictable IDs and priorities, defined behavior when a node
+goes quiet, and bench testing with bus captures before anything touched the
+car. Tools like CANdb++ and PCAN-View lived permanently on my second monitor.
+
+## What it taught the team
+
+This network is also where I learned to lead: 10+ software members build
+against these interfaces, so the message set became documentation, code review
+became teaching, and CI pipelines in GitHub Actions became the way we keep five
+codebases honest. The bus is the contract between every subsystem on the car,
+and contracts are only useful when everyone can read them.

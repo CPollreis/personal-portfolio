@@ -36,7 +36,14 @@ const hasHeader = Boolean(label || title);
 
 <section id={id} class={`relative py-16 md:py-24 ${className}`}>
   {framed && <CornerBrackets size={16} inset={4} />}
-  <div class="container-hud">
+  <div class="container-hud relative">
+    {
+      index && (
+        <span class="ghost-index hidden lg:block" data-parallax="0.08" aria-hidden="true">
+          {index}
+        </span>
+      )
+    }
     {
       hasHeader && (
         <header class="mb-10 md:mb-14">

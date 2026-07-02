@@ -123,11 +123,14 @@ const COLLAPSE_Y = 164; // iris plane; everything stacks here before exploding
 </style>
 
 <script>
-  import { animate, stagger, createAnimatable, utils } from 'animejs';
+  import { animate, stagger, createAnimatable, utils, cubicBezier } from 'animejs';
 
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  function initLenses() {
   document.querySelectorAll<HTMLElement>('.lens-persp').forEach((root) => {
+    if (root.dataset.bound) return;
+    root.dataset.bound = '1';
     const tilt = root.querySelector<HTMLElement>('[data-lens-tilt]');
     const layers = root.querySelectorAll<SVGGElement>('.lens-layer');
     if (!tilt || !layers.length || reduced) return;
@@ -148,7 +151,7 @@ const COLLAPSE_Y = 164; // iris plane; everything stacks here before exploding
           opacity: 1,
           duration: 1100,
           delay: stagger(70, { from: 'center' }),
-          ease: 'cubicBezier(0.16, 1, 0.3, 1)',
+          ease: cubicBezier(0.16, 1, 0.3, 1),
           onComplete: () => {
             // gentle idle float so the diagram stays alive
             animate(tilt, {
@@ -182,4 +185,7 @@ const COLLAPSE_Y = 164; // iris plane; everything stacks here before exploding
     zone.addEventListener('pointermove', onMove as EventListener);
     zone.addEventListener('pointerleave', onLeave);
   });
+  }
+  initLenses();
+  document.addEventListener('astro:page-load', initLenses);
 </script>

@@ -8,7 +8,7 @@
  *   • Reduced motion   → final states applied instantly, no animation.
  *
  * Supported attributes:
- *   data-reveal[="up|left|right"]      fade + slide a single element in
+ *   data-reveal[="up|left|right|clip"] fade + slide (or clip-wipe) an element in
  *   data-reveal-delay="120"            ms delay
  *   data-stagger                       container: stagger its [data-stagger-item]s
  *   data-stagger-gap="60"              per-item ms (default 45)
@@ -16,13 +16,18 @@
  *   data-counter-suffix="+"            appended after the value
  *   data-scramble                      scramble-reveal the element's text
  *   data-draw[="scroll"]               draw inline SVG strokes on enter (or synced)
+ *   data-parallax="0.15"               slow scroll drift for decorative layers
+ *
+ * Re-initializes after ClientRouter page swaps (astro:page-load); nodes are
+ * marked with data-mo-bound so repeat passes never double-bind.
  */
-import { animate, stagger, createDrawable, onScroll, utils } from 'animejs';
+import { animate, stagger, createDrawable, onScroll, utils, cubicBezier } from 'animejs';
 
 const prefersReduced =
   window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
 
-const EASE = 'cubicBezier(0.16, 1, 0.3, 1)';
+// anime v4 removed the string form; pass the easing function itself.
+const EASE = cubicBezier(0.16, 1, 0.3, 1);
 
 /** Reveal offset per direction. */
 function offset(dir: string | null): { x: number; y: number } {
@@ -41,6 +46,21 @@ function offset(dir: string | null): { x: number; y: number } {
 function revealEl(el: HTMLElement) {
   const dir = el.getAttribute('data-reveal');
   const delay = Number(el.getAttribute('data-reveal-delay')) || 0;
+  if (dir === 'clip') {
+    // The clip lives on the CHILD: a clipped target reports a zero-area
+    // intersection, so observing the (unclipped) wrapper is what makes the
+    // IntersectionObserver fire at all.
+    const target = el.firstElementChild as HTMLElement | null;
+    if (!target) return;
+    animate(target, {
+      clipPath: ['inset(0 0 100% 0)', 'inset(0 0 -12% 0)'],
+      translateY: [22, 0],
+      duration: 900,
+      delay,
+      ease: EASE,
+    });
+    return;
+  }
   const { x, y } = offset(dir);
   animate(el, {
     opacity: [0, 1],
@@ -104,6 +124,16 @@ function scrambleEl(el: HTMLElement) {
   }, 28);
 }
 
+/** Slow vertical drift synced to the element's traversal of the viewport. */
+function parallaxEl(el: HTMLElement) {
+  const speed = Number(el.getAttribute('data-parallax')) || 0.15;
+  animate(el, {
+    translateY: [speed * 120, speed * -120],
+    ease: 'linear',
+    autoplay: onScroll({ target: el, sync: 1, enter: 'bottom top', leave: 'top bottom' }),
+  });
+}
+
 function drawEl(svgEl: HTMLElement) {
   const mode = svgEl.getAttribute('data-draw');
   const strokes = svgEl.querySelectorAll<SVGGeometryElement>('path, line, polyline, circle, rect, ellipse');
@@ -135,7 +165,8 @@ function settle(el: HTMLElement) {
   // reveal/stagger/scramble need nothing: content is visible by default.
 }
 
-const SELECTOR = '[data-reveal],[data-stagger],[data-counter],[data-scramble],[data-draw]';
+const SELECTOR =
+  '[data-reveal],[data-stagger],[data-counter],[data-scramble],[data-draw],[data-parallax]';
 
 function run(el: HTMLElement) {
   if (el.hasAttribute('data-reveal')) revealEl(el);
@@ -146,7 +177,14 @@ function run(el: HTMLElement) {
 }
 
 function init() {
-  const nodes = Array.from(document.querySelectorAll<HTMLElement>(SELECTOR));
+  // Only claim nodes this pass hasn't seen (fresh DOM after a page swap).
+  const nodes = Array.from(document.querySelectorAll<HTMLElement>(SELECTOR)).filter(
+    (n) => !n.dataset.moBound,
+  );
+  nodes.forEach((n) => {
+    n.dataset.moBound = '1';
+  });
+  if (!nodes.length) return;
 
   if (prefersReduced) {
     nodes.forEach(settle);
@@ -157,10 +195,9 @@ function init() {
   // Only now that JS + motion are active do we allow initial-hidden CSS.
   document.documentElement.classList.add('motion');
 
-  // Scroll-synced draws bind immediately (they track scroll position).
-  nodes
-    .filter((n) => n.getAttribute('data-draw') === 'scroll')
-    .forEach(drawEl);
+  // Scroll-synced binds attach immediately (they track scroll position).
+  nodes.filter((n) => n.getAttribute('data-draw') === 'scroll').forEach(drawEl);
+  nodes.filter((n) => n.hasAttribute('data-parallax')).forEach(parallaxEl);
 
   const io = new IntersectionObserver(
     (entries, obs) => {
@@ -175,7 +212,7 @@ function init() {
   );
 
   nodes
-    .filter((n) => n.getAttribute('data-draw') !== 'scroll')
+    .filter((n) => n.getAttribute('data-draw') !== 'scroll' && !n.hasAttribute('data-parallax'))
     .forEach((n) => io.observe(n));
 }
 
@@ -184,3 +221,5 @@ if (document.readyState === 'loading') {
 } else {
   init();
 }
+// Re-run after every ClientRouter navigation (also fires on first load).
+document.addEventListener('astro:page-load', init);

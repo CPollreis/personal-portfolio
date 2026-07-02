@@ -12,21 +12,21 @@ import { site } from '../config/site';
 
 const now = [
   { k: 'ROLE', v: 'Autonomous Systems Lead, FSAE Electric' },
-  { k: 'STUDY', v: 'B.S. Computer Engineering' },
+  { k: 'STUDY', v: 'B.Sc. Computer Engineering (Co-op), University of Manitoba · Class of 2028' },
   { k: 'FOCUS', v: 'Perception · Controls · Embedded' },
-  { k: 'STATUS', v: 'Open to Summer 2026 internships' },
+  { k: 'STATUS', v: 'Available for internships Jan to Aug 2027' },
 ];
 ---
 
 <Base title="About" description="About Caleb Pollreis, computer engineering student and FSAE Electric autonomous systems lead.">
-  <header class="relative border-b border-line py-20 md:py-28">
+  <header class="glow-header relative overflow-hidden border-b border-line py-20 md:py-28">
     <div class="container-hud">
       <SpecLabel code="DIV.04" text="PROFILE · OPERATOR" accent />
-      <Reveal>
-        <h1 class="mt-6 font-display text-5xl font-semibold leading-[0.95] md:text-7xl">
+      <div class="mt-6" data-reveal="clip">
+        <h1 class="font-display text-5xl font-semibold leading-[0.95] md:text-7xl">
           About <span class="text-grad">me</span>
         </h1>
-      </Reveal>
+      </div>
       <div class="mt-6 max-w-xl"><DimensionLine value="COMPUTER ENGINEERING × AUTONOMY" /></div>
     </div>
   </header>
@@ -38,11 +38,11 @@ const now = [
         <Reveal>
           <p>
             I'm Caleb, a computer engineering student who likes problems that sit right on the
-            boundary between hardware and software. On my FSAE Electric team I lead the
-            <span class="text-ink">autonomous systems</span> group, but I've worked across the
-            whole car: writing firmware for the battery-management system, building and
-            validating the HV accumulator, and standing up the driverless stack that now puts
-            the car on track by itself.
+            boundary between hardware and software. On my FSAE Electric team I lead
+            the <span class="text-ink">autonomous systems</span> group, but I've worked across the
+            whole car: developing the CAN network that ties the custom boards, battery-management
+            system, and motor controller together, working hands-on with the HV accumulator, and
+            now leading the team's push to a driverless car by 2028.
           </p>
         </Reveal>
         <Reveal delay={100}>
@@ -60,7 +60,7 @@ const now = [
           </p>
         </Reveal>
         <Reveal delay={300} class="flex flex-wrap gap-3 pt-4">
-          <Button href="/resume.pdf" external>Download résumé</Button>
+          <Button href="/resume.pdf" external>Download resume</Button>
           <Button href={`mailto:${site.email}`} variant="ghost">Email me</Button>
         </Reveal>
       </div>

@@ -1,9 +1,9 @@
 ---
 title: Music Spectrum Analyzer
 date: 2025-02-10
-kind: Audio · DSP
-stack: [C++, JUCE, FFT, OpenGL]
-summary: "A real-time audio spectrum analyzer that turns live sound into a responsive frequency visualization: FFT on the audio thread, GPU rendering on the paint thread."
+kind: Embedded · DSP
+stack: [STM32, C, FFT, Altium, SolidWorks]
+summary: "A 28-band acrylic spectrum analyzer for a home sound system, in progress: FFT-based DSP on an STM32 driving WS2812B LED strips over DMA, on a custom Altium-designed PCB."
 order: 1
 featured: true
 links:
@@ -13,31 +13,32 @@ draft: false
 
 import Gallery from '../../components/content/Gallery.astro';
 
-I wanted to actually *see* music, so I built a real-time spectrum analyzer that
-takes a live audio stream and renders its frequency content as a smooth,
-reactive visualization.
+I wanted to actually *see* music, physically, on the wall, so I'm building a
+**28-band spectrum analyzer**: an acrylic panel of LED columns that turns live
+audio into a real-time frequency display, designed to integrate with my sound
+system. It's a work in progress, and it's as much a hardware project as a DSP
+one.
 
 ## Signal path
 
-The core is a classic short-time Fourier transform, but the interesting part is
-keeping it glitch-free in real time:
+The core is an **FFT running on an STM32 microcontroller**. Audio comes in,
+gets transformed, and the spectrum is binned into 28 bands that map to the
+acrylic columns. The display itself is **WS2812B addressable LED strips**,
+driven over **DMA** so the microcontroller can push frames continuously
+without the CPU babysitting every bit.
 
-- Audio arrives in small buffers on a high-priority callback, with no
-  allocations and no locks on that thread.
-- Each block is windowed (Hann) and run through an FFT to get magnitude per
-  frequency bin.
-- Bins are mapped to a log-frequency scale so bass and treble get perceptually
-  fair space, then smoothed over time so the display moves musically instead of
-  flickering.
+<Gallery labels={['PCB · ALTIUM LAYOUT', 'BENCH · LED BRING-UP', 'CAD · ACRYLIC ENCLOSURE']} cols={3} />
 
-<Gallery labels={['UI · LIVE SPECTRUM', 'DEBUG · FFT BINS', 'SETTINGS · SCALE']} cols={3} />
+## The hardware is the project
 
-## Making it feel good
+The electronics live on a **custom PCB designed in Altium Designer**, and the
+enclosure and mounting hardware are modeled in **SolidWorks**. Doing the full
+loop, schematic, layout, firmware, and mechanical design, is the point: it's
+the same discipline as the FSAE work, scaled to something that hangs in my
+room.
 
-A technically-correct analyzer can still look bad. Two tweaks did most of the
-work: an asymmetric attack/decay envelope on each band (fast rise, slow fall,
-like a real VU meter) and a subtle peak-hold line. Rendering runs on the GPU so
-the visualization stays at display refresh even with a fine bin resolution.
+## Status
 
-It started as a DSP learning project and turned into the thing I leave running
-on a second monitor while I work.
+WIP. The DSP pipeline and LED driving are the current focus; the enclosure
+design is modeled and waiting on the electronics to settle. Real photos and
+captures will land here as the build progresses.

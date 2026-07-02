@@ -30,15 +30,15 @@ const photos: Photo[] = frames.map((f) => ({
 ---
 
 <Base title="Photography" description="Photography by Caleb Pollreis: motorsport, engineering detail, and the world in between.">
-  <header class="relative overflow-hidden border-b border-line py-20 md:py-28">
+  <header class="glow-header relative overflow-hidden border-b border-line py-20 md:py-28">
     <div class="container-hud grid items-center gap-12 lg:grid-cols-[1fr_400px]">
       <div>
         <SpecLabel code="DIV.03" text="OPTICS · PHOTOGRAPHY" accent />
-        <Reveal>
-          <h1 class="mt-6 font-display text-5xl font-semibold leading-[0.95] md:text-7xl">
+        <div class="mt-6" data-reveal="clip">
+          <h1 class="font-display text-5xl font-semibold leading-[0.95] md:text-7xl">
             Through the <span class="text-grad">lens</span>
           </h1>
-        </Reveal>
+        </div>
         <div class="mt-6 max-w-xl"><DimensionLine value="MOTORSPORT · DETAIL · LANDSCAPE" /></div>
         <Reveal delay={140}>
           <p class="mt-6 max-w-2xl text-lg text-muted">

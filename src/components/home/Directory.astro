@@ -7,9 +7,10 @@ import Section from '../layout/Section.astro';
 import Stagger from '../motion/Stagger.astro';
 import CornerBrackets from '../hud/CornerBrackets.astro';
 import Placeholder from '../media/Placeholder.astro';
+import SlamTrack from '../fsae/SlamTrack.astro';
 
 const subsystems = ['Firmware', 'Manufacturing', 'Autonomy'];
-const projects = ['Music Spectrum Analyzer', 'BMS Local Agent', 'Rocket League RL Bot'];
+const projects = ['Music Spectrum Analyzer', 'BMO · Embodied AI Agent', 'Rocket League RL Bot'];
 ---
 
 <Section index="01" label="Directory" title="Where the work lives">
@@ -21,15 +22,18 @@ const projects = ['Music Spectrum Analyzer', 'BMS Local Agent', 'Rocket League R
     <a
       href="/fsae"
       data-stagger-item
-      class="group relative flex flex-col justify-between overflow-hidden border border-line bg-surface p-6 transition-all duration-300 hover:border-cyan/60 lg:col-span-2 lg:row-span-2"
+      class="card-hud group relative flex flex-col justify-between overflow-hidden border border-line bg-surface p-6 transition-all duration-300 hover:border-cyan/60 lg:col-span-2 lg:row-span-2"
     >
       <CornerBrackets size={16} inset={10} color="var(--color-line)" />
       <div class="flex items-start justify-between">
         <span class="hud-label text-accent">01 · FSAE ELECTRIC</span>
         <span class="hud-label opacity-0 transition-opacity group-hover:opacity-100">OPEN →</span>
       </div>
-      <div class="my-6 grow">
-        <Placeholder ratio="16/10" label="FSAE · DV STACK" seed={0} class="h-full" />
+      <!-- live SLAM cone map: the same instrument that headlines /fsae -->
+      <div class="relative my-6 grow overflow-hidden border border-line bg-surface" style="min-height:220px">
+        <SlamTrack class="absolute inset-0 h-full w-full opacity-75 transition-opacity duration-300 group-hover:opacity-100" />
+        <span class="hud-label absolute bottom-3 left-3">SLAM · SIMULATED RUN</span>
+        <span class="hud-label absolute right-3 top-3 text-cyan">SIM ●</span>
       </div>
       <div>
         <h3 class="font-display text-2xl text-ink md:text-3xl">Autonomous Systems Lead</h3>
@@ -53,7 +57,7 @@ const projects = ['Music Spectrum Analyzer', 'BMS Local Agent', 'Rocket League R
     <a
       href="/projects"
       data-stagger-item
-      class="group relative flex flex-col justify-between overflow-hidden border border-line bg-surface p-6 transition-all duration-300 hover:border-cyan/60 lg:col-span-2"
+      class="card-hud group relative flex flex-col justify-between overflow-hidden border border-line bg-surface p-6 transition-all duration-300 hover:border-cyan/60 lg:col-span-2"
     >
       <CornerBrackets size={16} inset={10} color="var(--color-line)" />
       <div class="flex items-start justify-between">
@@ -76,7 +80,7 @@ const projects = ['Music Spectrum Analyzer', 'BMS Local Agent', 'Rocket League R
     <a
       href="/photography"
       data-stagger-item
-      class="group relative flex flex-col justify-between overflow-hidden border border-line bg-surface p-6 transition-all duration-300 hover:border-cyan/60"
+      class="card-hud group relative flex flex-col justify-between overflow-hidden border border-line bg-surface p-6 transition-all duration-300 hover:border-cyan/60"
     >
       <CornerBrackets size={16} inset={10} color="var(--color-line)" />
       <div class="flex items-start justify-between">
@@ -92,13 +96,13 @@ const projects = ['Music Spectrum Analyzer', 'BMS Local Agent', 'Rocket League R
     <a
       href="/about"
       data-stagger-item
-      class="group relative flex flex-col justify-between overflow-hidden border border-line bg-surface p-6 transition-all duration-300 hover:border-cyan/60"
+      class="card-hud group relative flex flex-col justify-between overflow-hidden border border-line bg-surface p-6 transition-all duration-300 hover:border-cyan/60"
     >
       <CornerBrackets size={16} inset={10} color="var(--color-line)" />
       <span class="hud-label text-accent">04 · ABOUT</span>
       <div>
         <h3 class="mt-6 font-display text-xl text-ink">Profile &amp; contact</h3>
-        <p class="mt-2 text-sm text-muted">Bio, stack, résumé.</p>
+        <p class="mt-2 text-sm text-muted">Bio, stack, resume.</p>
       </div>
       <span class="hud-label mt-4 transition-colors group-hover:text-cyan">CONNECT →</span>
     </a>

@@ -1,0 +1,50 @@
+---
+title: BMO, an Embodied AI Agent
+date: 2025-04-22
+kind: Embodied AI · Local LLM
+stack: [Raspberry Pi 5, Qwen 3, Whisper, Python]
+summary: "A local multimodal AI agent living in a BMO shell, in progress: a quantized Qwen 3 LLM on a Raspberry Pi 5 with Whisper voice input, TTS output, a live camera for real-world context, and Steam game streaming to double as a console."
+order: 2
+featured: true
+links:
+  repo: https://github.com/
+draft: false
+---
+
+import Gallery from '../../components/content/Gallery.astro';
+
+BMO is my attempt to build the friendly computer from Adventure Time for real:
+a **local, multimodal AI agent** that lives on my shelf, sees the room, talks
+back, and, because every good roommate should, also plays video games. No
+cloud. Everything runs at home.
+
+## The brain
+
+The core is a **quantized Qwen 3 LLM running on a Raspberry Pi 5**. Getting a
+modern language model to be useful on a Pi is a project in constraints:
+quantization, context budgeting, and deciding what the model actually needs to
+see versus what can be summarized before it ever reaches the prompt.
+
+## Ears, voice, and eyes
+
+- **Whisper** handles voice input, so you talk to BMO like you'd talk to a
+  person.
+- **TTS output** gives it a voice back.
+- A **live camera feed** provides real-world context cues, so responses can be
+  grounded in what's actually happening in the room.
+
+<Gallery labels={['SHELL · BMO FACE', 'PIPELINE · VOICE LOOP', 'CAM · CONTEXT FEED']} cols={3} />
+
+## The console party trick
+
+BMO also **streams Steam games over the local network**, which turns the same
+little box into a couch gaming console. It's the feature that makes people
+smile, and the reason the project earns its shelf space even between
+experiments.
+
+## Status
+
+WIP. The voice loop and local inference run today; ongoing work is tightening
+latency and making the camera context genuinely useful rather than decorative.
+It's also my personal testbed for the same question my FSAE work asks:
+how much intelligence can you run on a small computer at the edge?

@@ -32,24 +32,24 @@ const posts = all.map((p) => ({
 
 const timeline = [
   {
-    marker: '2023',
+    marker: '2022',
     title: 'Joined the team on firmware',
     detail:
-      'Started on embedded software, writing sensor drivers and CAN handlers for the vehicle control units and learning the accumulator inside out.',
+      'Programmed STM32 microcontrollers on the custom PCBs that run the car, learned to troubleshoot electrical systems through their schematics, and wrote a Python tool that logs high-current tab-test measurements through an ADC.',
     tag: 'FW',
   },
   {
     marker: '2024',
-    title: 'Accumulator build + BMS ownership',
+    title: 'Software System Lead',
     detail:
-      'Built and validated the HV accumulator, from cell tab testing to segment assembly and harnessing, while taking ownership of the battery-management firmware through a full bring-up.',
+      'Led 10+ software members across 5+ vehicle codebases: CI/CD test pipelines with GitHub Actions, and CAN 2.0 communication between the custom PCBs, the battery-management system, and the 3-phase motor controller.',
     tag: 'FW · MFG',
   },
   {
-    marker: '2025',
-    title: 'Autonomous Systems Lead',
+    marker: '2026',
+    title: 'Autonomous Systems Lead (DSO)',
     detail:
-      'Stood up the driverless perception + SLAM stack and led the autonomy subteam to the car’s first fully autonomous laps.',
+      'Leading 10+ members standing up the driverless program: a C++/ROS 2 monorepo targeting the NVIDIA Jetson Orin, $30k in sponsored LiDARs and cameras, and system architecture built around the FS driverless ruleset. Target: driverless by 2028.',
     tag: 'AV',
   },
 ];
@@ -57,7 +57,7 @@ const timeline = [
 
 <Base title="FSAE" description="FSAE Electric build log: firmware, manufacturing, and autonomous systems.">
   <!-- Header -->
-  <header class="relative overflow-hidden border-b border-line py-20 md:py-28">
+  <header class="glow-header relative overflow-hidden border-b border-line py-20 md:py-28">
     <!-- SLAM pose-graph map, slightly out of focus behind the title -->
     <div class="pointer-events-none absolute inset-0 blur-[2.5px]" aria-hidden="true">
       <SlamTrack class="h-full w-full opacity-45" />
@@ -66,17 +66,18 @@ const timeline = [
     </div>
     <div class="container-hud relative">
       <SpecLabel code="DIV.01" text="FORMULA SAE · ELECTRIC" accent />
-      <Reveal>
-        <h1 class="mt-6 font-display text-5xl font-semibold leading-[0.95] md:text-7xl">
+      <div class="mt-6" data-reveal="clip">
+        <h1 class="font-display text-5xl font-semibold leading-[0.95] md:text-7xl">
           FSAE <span class="text-grad">Electric</span>
         </h1>
-      </Reveal>
+      </div>
       <div class="mt-6 max-w-xl"><DimensionLine value="AUTONOMOUS SYSTEMS LEAD" /></div>
       <Reveal delay={140}>
         <p class="mt-6 max-w-2xl text-lg text-muted">
-          Three seasons building a Formula Student car, from embedded firmware and
-          accumulator manufacturing to the driverless stack that now puts it on track by itself.
-          This is the build log.
+          Four seasons on UMSAE Formula Electric, the University of Manitoba's entry in
+          Formula SAE (the international competition where students design, build, and race
+          formula-style cars). From embedded firmware and accumulator work to leading the
+          push to make the car driverless by 2028. This is the build log.
         </p>
       </Reveal>
     </div>

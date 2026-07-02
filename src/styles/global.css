@@ -88,6 +88,19 @@
     background-attachment: fixed;
   }
 
+  /* Film grain: one fixed noise pass over everything gives the OLED black
+     a physical, printed depth. Kept faint enough to never read as dirt. */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 90;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 240px 240px;
+    opacity: 0.05;
+  }
+
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display);
     font-weight: 600;
@@ -153,10 +166,11 @@
     .container-hud { padding-inline: 3rem; }
   }
 
-  /* Monospace HUD label - the signature small-caps technical tag */
+  /* Monospace HUD label - the signature small-caps technical tag.
+     12px minimum: Lighthouse legibility threshold, and recruiters read these. */
   .hud-label {
     font-family: var(--font-mono);
-    font-size: 0.6875rem;
+    font-size: 0.75rem;
     line-height: 1;
     letter-spacing: 0.18em;
     text-transform: uppercase;
@@ -285,6 +299,137 @@
     width: 100%;
   }
 
+  /* Huge outlined section numeral, printed behind section headers */
+  .ghost-index {
+    position: absolute;
+    top: 2rem;
+    right: 1.5rem;
+    z-index: 0;
+    font-family: var(--font-display);
+    font-size: clamp(7rem, 15vw, 13rem);
+    font-weight: 700;
+    line-height: 0.8;
+    letter-spacing: -0.04em;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--color-line);
+    opacity: 0.55;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  /* Huge outlined wordmark (footer sign-off). Line-height 1 so the glyph
+     bottoms (and their 1px stroke) never get cropped by the line box. */
+  .ghost-word {
+    font-family: var(--font-display);
+    font-size: clamp(3.4rem, 11.5vw, 10.5rem);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    white-space: nowrap;
+    overflow: hidden;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--color-line);
+    user-select: none;
+  }
+
+  /* Ambient accent glow for page headers and the hero. Applied to a
+     positioned container; stays under 10% accent coverage. */
+  .glow-header::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(640px 320px at 10% -10%, color-mix(in srgb, var(--color-accent) 11%, transparent), transparent 70%),
+      radial-gradient(520px 300px at 88% 15%, color-mix(in srgb, var(--color-indigo) 9%, transparent), transparent 70%),
+      radial-gradient(400px 220px at 55% 110%, color-mix(in srgb, var(--color-cyan) 6%, transparent), transparent 70%);
+  }
+
+  /* Gradient border sweep on hover: a 1px accent-triad edge that lights up
+     around any bordered card. Pairs with the existing border-line box. */
+  .card-hud {
+    position: relative;
+  }
+  /* Sits at inset 0 (not -1px) so overflow-hidden hosts don't clip it; the
+     1px ring paints exactly over the host's own border-line. */
+  .card-hud::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    padding: 1px;
+    background: linear-gradient(
+      120deg,
+      color-mix(in srgb, var(--color-indigo) 55%, transparent),
+      color-mix(in srgb, var(--color-accent) 70%, transparent) 45%,
+      color-mix(in srgb, var(--color-cyan) 75%, transparent)
+    );
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity var(--dur-slow) var(--ease-out-hud);
+    pointer-events: none;
+  }
+  .card-hud:hover::after,
+  .card-hud:focus-visible::after {
+    opacity: 1;
+  }
+
+  /* Telemetry ticker marquee (hero footer strip) */
+  .ticker {
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  }
+  .ticker-track {
+    display: flex;
+    width: max-content;
+    animation: ticker-scroll 36s linear infinite;
+  }
+  @keyframes ticker-scroll {
+    to { transform: translateX(-50%); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ticker-track { animation: none; }
+  }
+
+  /* Scroll progress: hairline accent gradient pinned above the nav */
+  #scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    z-index: 60;
+    background: var(--accent-grad);
+    transform-origin: 0 50%;
+    transform: scaleX(0);
+    pointer-events: none;
+  }
+
+  /* Crosshair cursor: the pointer IS a cyan plus sign (with a dark halo so
+     it stays visible over bright elements). Desktop pointers only. */
+  @media (pointer: fine) {
+    html,
+    body,
+    a,
+    button,
+    [role="button"],
+    summary,
+    label,
+    input,
+    select,
+    textarea {
+      cursor:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Cpath d='M12 3v18M3 12h18' stroke='%2309090b' stroke-width='4.5'/%3E%3Cpath d='M12 3v18M3 12h18' stroke='%2325c6eb' stroke-width='2'/%3E%3C/svg%3E")
+          12 12,
+        crosshair;
+    }
+  }
+
   /* Thin interactive link underline that draws in on hover */
   .link-hud {
     position: relative;
@@ -319,6 +464,25 @@
 .motion [data-stagger] > *,
 .motion [data-stagger-item] {
   opacity: 0;
+}
+/* Clip-wipe variant: the wrapper stays opaque and unclipped (so the
+   IntersectionObserver still sees it); its child carries the mask. */
+.motion [data-reveal="clip"] {
+  opacity: 1;
+}
+.motion [data-reveal="clip"] > * {
+  clip-path: inset(0 0 100% 0);
+}
+
+/* =========================================================================
+   VIEW TRANSITIONS
+   Snappy crossfade between pages; the persistent chrome (progress bar,
+   cursor) rides across untouched.
+   ========================================================================= */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 220ms;
+  animation-timing-function: var(--ease-out-hud);
 }
 
 /* =========================================================================

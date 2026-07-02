@@ -184,17 +184,6 @@ function PlaceholderPanel({ ratio, label }: { ratio: string; label: string }) {
           backgroundSize: '32px 32px',
         }}
       />
-      <svg
-        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-faint"
-        width="48"
-        height="48"
-        viewBox="0 0 48 48"
-        fill="none"
-        aria-hidden="true"
-      >
-        <path d="M24 8v10M24 30v10M8 24h10M30 24h10" stroke="currentColor" strokeWidth="1" />
-        <circle cx="24" cy="24" r="8" stroke="currentColor" strokeWidth="1" opacity="0.6" />
-      </svg>
       <span className="absolute bottom-3 left-3 font-mono text-[0.65rem] uppercase tracking-widest text-faint">
         {label}
       </span>

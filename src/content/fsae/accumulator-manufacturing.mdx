@@ -35,10 +35,10 @@ bench.
 ## Segment assembly
 
 Cells stack into segments with the monitoring hardware built in from the start:
-thermistors bonded where the thermal model wants them, sense leads dressed away
-from power paths, and the BMS segment boards mounted so **isoSPI** wiring stays
-short and serviceable. Torque values are written down, witnessed, and checked,
-because a loose busbar connection is a hot spot waiting for competition.
+thermistors placed where the pack needs watching, and sense leads dressed away
+from power paths so the BMS wiring stays short and serviceable. Torque values
+get written down and checked, because a loose busbar connection is a hot spot
+waiting for competition.
 
 ## HV and LV harnessing
 
@@ -63,6 +63,7 @@ The rules that keep the team safe are boring on purpose:
 - The **BMS gates the contactors**: over-voltage, under-voltage, or
   over-temperature on any cell opens the pack, no exceptions.
 
-The payoff of all this discipline is speed. A pack you trust is a pack you can
-work on quickly, and by the end of the build we could pull, service, and requal
-a segment in an afternoon.
+The payoff of all this discipline is trust. A pack whose every cell has a test
+record and whose every connection has a checklist behind it is a pack the whole
+team can work on without fear, and that trust is what lets an electric car
+program move fast.

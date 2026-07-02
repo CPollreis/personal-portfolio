@@ -9,21 +9,50 @@ import CoordinateAxis from '../../components/hud/CoordinateAxis.astro';
 import { subsystems } from '../../config/fsae';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('fsae', ({ data }) => !data.draft);
-  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+  const posts = (await getCollection('fsae', ({ data }) => !data.draft)).sort(
+    (a, b) => b.data.date.getTime() - a.data.date.getTime(),
+  );
+  return posts.map((post, i) => ({
+    params: { slug: post.id },
+    props: { post, newer: posts[i - 1] ?? null, older: posts[i + 1] ?? null },
+  }));
 }
 
-const { post } = Astro.props;
+const { post, newer, older } = Astro.props;
 const { Content } = await render(post);
 const meta = subsystems[post.data.subsystem];
 const dateStr = post.data.date.toISOString().slice(0, 10);
+/* Image behind the title: dedicated hero, else the cover. */
+const heroImg = post.data.hero ?? post.data.cover;
 ---
 
 <Base title={post.data.title} description={post.data.summary}>
   <article class="pb-24">
-    <!-- header -->
-    <header class="relative border-b border-line py-14 md:py-20" style={`--sc:${meta.color}`}>
-      <div class="container-hud max-w-3xl">
+    <!-- header (title in focus over the entry's hero image, home-hero style) -->
+    <header
+      class:list={[
+        'relative overflow-hidden border-b border-line py-14',
+        heroImg ? 'md:py-28' : 'md:py-20',
+      ]}
+      style={`--sc:${meta.color}`}
+    >
+      {
+        heroImg && (
+          <div class="absolute inset-0" aria-hidden="true">
+            <Image
+              src={heroImg}
+              alt=""
+              widths={[960, 1600, 2400]}
+              sizes="100vw"
+              class="h-full w-full object-cover"
+            />
+            <div class="absolute inset-0 bg-bg/60" />
+            <div class="absolute inset-0 bg-gradient-to-r from-bg/85 via-bg/45 to-bg/25" />
+            <div class="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-bg to-transparent" />
+          </div>
+        )
+      }
+      <div class="container-hud relative max-w-3xl">
         <a href="/fsae" class="link-hud mb-8 inline-block font-mono text-xs uppercase tracking-widest text-muted hover:text-ink">
           ← Build log
         </a>
@@ -49,24 +78,26 @@ const dateStr = post.data.date.toISOString().slice(0, 10);
     </header>
 
     <div class="container-hud max-w-3xl">
-      <!-- lead media: video > cover > placeholder -->
-      <div class="mt-10">
-        {
-          post.data.video ? (
-            <VideoEmbed url={post.data.video} title={post.data.title} />
-          ) : post.data.cover ? (
-            <Image
-              src={post.data.cover}
-              alt={post.data.title}
-              widths={[600, 1000, 1600]}
-              sizes="(min-width: 768px) 768px, 100vw"
-              class="w-full border border-line object-cover"
-            />
-          ) : (
-            <Placeholder ratio="16/9" label={`${meta.code} · FIG.LEAD`} seed={0} />
-          )
-        }
-      </div>
+      <!-- lead media: video > cover (unless the header already used it) > placeholder -->
+      {
+        (post.data.video || (post.data.hero && post.data.cover) || !heroImg) && (
+          <div class="mt-10">
+            {post.data.video ? (
+              <VideoEmbed url={post.data.video} title={post.data.title} />
+            ) : post.data.hero && post.data.cover ? (
+              <Image
+                src={post.data.cover}
+                alt={post.data.title}
+                widths={[600, 1000, 1600]}
+                sizes="(min-width: 768px) 768px, 100vw"
+                class="w-full border border-line object-cover"
+              />
+            ) : (
+              <Placeholder ratio="16/9" label={`${meta.code} · FIG.LEAD`} seed={0} />
+            )}
+          </div>
+        )
+      }
 
       <!-- MDX body -->
       <div class="prose-hud mt-12">
@@ -75,6 +106,39 @@ const dateStr = post.data.date.toISOString().slice(0, 10);
 
       <div class="mt-16">
         <CoordinateAxis startLabel="EOF" endLabel="↑ TOP" />
+
+        <!-- prev / next entry -->
+        <nav class="mt-8 grid gap-3 sm:grid-cols-2" aria-label="Adjacent entries">
+          {
+            older ? (
+              <a
+                href={`/fsae/${older.id}`}
+                class="card-hud group border border-line bg-surface p-5 transition-colors"
+              >
+                <span class="hud-label">← Older</span>
+                <span class="mt-2 block font-display text-lg text-ink transition-colors group-hover:text-cyan">
+                  {older.data.title}
+                </span>
+              </a>
+            ) : (
+              <span />
+            )
+          }
+          {
+            newer && (
+              <a
+                href={`/fsae/${newer.id}`}
+                class="card-hud group border border-line bg-surface p-5 text-right transition-colors"
+              >
+                <span class="hud-label">Newer →</span>
+                <span class="mt-2 block font-display text-lg text-ink transition-colors group-hover:text-cyan">
+                  {newer.data.title}
+                </span>
+              </a>
+            )
+          }
+        </nav>
+
         <a
           href="/fsae"
           class="link-hud mt-8 inline-block font-mono text-xs uppercase tracking-widest text-muted hover:text-ink"

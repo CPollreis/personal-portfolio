@@ -8,20 +8,48 @@ import Placeholder from '../../components/media/Placeholder.astro';
 import CoordinateAxis from '../../components/hud/CoordinateAxis.astro';
 
 export async function getStaticPaths() {
-  const projects = await getCollection('projects', ({ data }) => !data.draft);
-  return projects.map((project) => ({ params: { slug: project.id }, props: { project } }));
+  const projects = (await getCollection('projects', ({ data }) => !data.draft)).sort(
+    (a, b) => a.data.order - b.data.order || b.data.date.getTime() - a.data.date.getTime(),
+  );
+  return projects.map((project, i) => ({
+    params: { slug: project.id },
+    props: { project, prev: projects[i - 1] ?? null, next: projects[i + 1] ?? null },
+  }));
 }
 
-const { project } = Astro.props;
+const { project, prev, next } = Astro.props;
 const { Content } = await render(project);
-const { title, kind, stack, summary, links, cover, video, date } = project.data;
+const { title, kind, stack, summary, links, cover, video, date, hero } = project.data;
 const dateStr = date.toISOString().slice(0, 7);
+/* Image behind the title: dedicated hero, else the cover. */
+const heroImg = hero ?? cover;
 ---
 
 <Base title={title} description={summary}>
   <article class="pb-24">
-    <header class="relative border-b border-line py-14 md:py-20">
-      <div class="container-hud max-w-3xl">
+    <header
+      class:list={[
+        'relative overflow-hidden border-b border-line py-14',
+        heroImg ? 'md:py-28' : 'md:py-20',
+      ]}
+    >
+      {
+        heroImg && (
+          <div class="absolute inset-0" aria-hidden="true">
+            <Image
+              src={heroImg}
+              alt=""
+              widths={[960, 1600, 2400]}
+              sizes="100vw"
+              class="h-full w-full object-cover"
+            />
+            <div class="absolute inset-0 bg-bg/60" />
+            <div class="absolute inset-0 bg-gradient-to-r from-bg/85 via-bg/45 to-bg/25" />
+            <div class="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-bg to-transparent" />
+          </div>
+        )
+      }
+      <div class="container-hud relative max-w-3xl">
         <a href="/projects" class="link-hud mb-8 inline-block font-mono text-xs uppercase tracking-widest text-muted hover:text-ink">
           ← Projects
         </a>
@@ -63,17 +91,25 @@ const dateStr = date.toISOString().slice(0, 7);
     </header>
 
     <div class="container-hud max-w-3xl">
-      <div class="mt-10">
-        {
-          video ? (
-            <VideoEmbed url={video} title={title} />
-          ) : cover ? (
-            <Image src={cover} alt={title} widths={[600, 1000, 1600]} sizes="(min-width: 768px) 768px, 100vw" class="w-full border border-line object-cover" />
-          ) : (
-            <Placeholder ratio="16/9" label={`${kind} · FIG.LEAD`} seed={2} />
-          )
-        }
-      </div>
+      {
+        (video || (hero && cover) || !heroImg) && (
+          <div class="mt-10">
+            {video ? (
+              <VideoEmbed url={video} title={title} />
+            ) : hero && cover ? (
+              <Image
+                src={cover}
+                alt={title}
+                widths={[600, 1000, 1600]}
+                sizes="(min-width: 768px) 768px, 100vw"
+                class="w-full border border-line object-cover"
+              />
+            ) : (
+              <Placeholder ratio="16/9" label={`${kind} · FIG.LEAD`} seed={2} />
+            )}
+          </div>
+        )
+      }
 
       <div class="prose-hud mt-12">
         <Content />
@@ -81,6 +117,39 @@ const dateStr = date.toISOString().slice(0, 7);
 
       <div class="mt-16">
         <CoordinateAxis startLabel="EOF" endLabel="↑ TOP" />
+
+        <!-- prev / next project -->
+        <nav class="mt-8 grid gap-3 sm:grid-cols-2" aria-label="Adjacent projects">
+          {
+            prev ? (
+              <a
+                href={`/projects/${prev.id}`}
+                class="card-hud group border border-line bg-surface p-5 transition-colors"
+              >
+                <span class="hud-label">← Previous</span>
+                <span class="mt-2 block font-display text-lg text-ink transition-colors group-hover:text-cyan">
+                  {prev.data.title}
+                </span>
+              </a>
+            ) : (
+              <span />
+            )
+          }
+          {
+            next && (
+              <a
+                href={`/projects/${next.id}`}
+                class="card-hud group border border-line bg-surface p-5 text-right transition-colors"
+              >
+                <span class="hud-label">Next →</span>
+                <span class="mt-2 block font-display text-lg text-ink transition-colors group-hover:text-cyan">
+                  {next.data.title}
+                </span>
+              </a>
+            )
+          }
+        </nav>
+
         <a href="/projects" class="link-hud mt-8 inline-block font-mono text-xs uppercase tracking-widest text-muted hover:text-ink">
           ← Back to all projects
         </a>

@@ -15,14 +15,14 @@ const projects = (await getCollection('projects', ({ data }) => !data.draft)).so
 ---
 
 <Base title="Projects" description="Personal engineering projects: DSP, local AI tooling, and reinforcement learning.">
-  <header class="relative border-b border-line py-20 md:py-28">
+  <header class="glow-header relative overflow-hidden border-b border-line py-20 md:py-28">
     <div class="container-hud">
       <SpecLabel code="DIV.02" text="PERSONAL PROJECTS" accent />
-      <Reveal>
-        <h1 class="mt-6 font-display text-5xl font-semibold leading-[0.95] md:text-7xl">
+      <div class="mt-6" data-reveal="clip">
+        <h1 class="font-display text-5xl font-semibold leading-[0.95] md:text-7xl">
           Things I <span class="text-grad">build</span>
         </h1>
-      </Reveal>
+      </div>
       <div class="mt-6 max-w-xl"><DimensionLine value="DSP · LOCAL AI · REINFORCEMENT LEARNING" /></div>
       <Reveal delay={140}>
         <p class="mt-6 max-w-2xl text-lg text-muted">
@@ -54,7 +54,7 @@ const projects = (await getCollection('projects', ({ data }) => !data.draft)).so
     <!-- FSAE cross-link -->
     <a
       href="/fsae"
-      class="group relative mt-5 flex flex-col items-start justify-between gap-4 overflow-hidden border border-line bg-surface/60 p-6 transition-colors hover:border-cyan/50 md:flex-row md:items-center"
+      class="card-hud group relative mt-5 flex flex-col items-start justify-between gap-4 overflow-hidden border border-line bg-surface/60 p-6 transition-colors md:flex-row md:items-center"
     >
       <CornerBrackets size={14} inset={8} color="var(--color-line)" />
       <div>
