@@ -1,0 +1,55 @@
+---
+title: Standing Up the Driverless Program
+date: 2026-06-10
+subsystem: autonomous
+season: 2026 Season
+summary: "Year one as Autonomous Systems Lead: reading the driverless ruleset like a spec, architecting a C++/ROS 2 monorepo for the Jetson Orin, and securing the sensors that will let the car see. Target: driverless by 2028."
+tags: [ROS 2, C++, Jetson Orin, architecture]
+draft: false
+---
+
+import Gallery from '../../components/content/Gallery.astro';
+
+Our car does not drive itself yet. That's the honest headline, and it's also the
+point: **the team's goal is a driverless car by 2028**, and this season my job
+as Autonomous Systems Lead (DSO) has been to make sure the foundation we lay
+now doesn't have to be torn up later.
+
+## Rules first, architecture second
+
+Before writing a line of stack code, I studied the FSAE driverless ruleset and
+how FSG runs its driverless events, because compliance requirements decide
+architecture: where the emergency brake authority lives, what the autonomous
+system master switch has to do, and what the car must prove before it's allowed
+to move without a driver. Designing around those constraints from day one is
+much cheaper than retrofitting them.
+
+## The monorepo
+
+The software home for all of it is a **C++/ROS 2 monorepo targeting the NVIDIA
+Jetson Orin**. I architected the repository and build infrastructure: package
+layout, build tooling, and the project structure that lets 10+ software members
+work in parallel without stepping on each other.
+
+<Gallery
+  labels={['REPO · PACKAGE LAYOUT', 'RULESET · COMPLIANCE MAP', 'SENSORS · MOUNT STUDY', 'DASH · TEAM DOCS']}
+  cols={2}
+/>
+
+## Hardware we don't have to buy
+
+Driverless perception is expensive, so I ran targeted sponsorship outreach and
+secured about **$30k in sponsored hardware**: LiDARs, cameras, and auxiliary
+sensors. That's the difference between designing the perception stack around
+the sensors we want versus the sensors we could afford.
+
+## Keeping ten people rowing together
+
+The least glamorous work matters most at this stage: I'm building a team
+documentation dashboard with visual aids covering sensor mounting, wire harness
+routing, and subsystem interfaces, so knowledge survives graduation cycles and
+new members ramp up in weeks instead of months.
+
+Next milestones: perception prototyping on the Orin with the sponsored sensor
+suite, and simulation infrastructure so the stack can fail safely long before
+the car does. The build log will follow it, honestly, all the way to 2028.

@@ -38,8 +38,8 @@ export const subsystems: Record<Subsystem, SubsystemMeta> = {
     code: 'AV',
     color: 'var(--color-indigo)',
     text: 'text-indigo',
-    blurb: 'The driverless stack: perception, state estimation, path planning, and vehicle controls for the autonomous events.',
-    focus: ['Perception', 'SLAM', 'Planning', 'Controls', 'ROS 2'],
+    blurb: 'The driverless program, in active development: system architecture, C++/ROS 2 on Jetson Orin, and ruleset compliance, targeting autonomous events by 2028.',
+    focus: ['ROS 2', 'C++', 'Jetson Orin', 'Perception', 'Architecture'],
   },
 };
 

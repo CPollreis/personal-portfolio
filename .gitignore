@@ -18,3 +18,5 @@ pnpm-debug.log*
 .idea/
 .vscode/*
 !.vscode/extensions.json
+# raw hero footage (web-compressed copy is what ships)
+public/videos/hero-loop.MP4

@@ -115,16 +115,17 @@ const pathname = Astro.url.pathname;
 </header>
 
 <script>
-  const toggle = document.getElementById('nav-toggle');
-  const close = document.getElementById('nav-close');
-  const drawer = document.getElementById('mobile-drawer');
-
-  function setOpen(open: boolean) {
+  // Delegated so the bindings survive ClientRouter page swaps (the header is
+  // re-rendered per page; document-level listeners are registered once).
+  function setOpen(open: boolean, refocus = true) {
+    const drawer = document.getElementById('mobile-drawer');
+    const toggle = document.getElementById('nav-toggle');
     if (!drawer || !toggle) return;
     drawer.classList.toggle('hidden', !open);
     drawer.classList.toggle('flex', open);
     toggle.setAttribute('aria-expanded', String(open));
     document.body.style.overflow = open ? 'hidden' : '';
+    if (!refocus) return;
     if (open) {
       (drawer.querySelector('a') as HTMLElement | null)?.focus();
     } else {
@@ -132,10 +133,19 @@ const pathname = Astro.url.pathname;
     }
   }
 
-  toggle?.addEventListener('click', () => setOpen(true));
-  close?.addEventListener('click', () => setOpen(false));
-  drawer?.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setOpen(false)));
+  document.addEventListener('click', (e) => {
+    const t = e.target as HTMLElement | null;
+    if (!t) return;
+    if (t.closest('#nav-toggle')) setOpen(true);
+    else if (t.closest('#nav-close')) setOpen(false);
+    else if (t.closest('#mobile-drawer a')) setOpen(false, false);
+  });
   document.addEventListener('keydown', (e) => {
+    const drawer = document.getElementById('mobile-drawer');
     if (e.key === 'Escape' && drawer && !drawer.classList.contains('hidden')) setOpen(false);
+  });
+  // A page swap replaces the drawer in its closed state; clear the scroll lock.
+  document.addEventListener('astro:after-swap', () => {
+    document.body.style.overflow = '';
   });
 </script>

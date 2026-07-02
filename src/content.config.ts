@@ -16,6 +16,8 @@ const fsae = defineCollection({
       season: z.string().optional(),
       summary: z.string(),
       cover: image().optional(),
+      /** Full-bleed image behind the entry title (falls back to `cover`). */
+      hero: image().optional(),
       tags: z.array(z.string()).default([]),
       /** Optional YouTube/Vimeo URL rendered as an embed in the post header. */
       video: z.url().optional(),
@@ -34,6 +36,8 @@ const projects = defineCollection({
       stack: z.array(z.string()).default([]),
       summary: z.string(),
       cover: image().optional(),
+      /** Full-bleed image behind the entry title (falls back to `cover`). */
+      hero: image().optional(),
       /** Optional demo video (YouTube/Vimeo) shown as the lead media. */
       video: z.url().optional(),
       links: z
@@ -65,7 +69,7 @@ const photography = defineCollection({
       lens: z.string().optional(),
       /** e.g. "35mm · f/1.8 · 1/500s · ISO 200" */
       settings: z.string().optional(),
-      /** e.g. "44.97°N 93.23°W" */
+      /** e.g. "49.90°N 97.14°W" */
       coords: z.string().optional(),
       image: image().optional(),
       ratio: z.enum(['1/1', '4/3', '3/4', '3/2', '2/3', '16/9']).default('3/2'),
