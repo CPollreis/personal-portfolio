@@ -1,0 +1,81 @@
+---
+/**
+ * MomentFrame - one gallery frame (photo or video). A button that opens the
+ * moment lightbox (wired by index via [data-moment-index]). Carries the
+ * isometric tilt + glare hover treatment from moments.css; the inner
+ * [data-media] element is the shared-element source for the lightbox FLIP.
+ */
+import { Image } from 'astro:assets';
+import { momentBackdrop } from './backdrop';
+
+interface Props {
+  index: number;
+  title: string;
+  year: string;
+  kind: 'photo' | 'video';
+  ratio: string;
+  image?: ImageMetadata;
+  /** Hide the caption on decorative placements (hero, marquee overlaps). */
+  caption?: boolean;
+  class?: string;
+}
+
+const { index, title, year, kind, ratio, image, caption = true, class: className = '' } = Astro.props;
+const alt = index % 2 === 1 ? 'm-tilt-alt' : '';
+---
+
+<button
+  type="button"
+  data-moment-index={index}
+  class={`m-frame group ${alt} ${className}`}
+  aria-haspopup="dialog"
+  aria-label={`Open ${kind}: ${title}`}
+>
+  <span class="m-media" data-media style={`aspect-ratio:${ratio}`}>
+    {
+      image ? (
+        <Image
+          src={image}
+          alt={title}
+          widths={[480, 960]}
+          sizes="(min-width: 1024px) 50vw, 100vw"
+          class="absolute inset-0 h-full w-full object-cover"
+        />
+      ) : (
+        <span class="absolute inset-0" style={`background:${momentBackdrop(index)}`} aria-hidden="true"></span>
+      )
+    }
+
+    {
+      kind === 'video' && (
+        <span class="m-play" aria-hidden="true">
+          <span>
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M4 2.5v9l7-4.5-7-4.5z" fill="#f5f5f4" />
+            </svg>
+          </span>
+        </span>
+      )
+    }
+
+    <!-- tiny frame index, whisper of cyan -->
+    <span
+      class="absolute left-3 top-3 z-[3] font-mono text-[0.6rem] tracking-[0.18em] text-cyan/70 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+      aria-hidden="true"
+    >
+      {String(index + 1).padStart(2, '0')}
+    </span>
+  </span>
+
+  {
+    caption && (
+      <>
+        <span class="m-cap">{title}</span>
+        <span class="m-cap-year">
+          ({year}
+          {kind === 'video' ? ' · film' : ''})
+        </span>
+      </>
+    )
+  }
+</button>

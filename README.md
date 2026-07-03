@@ -73,6 +73,10 @@ data with the team first.
 - `public/og-default.png` - regenerate if branding changes.
 - `astro.config.mjs` - set `site` to your real production domain.
 - Portrait on the About page (`src/pages/about.astro`) - swap the placeholder.
+- `src/config/timeline.ts` - **every moment on /timeline is a realistic
+  placeholder.** Edit titles, dates, and `why` blurbs to your real history, and
+  point each `media.src` at real photos/videos under `public/` (e.g.
+  `/timeline/first-drive.jpg`). The constellation layout adapts automatically.
 
 ## Deploy
 

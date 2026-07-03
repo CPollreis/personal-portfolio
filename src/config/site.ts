@@ -31,6 +31,7 @@ export const nav: NavItem[] = [
   { label: 'Projects', href: '/projects', index: '02' },
   { label: 'Photography', href: '/photography', index: '03' },
   { label: 'About', href: '/about', index: '04' },
+  { label: 'Timeline', href: '/timeline', index: '05' },
 ];
 
 export interface SocialLink {
@@ -39,8 +40,8 @@ export interface SocialLink {
 }
 
 export const socials: SocialLink[] = [
-  { label: 'GitHub', href: 'https://github.com/' },
-  { label: 'LinkedIn', href: 'https://www.linkedin.com/' },
+  { label: 'GitHub', href: 'https://github.com/CPollreis' },
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/caleb-pollreis-b815642a6' },
   { label: 'Email', href: `mailto:${site.email}` },
 ];
 

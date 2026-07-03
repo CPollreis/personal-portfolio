@@ -1,81 +1,251 @@
 ---
+/**
+ * /photography - "Moments". The creative counterpart to the rest of the site:
+ * near-pure black, huge cropped Archivo display type with frames overlapping
+ * it, hairline dividers, a bright italic marquee, and an editorial scatter
+ * archive. Clicking any frame opens the shared-element lightbox.
+ */
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
-import Section from '../../components/layout/Section.astro';
-import PhotoTile from '../../components/photography/PhotoTile.astro';
-import Lightbox, { type Photo } from '../../components/photography/Lightbox.tsx';
-import Stagger from '../../components/motion/Stagger.astro';
-import Reveal from '../../components/motion/Reveal.astro';
-import SpecLabel from '../../components/hud/SpecLabel.astro';
-import DimensionLine from '../../components/hud/DimensionLine.astro';
-import CoordinateAxis from '../../components/hud/CoordinateAxis.astro';
-import LensExplode from '../../components/photography/LensExplode.astro';
+import MomentFrame from '../../components/photography/MomentFrame.astro';
+import MomentLightbox, { type Moment } from '../../components/photography/MomentLightbox.tsx';
+import { momentBackdrop } from '../../components/photography/backdrop';
+import { stripArt } from '../../components/photography/stripArt';
+import '../../styles/moments.css';
 
 const frames = (await getCollection('photography')).sort(
   (a, b) => a.data.order - b.data.order || b.data.date.getTime() - a.data.date.getTime(),
 );
 
+const fmtDate = (d: Date) =>
+  d
+    .toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' })
+    .toUpperCase();
+
 // Serializable payload for the lightbox island.
-const photos: Photo[] = frames.map((f) => ({
+const moments: Moment[] = frames.map((f, i) => ({
   title: f.data.title,
-  date: f.data.date.toISOString().slice(0, 10),
+  kind: f.data.kind,
+  dateDisplay: fmtDate(f.data.date),
+  story: f.data.story,
   location: f.data.location,
   camera: f.data.camera,
   lens: f.data.lens,
-  settings: f.data.settings,
-  coords: f.data.coords,
+  iso: f.data.iso,
+  aperture: f.data.aperture,
+  focal: f.data.focal,
+  fps: f.data.fps,
+  quality: f.data.quality,
   ratio: f.data.ratio,
   src: f.data.image?.src,
+  backdrop: momentBackdrop(i),
 }));
+
+const years = frames.map((f) => f.data.date.getUTCFullYear());
+const span = `${Math.min(...years)} – ${Math.max(...years)}`;
+const yearOf = (i: number) => String(frames[i].data.date.getUTCFullYear());
+
+const frameProps = (i: number) => ({
+  index: i,
+  title: frames[i].data.title,
+  year: yearOf(i),
+  kind: frames[i].data.kind,
+  ratio: frames[i].data.ratio,
+  image: frames[i].data.image,
+});
+
+// Editorial scatter: column placements + vertical offsets per archive slot.
+const LAYOUTS = [
+  'col-span-12 md:col-span-7',
+  'col-span-9 col-start-4 md:col-span-4 md:col-start-9 md:mt-36',
+  'col-span-10 md:col-span-5 md:col-start-2 md:mt-4',
+  'col-span-8 col-start-5 md:col-span-3 md:col-start-9 md:-mt-16',
+  'col-span-12 md:col-span-6 md:mt-8',
+  'col-span-9 md:col-span-4 md:col-start-8 md:mt-28',
+  'col-span-7 md:col-span-3 md:col-start-2 md:mt-6',
+  'col-span-6 col-start-7 md:col-span-3 md:col-start-7 md:-mt-24',
+  'col-span-9 col-start-2 md:col-span-3 md:col-start-10 md:mt-16',
+  'col-span-8 md:col-span-4 md:col-start-1 md:mt-10',
+  'col-span-12 md:col-span-6 md:col-start-6 md:-mt-4',
+  'col-span-12 md:col-span-8 md:col-start-3 md:mt-16',
+];
 ---
 
-<Base title="Photography" description="Photography by Caleb Pollreis: motorsport, engineering detail, and the world in between.">
-  <header class="glow-header relative overflow-hidden border-b border-line py-20 md:py-28">
-    <div class="container-hud grid items-center gap-12 lg:grid-cols-[1fr_400px]">
-      <div>
-        <SpecLabel code="DIV.03" text="OPTICS · PHOTOGRAPHY" accent />
-        <div class="mt-6" data-reveal="clip">
-          <h1 class="font-display text-5xl font-semibold leading-[0.95] md:text-7xl">
-            Through the <span class="text-grad">lens</span>
-          </h1>
+<Base
+  title="Moments"
+  description="A running archive of photos and film by Caleb Pollreis: roads, nights, water, light, and the people along the way."
+>
+  <div class="moments">
+    <!-- ===== HERO: giant cropped wordmark with a frame overlapping it ===== -->
+    <header class="relative overflow-hidden border-b border-white/10">
+      <div class="container-hud flex items-start justify-between pt-10 md:pt-14">
+        <span class="m-label" data-reveal>✳ Caleb Pollreis · The other side of the brain</span>
+        <p class="hidden max-w-xs text-right text-sm leading-relaxed text-white/55 md:block" data-reveal data-reveal-delay="120">
+          Where the engineering stops. A running archive of light, noise, motion, and the people I
+          got to share it with.
+        </p>
+      </div>
+
+      <div class="relative mt-4 md:mt-0">
+        <!-- ambient filmstrip: an auto-scrolling, non-interactive slideshow of
+             the archive drifting behind the wordmark -->
+        <div class="m-strip absolute inset-0 z-0" aria-hidden="true">
+          <div class="m-strip-track">
+            {
+              [0, 1].map(() => (
+                <div class="flex h-full shrink-0 items-center gap-6 pr-6">
+                  {moments.map((m, i) => (
+                    <div
+                      class="m-strip-cell relative shrink-0 overflow-hidden"
+                      style={`aspect-ratio:${m.ratio}; background-image:${stripArt(i)}; background-size:cover; background-position:center`}
+                    >
+                      {m.kind === 'video' && (
+                        <>
+                          <video
+                            class="absolute inset-0 h-full w-full object-cover"
+                            src="/videos/hero-loop-web.mp4"
+                            autoplay
+                            muted
+                            loop
+                            playsinline
+                            preload="metadata"
+                            tabindex="-1"
+                          />
+                          <span class="absolute inset-0 grid place-items-center">
+                            <span class="grid h-9 w-9 place-items-center rounded-full border border-white/45 bg-black/25">
+                              <svg width="10" height="10" viewBox="0 0 14 14" fill="none">
+                                <path d="M4 2.5v9l7-4.5-7-4.5z" fill="rgba(245,245,244,0.8)" />
+                              </svg>
+                            </span>
+                          </span>
+                        </>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ))
+            }
+          </div>
         </div>
-        <div class="mt-6 max-w-xl"><DimensionLine value="MOTORSPORT · DETAIL · LANDSCAPE" /></div>
-        <Reveal delay={140}>
-          <p class="mt-6 max-w-2xl text-lg text-muted">
-            The same eye for systems, pointed at light. Track days, bench macros, and whatever
-            catches me between. Click any frame to enlarge.
+        <div data-reveal="clip">
+          <h1 class="m-display relative z-[1] -ml-[0.05em]">Moments</h1>
+        </div>
+      </div>
+
+      <div class="container-hud flex items-end justify-between gap-8 pb-10 pt-12 md:pb-14 md:pt-10">
+        <a href="#archive" class="m-scroll" data-reveal>
+          <span class="m-scroll-ring">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+              <path d="M6 1v10M2 7l4 4 4-4" stroke="#f5f5f4" stroke-width="1.2" />
+            </svg>
+          </span>
+          scroll down
+        </a>
+        <p class="max-w-[16rem] text-right text-sm leading-relaxed text-white/55 md:hidden">
+          A running archive of light, noise, motion, and the people I got to share it with.
+        </p>
+      </div>
+    </header>
+
+    <!-- ===== ABOUT: statement with overlapping frames ===== -->
+    <section class="relative border-b border-white/10">
+      <div class="container-hud grid gap-14 py-20 md:grid-cols-[1.15fr_1px_0.85fr] md:gap-0 md:py-28">
+        <div class="relative md:pr-14">
+          <span class="m-label" data-reveal>✳ About this page</span>
+          <div class="mt-8" data-reveal="clip">
+            <h2 class="m-statement relative z-[1]">
+              Not everything<br />needs a spec sheet.
+            </h2>
+          </div>
+          <div class="relative z-[2] ml-[30%] mt-[-1rem] w-[58%] md:mt-[-2.25rem]" data-reveal data-reveal-delay="180">
+            <MomentFrame {...frameProps(6)} caption={false} />
+          </div>
+          <p class="relative z-[3] ml-auto mt-[-3rem] max-w-md bg-[#050505]/85 p-4 text-sm leading-relaxed text-white/65 backdrop-blur-sm md:mt-[-4.5rem]" data-reveal data-reveal-delay="300">
+            The rest of this site is the engineering half: benches, builds, telemetry. This page is
+            everything those pages leave out. Some of it is sharp, some of it is grain at ISO 6400,
+            and every frame earned its spot by being a night I still think about.
           </p>
-        </Reveal>
+        </div>
+
+        <div class="m-hairline-y hidden md:block" aria-hidden="true"></div>
+
+        <div class="relative md:pl-14">
+          <div class="md:mt-24" data-reveal data-reveal-delay="140">
+            <MomentFrame {...frameProps(3)} />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== MARQUEE: ghost list crossed by a bright italic line ===== -->
+    <section class="relative overflow-hidden border-b border-white/10 py-20 md:py-28">
+      <div class="container-hud">
+        <span class="m-label" data-reveal>✳ What I chase</span>
       </div>
 
-      <!-- exploded optical formula, animejs.com-style blowup -->
-      <div class="relative hidden lg:block">
-        <LensExplode class="mx-auto w-full max-w-[400px]" />
-        <span class="hud-label absolute -bottom-4 left-1/2 -translate-x-1/2">
-          FIG.03 · OPTICAL FORMULA 5E/4G
-        </span>
+      <div class="relative mt-12">
+        <div class="flex flex-col gap-1 pl-[10%] md:pl-[42%]" data-reveal>
+          <span class="m-ghost">Long drives</span>
+          <span class="m-ghost">City nights</span>
+          <span class="m-ghost">Open water</span>
+          <span class="m-ghost">Northern lights</span>
+          <span class="m-ghost">Race weekends</span>
+        </div>
+
+        <!-- bright line crossing the middle, full-bleed -->
+        <div class="ticker absolute inset-x-0 top-1/2 z-[2] -translate-y-1/2" aria-hidden="true">
+          <div class="ticker-track">
+            {
+              [0, 1].map(() => (
+                <span class="m-marquee-text pr-4">
+                  chasing light · chasing light · chasing light · chasing light · chasing light ·&nbsp;
+                </span>
+              ))
+            }
+          </div>
+        </div>
+
+        <!-- portrait frame overlapping the list, like the reference -->
+        <div class="absolute left-[6%] top-1/2 z-[3] hidden w-[220px] -translate-y-1/2 md:block" data-reveal data-reveal-delay="160">
+          <MomentFrame {...frameProps(8)} caption={false} />
+        </div>
       </div>
-    </div>
-  </header>
+    </section>
 
-  <Section index="A" label="Gallery" title="Selected frames">
-    <div class="mb-10"><CoordinateAxis startLabel="ROLL" endLabel={`${photos.length} FRAMES`} /></div>
+    <!-- ===== ARCHIVE: the scatter grid ===== -->
+    <section id="archive" class="relative scroll-mt-16">
+      <div class="container-hud py-20 md:py-28">
+        <div class="flex flex-wrap items-end justify-between gap-4">
+          <span class="m-label" data-reveal>✳ The archive</span>
+          <span class="text-[0.72rem] font-medium uppercase tracking-[0.16em] text-white/40" data-reveal>
+            {moments.length} moments · {span}
+          </span>
+        </div>
 
-    <Stagger class="columns-1 gap-4 sm:columns-2 lg:columns-3" gap={55}>
-      {
-        frames.map((f, i) => (
-          <PhotoTile
-            index={i}
-            title={f.data.title}
-            settings={f.data.settings}
-            location={f.data.location}
-            ratio={f.data.ratio}
-            image={f.data.image}
-          />
-        ))
-      }
-    </Stagger>
-  </Section>
+        <div class="mt-16 grid grid-cols-12 gap-x-5 gap-y-16 md:gap-x-7">
+          {
+            frames.map((_, i) => (
+              <div class={LAYOUTS[i] ?? 'col-span-12 md:col-span-6'} data-reveal>
+                <MomentFrame {...frameProps(i)} />
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
 
-  <Lightbox client:load photos={photos} />
+    <!-- ===== OUTRO ===== -->
+    <section class="border-t border-white/10">
+      <div class="container-hud flex flex-col items-start gap-6 py-20 md:py-24">
+        <span class="m-label" data-reveal>✳ The roll never ends</span>
+        <p class="m-statement" data-reveal="clip"><span>To be continued.</span></p>
+        <p class="max-w-md text-sm leading-relaxed text-white/55" data-reveal data-reveal-delay="140">
+          Real frames and reels are on their way into this archive. The placeholders hold the light
+          for now.
+        </p>
+      </div>
+    </section>
+
+    <MomentLightbox client:load moments={moments} />
+  </div>
 </Base>
