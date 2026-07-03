@@ -53,26 +53,33 @@ const projects = defineCollection({
 });
 
 /**
- * Photography - one markdown entry per frame. `image` stays optional so the
- * gallery renders on-brand placeholders until real photos (co-located, then
- * referenced via `image: ./frame.jpg`) are dropped in and optimized by
- * astro:assets.
+ * Photography - one markdown entry per moment (photo or video). `image` stays
+ * optional so the gallery renders film-toned placeholders until real assets
+ * (co-located, then referenced via `image: ./frame.jpg`) are dropped in and
+ * optimized by astro:assets. The markdown body is unused; `story` carries the
+ * personal caption shown in the lightbox.
  */
 const photography = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/photography' }),
   schema: ({ image }) =>
     z.object({
       title: z.string(),
+      kind: z.enum(['photo', 'video']).default('photo'),
       date: z.coerce.date(),
+      /** Why this moment matters. Shown in the lightbox detail panel. */
+      story: z.string().optional(),
       location: z.string().optional(),
       camera: z.string().optional(),
       lens: z.string().optional(),
-      /** e.g. "35mm · f/1.8 · 1/500s · ISO 200" */
-      settings: z.string().optional(),
-      /** e.g. "49.90°N 97.14°W" */
-      coords: z.string().optional(),
+      /* Photo tech readout */
+      iso: z.string().optional(),
+      aperture: z.string().optional(),
+      focal: z.string().optional(),
+      /* Video tech readout */
+      fps: z.string().optional(),
+      quality: z.string().optional(),
       image: image().optional(),
-      ratio: z.enum(['1/1', '4/3', '3/4', '3/2', '2/3', '16/9']).default('3/2'),
+      ratio: z.enum(['1/1', '4/3', '3/4', '3/2', '2/3', '16/9', '9/16']).default('3/2'),
       order: z.number().default(99),
     }),
 });

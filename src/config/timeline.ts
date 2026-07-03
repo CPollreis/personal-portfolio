@@ -1,0 +1,270 @@
+/**
+ * Timeline data - the single source of truth for the /timeline constellation.
+ *
+ * >>> EVERY EVENT BELOW IS A REALISTIC PLACEHOLDER. <<<
+ * Edit titles, dates, `why` blurbs, and point `media.src` at real files in
+ * /public (e.g. src: '/timeline/first-drive.jpg') to make this yours. The
+ * constellation layout, edges, and zoom behavior all derive from this file;
+ * nothing else needs to change when you edit it.
+ *
+ * media.src supports images (.jpg/.png/.webp) and video (.mp4/.webm). When
+ * src is omitted the detail card shows an on-brand "media pending" frame
+ * with the alt text as the description of the picture or video.
+ */
+
+export type EventKind = 'milestone' | 'fsae' | 'project' | 'photo';
+
+export interface TimelineMedia {
+  type: 'photo' | 'video';
+  /** Path under /public. Omit while the real asset is pending. */
+  src?: string;
+  /** Description of the picture or video (shown in the card, used as alt). */
+  alt: string;
+}
+
+export interface TimelineEvent {
+  id: string;
+  /** ISO date (yyyy-mm-dd). Shown on the detail card. */
+  date: string;
+  title: string;
+  /** A few lines: why this moment mattered to me and my career. */
+  why: string;
+  kind: EventKind;
+  /** 2 = major star: drawn larger, labeled even when zoomed far out. */
+  weight?: 1 | 2;
+  media?: TimelineMedia;
+}
+
+export interface TimelineYear {
+  year: number;
+  /** Short space-flavored theme word shown under the year numeral. */
+  theme: string;
+  events: TimelineEvent[];
+}
+
+export const timeline: TimelineYear[] = [
+  {
+    year: 2022,
+    theme: 'Ignition',
+    events: [
+      {
+        id: 'hs-grad',
+        date: '2022-06-28',
+        title: 'High school graduation',
+        kind: 'milestone',
+        why: 'The last day everything was decided for me. I knew I wanted to build things that move, and engineering was the way in.',
+        media: { type: 'photo', alt: 'Cap and gown photo outside the school with my family.' },
+      },
+      {
+        id: 'first-day-compe',
+        date: '2022-09-07',
+        title: 'First day of Computer Engineering',
+        kind: 'milestone',
+        weight: 2,
+        why: 'Walked into the University of Manitoba as a computer engineering student. Everything on this map traces back to this decision.',
+        media: { type: 'photo', alt: 'Photo of the engineering atrium on day one, student card in hand.' },
+      },
+      {
+        id: 'first-c-program',
+        date: '2022-10-14',
+        title: 'First C program that did something real',
+        kind: 'project',
+        why: 'A tiny terminal game for an intro course. The first time code stopped being abstract and started being a thing I made.',
+        media: { type: 'video', alt: 'Screen recording of the terminal game running for the first time.' },
+      },
+      {
+        id: 'first-camera',
+        date: '2022-11-19',
+        title: 'Bought my first camera',
+        kind: 'photo',
+        why: 'A used body and one lens. Photography became how I learned to actually look at light, which later made me care about how things are presented.',
+        media: { type: 'photo', alt: 'The first frame I ever shot: a streetlight in falling snow.' },
+      },
+      {
+        id: 'first-exams',
+        date: '2022-12-16',
+        title: 'Survived first exam season',
+        kind: 'milestone',
+        why: 'Proof I could handle the load. The confidence from this term is what made me feel ready to join a design team.',
+      },
+    ],
+  },
+  {
+    year: 2023,
+    theme: 'First contact',
+    events: [
+      {
+        id: 'found-fsae',
+        date: '2023-01-23',
+        title: 'Found the FSAE Electric team',
+        kind: 'fsae',
+        weight: 2,
+        why: 'Stopped at a club fair table with a half-built race car on it. Signed up on the spot. The single most important five minutes of university so far.',
+        media: { type: 'photo', alt: 'The club fair table with the previous season chassis on display.' },
+      },
+      {
+        id: 'first-workshop-night',
+        date: '2023-03-14',
+        title: 'First workshop night',
+        kind: 'fsae',
+        why: 'Learned the shop rules, met the leads, and got handed my first real task. Being trusted with hardware changed how seriously I took everything else.',
+        media: { type: 'photo', alt: 'Late night in the shop, the car up on stands.' },
+      },
+      {
+        id: 'spectrum-analyzer',
+        date: '2023-06-10',
+        title: 'Built the Music Spectrum Analyzer',
+        kind: 'project',
+        weight: 2,
+        why: 'My first full-stack hardware project: audio in, FFT, LEDs out. Taught me DSP fundamentals and how to finish a project, not just start one.',
+        media: { type: 'video', alt: 'The LED matrix pulsing to a song, first successful run.' },
+      },
+      {
+        id: 'photo-roadtrip',
+        date: '2023-08-12',
+        title: 'First photography road trip',
+        kind: 'photo',
+        why: 'A weekend chasing prairie storms with the camera. The discipline of shooting deliberately carried straight back into how I document engineering work.',
+        media: { type: 'photo', alt: 'Lightning over a canola field outside Winnipeg.' },
+      },
+      {
+        id: 'first-firmware-task',
+        date: '2023-10-05',
+        title: 'First firmware task on the car',
+        kind: 'fsae',
+        why: 'A small CAN bus node, but it ran on the actual vehicle. First time my code lived inside something that could hurt you if you got it wrong.',
+        media: { type: 'photo', alt: 'The bench setup: dev board, CAN analyzer, and a very long logic trace.' },
+      },
+    ],
+  },
+  {
+    year: 2024,
+    theme: 'High voltage',
+    events: [
+      {
+        id: 'accumulator-build',
+        date: '2024-02-09',
+        title: 'Joined the accumulator build',
+        kind: 'fsae',
+        weight: 2,
+        why: 'HV pack assembly, cell testing, and safety procedure. Working around 400 volts teaches a kind of care that no course does.',
+        media: { type: 'photo', alt: 'Gloved hands torquing busbars inside the accumulator container.' },
+      },
+      {
+        id: 'rl-bot-first-win',
+        date: '2024-04-20',
+        title: 'Rocket League bot beat the in-game AI',
+        kind: 'project',
+        why: 'My reinforcement learning bot finally won a match. Months of reward shaping paid off, and it became my proof that I could take ML from tutorial to result.',
+        media: { type: 'video', alt: 'Clip of the winning goal, bot on the left.' },
+      },
+      {
+        id: 'bms-bringup',
+        date: '2024-06-15',
+        title: 'BMS firmware bring-up',
+        kind: 'fsae',
+        why: 'Brought up the battery management firmware and watched real cell voltages stream in for the first time. The moment firmware became my lane on the team.',
+        media: { type: 'photo', alt: 'Terminal full of cell telemetry next to the open pack.' },
+      },
+      {
+        id: 'third-year',
+        date: '2024-09-03',
+        title: 'Hardest term begins',
+        kind: 'milestone',
+        why: 'Third year: signals, embedded systems, and a full car build at the same time. Learning to schedule myself like a project was the real course.',
+      },
+      {
+        id: 'winter-photo-series',
+        date: '2024-11-22',
+        title: 'Winnipeg at minus 30, on film',
+        kind: 'photo',
+        why: 'A winter photo series in brutal cold. Batteries die, fingers stop working, and you learn to plan every shot before you leave the house.',
+        media: { type: 'photo', alt: 'Steam rising off the river at sunrise, minus 30 air.' },
+      },
+    ],
+  },
+  {
+    year: 2025,
+    theme: 'Taking command',
+    events: [
+      {
+        id: 'autonomous-lead',
+        date: '2025-01-15',
+        title: 'Named Autonomous Systems Lead',
+        kind: 'fsae',
+        weight: 2,
+        why: 'Handed the driverless program. Suddenly my job was not just writing code but deciding what a 10-person team builds and in what order.',
+        media: { type: 'photo', alt: 'Whiteboard photo from the first autonomy planning meeting.' },
+      },
+      {
+        id: 'built-the-team',
+        date: '2025-03-08',
+        title: 'Recruited the autonomy team',
+        kind: 'fsae',
+        why: 'Interviewed and onboarded ten people across perception, mapping, and controls. Leading people turned out to be a harder engineering problem than the car.',
+      },
+      {
+        id: 'first-slam-demo',
+        date: '2025-06-10',
+        title: 'First SLAM demo on real data',
+        kind: 'fsae',
+        weight: 2,
+        why: 'Cone landmarks and a pose graph built from a recorded run, live on screen. The first evidence that autonomous by 2028 is a plan and not a poster.',
+        media: { type: 'video', alt: 'Screen capture of the SLAM map forming as the log replays.' },
+      },
+      {
+        id: 'bmo-agent',
+        date: '2025-09-18',
+        title: 'Started BMO, an embodied AI agent',
+        kind: 'project',
+        why: 'A desk robot with a local LLM brain. My sandbox for the perception-to-action loop that the race car needs at a much bigger scale.',
+        media: { type: 'video', alt: 'BMO tracking a face and responding on its little screen.' },
+      },
+      {
+        id: 'driverless-roadmap',
+        date: '2025-12-02',
+        title: 'Driverless 2028 roadmap approved',
+        kind: 'fsae',
+        why: 'Pitched the multi-season autonomy roadmap to the team leads and got the green light. My first time owning a plan measured in years, not semesters.',
+      },
+    ],
+  },
+  {
+    year: 2026,
+    theme: 'Escape velocity',
+    events: [
+      {
+        id: 'perception-on-car',
+        date: '2026-02-11',
+        title: 'Perception stack runs on the car',
+        kind: 'fsae',
+        weight: 2,
+        why: 'Cone detection running on the vehicle compute for the first time, off recorded camera data. The stack left the laptop and moved into the car.',
+        media: { type: 'video', alt: 'Detection overlay on the forward camera feed, cones boxed in real time.' },
+      },
+      {
+        id: 'portfolio-launch',
+        date: '2026-04-25',
+        title: 'Built this site',
+        kind: 'project',
+        why: 'Designed and shipped this portfolio to give the work a home. You are standing inside this event right now.',
+      },
+      {
+        id: 'looking-ahead',
+        date: '2026-07-01',
+        title: 'Looking ahead: 2027 internships',
+        kind: 'milestone',
+        weight: 2,
+        why: 'Open to internships from January to August 2027. The next star on this map could be with your team.',
+      },
+    ],
+  },
+];
+
+/** Card tag text per event kind. */
+export const kindLabels: Record<EventKind, string> = {
+  milestone: 'Milestone',
+  fsae: 'FSAE',
+  project: 'Project',
+  photo: 'Photography',
+};
