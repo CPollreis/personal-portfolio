@@ -3,10 +3,9 @@
  * Hero - full-height HUD landing over a looping background video of the car
  * (MIT FSAE style: footage behind, text in focus). Drop the clip at
  * public/videos/hero-loop.mp4; until then the layer is simply black.
- * Reticle + scramble tagline + dimensioned name block on top. Playback across
+ * Scramble tagline + dimensioned name block on top. Playback across
  * ClientRouter swaps is handled globally by src/scripts/footage.ts.
  */
-import Reticle from '../hud/Reticle.astro';
 import SpecLabel from '../hud/SpecLabel.astro';
 import CoordinateAxis from '../hud/CoordinateAxis.astro';
 import DimensionLine from '../hud/DimensionLine.astro';
@@ -51,9 +50,10 @@ const feed = [
       <source src={withBase('/videos/hero-loop-web.webm')} type="video/webm" />
       <source src={withBase('/videos/hero-loop-web.mp4')} type="video/mp4" />
     </video>
-    <!-- dimming + focus gradient so the type stays legible over footage -->
-    <div class="absolute inset-0 bg-bg/55"></div>
-    <div class="absolute inset-0 bg-gradient-to-r from-bg/80 via-bg/35 to-bg/20"></div>
+    <!-- dimming + focus gradient: heavy on the text side, fading to nothing on
+         the right so the footage itself is the hero's visual object -->
+    <div class="absolute inset-0 bg-bg/50"></div>
+    <div class="absolute inset-0 bg-gradient-to-r from-bg/85 via-bg/30 via-45% to-transparent"></div>
     <!-- fade the footage into the page background so sections meet seamlessly -->
     <div class="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-bg to-transparent"></div>
   </div>
@@ -73,8 +73,7 @@ const feed = [
       <span class="hud-label">U OF MANITOBA · GRAD 2028</span>
     </div>
 
-    <div class="grid items-center gap-10 lg:grid-cols-[1fr_auto]">
-      <div>
+    <div class="max-w-2xl">
         <div data-reveal="clip">
           <h1 class="font-display text-[3.25rem] font-semibold leading-[0.95] tracking-tight sm:text-7xl lg:text-8xl">
             Caleb
@@ -115,13 +114,6 @@ const feed = [
             <Button href="/resume.pdf" variant="ghost" external>Download resume</Button>
           </div>
         </Reveal>
-      </div>
-
-      <!-- Reticle instrument -->
-      <div class="relative hidden justify-self-end lg:block">
-        <Reticle size={260} />
-        <span class="hud-label absolute -bottom-2 left-1/2 -translate-x-1/2">TRACKING · LOCK</span>
-      </div>
     </div>
 
     <div class="mt-16">

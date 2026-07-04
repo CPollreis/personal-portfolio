@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { withBase } from '../../config/paths';
 
 export interface Moment {
   title: string;
@@ -18,6 +19,8 @@ export interface Moment {
   ratio: string;
   /** Optimized image URL, if a real asset exists. */
   src?: string;
+  /** Looping clip (public/ path) for kind: video moments. */
+  video?: string;
   /** CSS background used by the placeholder tile (must match the grid). */
   backdrop: string;
 }
@@ -154,6 +157,9 @@ export default function MomentLightbox({ moments }: Props) {
   const m = moments[index];
   const [rw, rh] = m.ratio.split('/').map(Number);
   const r = rw / rh;
+  // webm-first sibling (see src/scripts/footage.ts / Hero.astro): Firefox on
+  // macOS can fail the H.264 decoder, so prefer the .webm when we have an .mp4.
+  const videoWebm = m.video?.endsWith('.mp4') ? m.video.replace(/\.mp4$/, '.webm') : null;
   // Crossfade media content only when browsing away from the opened frame,
   // so the FLIP flight itself never double-animates.
   const browsing = index !== openedIndex.current;
@@ -207,21 +213,23 @@ export default function MomentLightbox({ moments }: Props) {
           }}
         >
           <div key={index} className="absolute inset-0" style={browsing ? { animation: 'm-fade 280ms both' } : undefined}>
-            {m.src ? (
+            {m.kind === 'video' && m.video ? (
+              <video
+                autoPlay
+                muted
+                loop
+                playsInline
+                className="absolute inset-0 h-full w-full object-cover"
+              >
+                {videoWebm && <source src={withBase(videoWebm)} type="video/webm" />}
+                <source src={withBase(m.video)} type={m.video.endsWith('.mp4') ? 'video/mp4' : 'video/webm'} />
+              </video>
+            ) : m.src ? (
               <img src={m.src} alt={m.title} className="absolute inset-0 h-full w-full object-cover" />
             ) : (
               <span className="absolute inset-0" style={{ background: m.backdrop }} aria-hidden="true" />
             )}
-            {m.kind === 'video' && (
-              <span className="absolute inset-0 grid place-items-center" aria-hidden="true">
-                <span className="grid h-16 w-16 place-items-center rounded-full border border-white/60 bg-black/30 backdrop-blur-sm">
-                  <svg width="18" height="18" viewBox="0 0 14 14" fill="none">
-                    <path d="M4 2.5v9l7-4.5-7-4.5z" fill="#f5f5f4" />
-                  </svg>
-                </span>
-              </span>
-            )}
-            {!m.src && (
+            {!m.src && !m.video && (
               <span className="absolute bottom-3 left-3 font-mono text-[0.6rem] uppercase tracking-[0.18em] text-white/35">
                 {m.kind === 'video' ? 'Reel placeholder' : 'Frame placeholder'}
               </span>

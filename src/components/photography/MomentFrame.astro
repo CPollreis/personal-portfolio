@@ -7,6 +7,7 @@
  */
 import { Image } from 'astro:assets';
 import { momentBackdrop } from './backdrop';
+import { withBase } from '../../config/paths';
 
 interface Props {
   index: number;
@@ -15,13 +16,19 @@ interface Props {
   kind: 'photo' | 'video';
   ratio: string;
   image?: ImageMetadata;
+  /** Looping clip (public/ path) for kind: video frames; autoplays inline. */
+  video?: string;
   /** Hide the caption on decorative placements (hero, marquee overlaps). */
   caption?: boolean;
   class?: string;
 }
 
-const { index, title, year, kind, ratio, image, caption = true, class: className = '' } = Astro.props;
+const { index, title, year, kind, ratio, image, video, caption = true, class: className = '' } = Astro.props;
 const alt = index % 2 === 1 ? 'm-tilt-alt' : '';
+// webm-first sibling: Firefox's macOS H.264 decoder can fail after client-side
+// navigation (see src/scripts/footage.ts), so prefer the .webm when we have an
+// .mp4 path. See src/components/home/Hero.astro for the same pattern.
+const videoWebm = video?.endsWith('.mp4') ? video.replace(/\.mp4$/, '.webm') : null;
 ---
 
 <button
@@ -33,7 +40,21 @@ const alt = index % 2 === 1 ? 'm-tilt-alt' : '';
 >
   <span class="m-media" data-media style={`aspect-ratio:${ratio}`}>
     {
-      image ? (
+      kind === 'video' && video ? (
+        <video
+          data-header-video
+          class="absolute inset-0 h-full w-full object-cover"
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="metadata"
+          tabindex="-1"
+        >
+          {videoWebm && <source src={withBase(videoWebm)} type="video/webm" />}
+          <source src={withBase(video)} type={video.endsWith('.mp4') ? 'video/mp4' : 'video/webm'} />
+        </video>
+      ) : image ? (
         <Image
           src={image}
           alt={title}
@@ -43,18 +64,6 @@ const alt = index % 2 === 1 ? 'm-tilt-alt' : '';
         />
       ) : (
         <span class="absolute inset-0" style={`background:${momentBackdrop(index)}`} aria-hidden="true"></span>
-      )
-    }
-
-    {
-      kind === 'video' && (
-        <span class="m-play" aria-hidden="true">
-          <span>
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-              <path d="M4 2.5v9l7-4.5-7-4.5z" fill="#f5f5f4" />
-            </svg>
-          </span>
-        </span>
       )
     }
 

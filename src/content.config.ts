@@ -1,6 +1,11 @@
 import { defineCollection } from 'astro:content';
 import { z } from 'zod';
 import { glob } from 'astro/loaders';
+import { docsLoader } from '@astrojs/starlight/loaders';
+import { docsSchema } from '@astrojs/starlight/schema';
+
+/** Starlight documentation (src/content/docs/), served under /docs. */
+const docs = defineCollection({ loader: docsLoader(), schema: docsSchema() });
 
 /**
  * FSAE build-log posts. subsystem drives color-coding across the site
@@ -83,9 +88,11 @@ const photography = defineCollection({
       fps: z.string().optional(),
       quality: z.string().optional(),
       image: image().optional(),
+      /** Looping clip for `kind: video` moments (public/ path, e.g. '/videos/clip.mp4'). A co-hosted .webm sibling is tried first for Firefox. */
+      video: z.string().optional(),
       ratio: z.enum(['1/1', '4/3', '3/4', '3/2', '2/3', '16/9', '9/16']).default('3/2'),
       order: z.number().default(99),
     }),
 });
 
-export const collections = { fsae, projects, photography };
+export const collections = { fsae, projects, photography, docs };
