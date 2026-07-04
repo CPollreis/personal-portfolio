@@ -10,6 +10,13 @@ import DimensionLine from '../../components/hud/DimensionLine.astro';
 import SpecLabel from '../../components/hud/SpecLabel.astro';
 import CoordinateAxis from '../../components/hud/CoordinateAxis.astro';
 import SlamTrack from '../../components/fsae/SlamTrack.astro';
+import HeaderMedia from '../../components/layout/HeaderMedia.astro';
+import { withBase } from '../../config/paths';
+
+/* Optional footage behind the title, home-hero style: set a video (public/
+   path, e.g. '/videos/hero-loop-web.mp4') or an image path to switch it on.
+   It renders beneath the SLAM pose-graph sketch. */
+const headerMedia: { video?: string; image?: string } = {};
 
 const all = (await getCollection('fsae', ({ data }) => !data.draft)).sort(
   (a, b) => b.data.date.getTime() - a.data.date.getTime(),
@@ -21,7 +28,7 @@ const counts = all.reduce<Record<string, number>>((acc, p) => {
 }, {});
 
 const posts = all.map((p) => ({
-  href: `/fsae/${p.id}`,
+  href: withBase(`/fsae/${p.id}`),
   title: p.data.title,
   summary: p.data.summary,
   subsystem: p.data.subsystem,
@@ -58,6 +65,7 @@ const timeline = [
 <Base title="FSAE" description="FSAE Electric build log: firmware, manufacturing, and autonomous systems.">
   <!-- Header -->
   <header class="glow-header relative overflow-hidden border-b border-line py-20 md:py-28">
+    <HeaderMedia {...headerMedia} />
     <!-- SLAM pose-graph map, slightly out of focus behind the title -->
     <div class="pointer-events-none absolute inset-0 blur-[2.5px]" aria-hidden="true">
       <SlamTrack class="h-full w-full opacity-45" />

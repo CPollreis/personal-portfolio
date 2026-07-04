@@ -7,14 +7,14 @@ import DataReadout from '../hud/DataReadout.astro';
 import CircuitTrace from '../hud/CircuitTrace.astro';
 import SpecLabel from '../hud/SpecLabel.astro';
 
-/* Verified against the resume: joined Sept 2022; 10+ members led as Software
+/* Verified against the resume: joined Sept 2022; 20+ members led as Software
    System Lead and as Autonomous Systems Lead; ~$30k sponsored driverless
-   hardware; six personal projects on the resume. */
+   hardware; four personal projects on the resume. */
 const stats = [
-  { label: 'Seasons on team', value: 4, unit: 'yrs' },
-  { label: 'Engineers led', value: 10, suffix: '+', unit: 'members' },
-  { label: 'Sponsored hardware', value: 30, suffix: 'k', unit: 'secured' },
-  { label: 'Personal projects', value: 6, unit: 'builds' },
+  { label: 'Years on team', value: 4, unit: 'yrs' },
+  { label: 'Engineers led', value: 20, suffix: '+', unit: 'members' },
+  { label: 'Sponsored hardware', value: 30, prefix: '$', suffix: 'k', unit: 'secured' },
+  { label: 'Personal projects', value: 4, unit: 'builds' },
 ];
 ---
 
@@ -27,7 +27,7 @@ const stats = [
     <div class="grid grid-cols-2 gap-x-6 gap-y-10 lg:grid-cols-4">
       {
         stats.map((s) => (
-          <DataReadout label={s.label} value={s.value} suffix={s.suffix ?? ''} unit={s.unit} />
+          <DataReadout label={s.label} value={s.value} prefix={s.prefix ?? ''} suffix={s.suffix ?? ''} unit={s.unit} />
         ))
       }
     </div>

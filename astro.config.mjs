@@ -7,8 +7,10 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
-  // TODO: replace with the real production domain before deploy (Phase 8)
-  site: 'https://calebpollreis.com',
+  // GitHub Pages project site. When the custom domain lands, set `site` to the
+  // domain (e.g. 'https://calebpollreis.com') and remove `base` entirely.
+  site: 'https://cpollreis.github.io',
+  base: '/personal-portfolio',
   integrations: [react(), mdx(), sitemap()],
   vite: {
     plugins: [tailwindcss()],

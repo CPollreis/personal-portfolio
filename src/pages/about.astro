@@ -8,7 +8,12 @@ import Placeholder from '../components/media/Placeholder.astro';
 import SpecLabel from '../components/hud/SpecLabel.astro';
 import DimensionLine from '../components/hud/DimensionLine.astro';
 import CoordinateAxis from '../components/hud/CoordinateAxis.astro';
+import HeaderMedia from '../components/layout/HeaderMedia.astro';
 import { site } from '../config/site';
+
+/* Optional footage behind the title, home-hero style: set a video (public/
+   path, e.g. '/videos/hero-loop-web.mp4') or an image path to switch it on. */
+const headerMedia: { video?: string; image?: string } = {};
 
 const now = [
   { k: 'ROLE', v: 'Autonomous Systems Lead, FSAE Electric' },
@@ -20,7 +25,8 @@ const now = [
 
 <Base title="About" description="About Caleb Pollreis, computer engineering student and FSAE Electric autonomous systems lead.">
   <header class="glow-header relative overflow-hidden border-b border-line py-20 md:py-28">
-    <div class="container-hud">
+    <HeaderMedia {...headerMedia} />
+    <div class="container-hud relative">
       <SpecLabel code="DIV.04" text="PROFILE · OPERATOR" accent />
       <div class="mt-6" data-reveal="clip">
         <h1 class="font-display text-5xl font-semibold leading-[0.95] md:text-7xl">

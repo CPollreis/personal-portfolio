@@ -3,7 +3,8 @@
  * Hero - full-height HUD landing over a looping background video of the car
  * (MIT FSAE style: footage behind, text in focus). Drop the clip at
  * public/videos/hero-loop.mp4; until then the layer is simply black.
- * Reticle + scramble tagline + dimensioned name block on top.
+ * Reticle + scramble tagline + dimensioned name block on top. Playback across
+ * ClientRouter swaps is handled globally by src/scripts/footage.ts.
  */
 import Reticle from '../hud/Reticle.astro';
 import SpecLabel from '../hud/SpecLabel.astro';
@@ -13,6 +14,7 @@ import ScrambleText from '../motion/ScrambleText.astro';
 import Reveal from '../motion/Reveal.astro';
 import Button from '../ui/Button.astro';
 import { site } from '../../config/site';
+import { withBase } from '../../config/paths';
 
 /* Telemetry ticker feed: real facts only, styled as readouts. PACK/CAN values
    are the car's actual figures; the rest is verifiable from the resume. */
@@ -35,7 +37,7 @@ const feed = [
   <!-- background footage layer -->
   <div class="absolute inset-0" aria-hidden="true">
     <video
-      id="hero-video"
+      data-header-video
       class="h-full w-full object-cover"
       autoplay
       muted
@@ -44,7 +46,10 @@ const feed = [
       preload="metadata"
       tabindex="-1"
     >
-      <source src="/videos/hero-loop-web.mp4" type="video/mp4" />
+      <!-- webm first: Firefox's macOS H.264 decoder can fail after client-side
+           navigation (see src/scripts/footage.ts); VP9 decodes in software -->
+      <source src={withBase('/videos/hero-loop-web.webm')} type="video/webm" />
+      <source src={withBase('/videos/hero-loop-web.mp4')} type="video/mp4" />
     </video>
     <!-- dimming + focus gradient so the type stays legible over footage -->
     <div class="absolute inset-0 bg-bg/55"></div>
@@ -143,31 +148,3 @@ const feed = [
     </div>
   </div>
 </section>
-
-<script>
-  // Keeps the footage rolling. The autoplay attribute only fires on a real
-  // page parse, so after a ClientRouter swap back to home we restart the clip
-  // explicitly (from frame 0). Respects reduced motion by holding still.
-  const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
-  function syncHeroVideo() {
-    const video = document.getElementById('hero-video') as HTMLVideoElement | null;
-    if (!video) return;
-    if (mq.matches) {
-      video.pause();
-      return;
-    }
-    video.muted = true; // required for programmatic autoplay
-    try {
-      if (video.readyState >= 1) video.currentTime = 0;
-    } catch {
-      /* not seekable yet; play from wherever it loads */
-    }
-    video.play().catch(() => {
-      // Media not ready yet (fresh swap): play as soon as it can.
-      video.addEventListener('canplay', () => void video.play().catch(() => {}), { once: true });
-    });
-  }
-  syncHeroVideo();
-  mq.addEventListener('change', syncHeroVideo);
-  document.addEventListener('astro:page-load', syncHeroVideo);
-</script>

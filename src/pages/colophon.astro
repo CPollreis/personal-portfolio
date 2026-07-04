@@ -7,6 +7,11 @@ import SpecLabel from '../components/hud/SpecLabel.astro';
 import DimensionLine from '../components/hud/DimensionLine.astro';
 import CoordinateAxis from '../components/hud/CoordinateAxis.astro';
 import Button from '../components/ui/Button.astro';
+import HeaderMedia from '../components/layout/HeaderMedia.astro';
+
+/* Optional footage behind the title, home-hero style: set a video (public/
+   path, e.g. '/videos/hero-loop-web.mp4') or an image path to switch it on. */
+const headerMedia: { video?: string; image?: string } = {};
 
 /* The site is itself an engineering project; this page is its spec sheet. */
 const decisions = [
@@ -48,7 +53,8 @@ const decisions = [
   description="How calebpollreis.dev works: Astro 7 static output, one shared anime.js motion engine, build-time SVG instead of WebGL, and honest instruments."
 >
   <header class="glow-header relative overflow-hidden border-b border-line py-20 md:py-28">
-    <div class="container-hud">
+    <HeaderMedia {...headerMedia} />
+    <div class="container-hud relative">
       <SpecLabel code="DIV.05" text="COLOPHON · SPEC SHEET" accent />
       <div class="mt-6" data-reveal="clip">
         <h1 class="font-display text-5xl font-semibold leading-[0.95] md:text-7xl">

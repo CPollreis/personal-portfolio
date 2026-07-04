@@ -4,15 +4,17 @@
  */
 interface Props {
   value: number;
+  prefix?: string;
   suffix?: string;
   class?: string;
 }
 
-const { value, suffix = '', class: className = '' } = Astro.props;
+const { value, prefix = '', suffix = '', class: className = '' } = Astro.props;
 ---
 
 <span
   class={`tabular ${className}`}
   data-counter={value}
+  data-counter-prefix={prefix}
   data-counter-suffix={suffix}
->0{suffix}</span>
+>{prefix}0{suffix}</span>

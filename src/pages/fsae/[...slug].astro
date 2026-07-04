@@ -6,7 +6,9 @@ import SubsystemBadge from '../../components/fsae/SubsystemBadge.astro';
 import VideoEmbed from '../../components/content/VideoEmbed.astro';
 import Placeholder from '../../components/media/Placeholder.astro';
 import CoordinateAxis from '../../components/hud/CoordinateAxis.astro';
+import HeaderMedia from '../../components/layout/HeaderMedia.astro';
 import { subsystems } from '../../config/fsae';
+import { withBase } from '../../config/paths';
 
 export async function getStaticPaths() {
   const posts = (await getCollection('fsae', ({ data }) => !data.draft)).sort(
@@ -22,8 +24,9 @@ const { post, newer, older } = Astro.props;
 const { Content } = await render(post);
 const meta = subsystems[post.data.subsystem];
 const dateStr = post.data.date.toISOString().slice(0, 10);
-/* Image behind the title: dedicated hero, else the cover. */
+/* Media behind the title: dedicated clip, else dedicated hero image, else the cover. */
 const heroImg = post.data.hero ?? post.data.cover;
+const hasHeroMedia = Boolean(post.data.heroVideo || heroImg);
 ---
 
 <Base title={post.data.title} description={post.data.summary}>
@@ -32,28 +35,13 @@ const heroImg = post.data.hero ?? post.data.cover;
     <header
       class:list={[
         'relative overflow-hidden border-b border-line py-14',
-        heroImg ? 'md:py-28' : 'md:py-20',
+        hasHeroMedia ? 'md:py-28' : 'md:py-20',
       ]}
       style={`--sc:${meta.color}`}
     >
-      {
-        heroImg && (
-          <div class="absolute inset-0" aria-hidden="true">
-            <Image
-              src={heroImg}
-              alt=""
-              widths={[960, 1600, 2400]}
-              sizes="100vw"
-              class="h-full w-full object-cover"
-            />
-            <div class="absolute inset-0 bg-bg/60" />
-            <div class="absolute inset-0 bg-gradient-to-r from-bg/85 via-bg/45 to-bg/25" />
-            <div class="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-bg to-transparent" />
-          </div>
-        )
-      }
+      <HeaderMedia video={post.data.heroVideo} image={heroImg} />
       <div class="container-hud relative max-w-3xl">
-        <a href="/fsae" class="link-hud mb-8 inline-block font-mono text-xs uppercase tracking-widest text-muted hover:text-ink">
+        <a href={withBase('/fsae')} class="link-hud mb-8 inline-block font-mono text-xs uppercase tracking-widest text-muted hover:text-ink">
           ← Build log
         </a>
         <div class="mb-5 flex flex-wrap items-center gap-3">
@@ -80,7 +68,7 @@ const heroImg = post.data.hero ?? post.data.cover;
     <div class="container-hud max-w-3xl">
       <!-- lead media: video > cover (unless the header already used it) > placeholder -->
       {
-        (post.data.video || (post.data.hero && post.data.cover) || !heroImg) && (
+        (post.data.video || (post.data.hero && post.data.cover) || !hasHeroMedia) && (
           <div class="mt-10">
             {post.data.video ? (
               <VideoEmbed url={post.data.video} title={post.data.title} />
@@ -112,7 +100,7 @@ const heroImg = post.data.hero ?? post.data.cover;
           {
             older ? (
               <a
-                href={`/fsae/${older.id}`}
+                href={withBase(`/fsae/${older.id}`)}
                 class="card-hud group border border-line bg-surface p-5 transition-colors"
               >
                 <span class="hud-label">← Older</span>
@@ -127,7 +115,7 @@ const heroImg = post.data.hero ?? post.data.cover;
           {
             newer && (
               <a
-                href={`/fsae/${newer.id}`}
+                href={withBase(`/fsae/${newer.id}`)}
                 class="card-hud group border border-line bg-surface p-5 text-right transition-colors"
               >
                 <span class="hud-label">Newer →</span>
@@ -140,7 +128,7 @@ const heroImg = post.data.hero ?? post.data.cover;
         </nav>
 
         <a
-          href="/fsae"
+          href={withBase('/fsae')}
           class="link-hud mt-8 inline-block font-mono text-xs uppercase tracking-widest text-muted hover:text-ink"
         >
           ← Back to all entries

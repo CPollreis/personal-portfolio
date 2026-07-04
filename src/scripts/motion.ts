@@ -13,6 +13,7 @@
  *   data-stagger                       container: stagger its [data-stagger-item]s
  *   data-stagger-gap="60"              per-item ms (default 45)
  *   data-counter="1240"                count up to a number (tabular)
+ *   data-counter-prefix="$"            prepended before the value
  *   data-counter-suffix="+"            appended after the value
  *   data-scramble                      scramble-reveal the element's text
  *   data-draw[="scroll"]               draw inline SVG strokes on enter (or synced)
@@ -87,6 +88,7 @@ function staggerEl(container: HTMLElement) {
 
 function counterEl(el: HTMLElement) {
   const end = Number(el.getAttribute('data-counter')) || 0;
+  const prefix = el.getAttribute('data-counter-prefix') ?? '';
   const suffix = el.getAttribute('data-counter-suffix') ?? '';
   const decimals = (el.getAttribute('data-counter') || '').split('.')[1]?.length ?? 0;
   const obj = { v: 0 };
@@ -95,7 +97,7 @@ function counterEl(el: HTMLElement) {
     duration: 1400,
     ease: 'out(3)',
     onUpdate: () => {
-      el.textContent = obj.v.toFixed(decimals) + suffix;
+      el.textContent = prefix + obj.v.toFixed(decimals) + suffix;
     },
   });
 }
@@ -154,9 +156,10 @@ function drawEl(svgEl: HTMLElement) {
 function settle(el: HTMLElement) {
   if (el.hasAttribute('data-counter')) {
     const end = Number(el.getAttribute('data-counter')) || 0;
+    const prefix = el.getAttribute('data-counter-prefix') ?? '';
     const suffix = el.getAttribute('data-counter-suffix') ?? '';
     const decimals = (el.getAttribute('data-counter') || '').split('.')[1]?.length ?? 0;
-    el.textContent = end.toFixed(decimals) + suffix;
+    el.textContent = prefix + end.toFixed(decimals) + suffix;
   }
   if (el.hasAttribute('data-draw')) {
     const strokes = el.querySelectorAll<SVGGeometryElement>('path, line, polyline, circle, rect, ellipse');

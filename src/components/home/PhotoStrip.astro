@@ -6,6 +6,7 @@
 import Section from '../layout/Section.astro';
 import Stagger from '../motion/Stagger.astro';
 import Placeholder from '../media/Placeholder.astro';
+import { withBase } from '../../config/paths';
 
 const frames = [
   { label: 'IMG_0142 · 35MM · F/1.8', ratio: '3/4' },
@@ -19,14 +20,14 @@ const frames = [
   <Stagger class="grid grid-cols-2 gap-4 lg:grid-cols-4" gap={60}>
     {
       frames.map((f, i) => (
-        <a href="/photography" data-stagger-item class="block">
+        <a href={withBase('/photography')} data-stagger-item class="block">
           <Placeholder ratio={f.ratio} label={f.label} seed={i} />
         </a>
       ))
     }
   </Stagger>
   <div class="mt-8">
-    <a href="/photography" class="link-hud font-mono text-xs uppercase tracking-widest text-muted hover:text-ink">
+    <a href={withBase('/photography')} class="link-hud font-mono text-xs uppercase tracking-widest text-muted hover:text-ink">
       View full gallery →
     </a>
   </div>

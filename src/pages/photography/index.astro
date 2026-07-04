@@ -11,7 +11,14 @@ import MomentFrame from '../../components/photography/MomentFrame.astro';
 import MomentLightbox, { type Moment } from '../../components/photography/MomentLightbox.tsx';
 import { momentBackdrop } from '../../components/photography/backdrop';
 import { stripArt } from '../../components/photography/stripArt';
+import HeaderMedia from '../../components/layout/HeaderMedia.astro';
+import { withBase } from '../../config/paths';
 import '../../styles/moments.css';
+
+/* Optional footage behind the whole hero, home-hero style: set a video
+   (public/ path, e.g. '/videos/hero-loop-web.mp4') or an image path to switch
+   it on. It renders beneath the auto-scrolling filmstrip. */
+const headerMedia: { video?: string; image?: string } = {};
 
 const frames = (await getCollection('photography')).sort(
   (a, b) => a.data.order - b.data.order || b.data.date.getTime() - a.data.date.getTime(),
@@ -78,7 +85,8 @@ const LAYOUTS = [
   <div class="moments">
     <!-- ===== HERO: giant cropped wordmark with a frame overlapping it ===== -->
     <header class="relative overflow-hidden border-b border-white/10">
-      <div class="container-hud flex items-start justify-between pt-10 md:pt-14">
+      <HeaderMedia {...headerMedia} />
+      <div class="container-hud relative flex items-start justify-between pt-10 md:pt-14">
         <span class="m-label" data-reveal>✳ Caleb Pollreis · The other side of the brain</span>
         <p class="hidden max-w-xs text-right text-sm leading-relaxed text-white/55 md:block" data-reveal data-reveal-delay="120">
           Where the engineering stops. A running archive of light, noise, motion, and the people I
@@ -102,15 +110,18 @@ const LAYOUTS = [
                       {m.kind === 'video' && (
                         <>
                           <video
+                            data-header-video
                             class="absolute inset-0 h-full w-full object-cover"
-                            src="/videos/hero-loop-web.mp4"
                             autoplay
                             muted
                             loop
                             playsinline
                             preload="metadata"
                             tabindex="-1"
-                          />
+                          >
+                            <source src={withBase('/videos/hero-loop-web.webm')} type="video/webm" />
+                            <source src={withBase('/videos/hero-loop-web.mp4')} type="video/mp4" />
+                          </video>
                           <span class="absolute inset-0 grid place-items-center">
                             <span class="grid h-9 w-9 place-items-center rounded-full border border-white/45 bg-black/25">
                               <svg width="10" height="10" viewBox="0 0 14 14" fill="none">
@@ -128,11 +139,11 @@ const LAYOUTS = [
           </div>
         </div>
         <div data-reveal="clip">
-          <h1 class="m-display relative z-[1] -ml-[0.05em]">Moments</h1>
+          <h1 class="m-display relative z-[1] text-center">Moments</h1>
         </div>
       </div>
 
-      <div class="container-hud flex items-end justify-between gap-8 pb-10 pt-12 md:pb-14 md:pt-10">
+      <div class="container-hud relative flex items-end justify-between gap-8 pb-10 pt-12 md:pb-14 md:pt-10">
         <a href="#archive" class="m-scroll" data-reveal>
           <span class="m-scroll-ring">
             <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">

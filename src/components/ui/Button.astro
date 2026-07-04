@@ -3,6 +3,8 @@
  * Button - link-styled CTA with HUD framing. Primary uses the accent; ghost is
  * a hairline-bordered technical button. Renders an <a>.
  */
+import { withBase } from '../../config/paths';
+
 interface Props {
   href: string;
   variant?: 'primary' | 'ghost';
@@ -21,7 +23,7 @@ const styles =
 ---
 
 <a
-  href={href}
+  href={withBase(href)}
   class={`${base} ${styles} ${className}`}
   rel={external ? 'noopener noreferrer' : undefined}
   target={external ? '_blank' : undefined}

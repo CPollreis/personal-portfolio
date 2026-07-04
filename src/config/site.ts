@@ -2,6 +2,7 @@
  * Single source of truth for site-wide metadata, navigation, and socials.
  * Keep copy edits here rather than scattered across components.
  */
+import { withBase } from './paths';
 
 export const site = {
   name: 'Caleb Pollreis',
@@ -50,7 +51,10 @@ export const socials: SocialLink[] = [
  * Home only matches exactly; other routes match their prefix.
  */
 export function isActive(href: string, pathname: string): boolean {
+  // pathname includes the base at build time, so compare against base-prefixed hrefs.
   const clean = pathname.replace(/\/+$/, '') || '/';
-  if (href === '/') return clean === '/';
-  return clean === href || clean.startsWith(href + '/');
+  const target = withBase(href).replace(/\/+$/, '') || '/';
+  const home = withBase('/').replace(/\/+$/, '') || '/';
+  if (target === home) return clean === home;
+  return clean === target || clean.startsWith(target + '/');
 }
