@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://cpollreis.github.io/personal-portfolio/sitemap-index.xml
+Sitemap: https://calebpollreis.com/sitemap-index.xml
