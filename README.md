@@ -10,7 +10,15 @@ and anime.js motion. Built with **Astro + React islands**.
 - **Tailwind CSS v4** + CSS-variable design tokens (`src/styles/global.css`)
 - **anime.js v4** via a single shared motion engine (`src/scripts/motion.ts`)
 - **MDX content collections** (`src/content.config.ts`)
+- **Starlight** docs at `/docs` (`src/content/docs/`)
 - Self-hosted variable fonts: Space Grotesk / Inter / JetBrains Mono
+
+## Docs
+
+Full build-and-maintain documentation lives on the site itself at **`/docs`**
+(source in `src/content/docs/`): architecture, every content-collection field,
+step-by-step content recipes, media rules, and the deploy pipeline. The sections
+below are the short version.
 
 ## Develop
 
@@ -21,17 +29,47 @@ npm run build      # astro check + static build → dist/
 npm run preview    # serve the production build
 ```
 
+## Project structure
+
+```
+src/
+  pages/          # routes (index, about, timeline, colophon, 404,
+                  #   fsae/, projects/, photography/)
+  layouts/        # Base.astro wraps every portfolio page
+  components/     # UI + content components (Gallery, VideoEmbed, motion, ...)
+  content/        # git-tracked content: fsae/ projects/ photography/ docs/
+  content.config.ts  # typed frontmatter schemas (source of truth)
+  scripts/        # shared client scripts: motion.ts, chrome.ts, footage.ts
+  styles/         # global.css (design tokens via @theme), moments.css
+  config/         # site.ts (copy/socials), paths.ts, fsae.ts, timeline.ts
+public/           # served as-is: videos/, resume.pdf, favicon.svg, og-default.png, CNAME
+```
+
 ## Adding content
 
-All content is git-tracked MDX/Markdown under `src/content/`.
+All content is git-tracked MDX/Markdown under `src/content/`. See `/docs` for the
+full field reference and worked examples.
 
 - **FSAE build log** - add `src/content/fsae/<slug>.mdx`. Frontmatter:
   `title, date, subsystem (firmware|manufacturing|autonomous), season, summary,
-  tags, cover?, hero?, video?`. Body is MDX; use `<Gallery>` / `<VideoEmbed>`.
+  tags, cover?, hero?, heroVideo?, video?, draft?`. Body is MDX; use `<Gallery>`
+  / `<VideoEmbed>`.
 - **Projects** - add `src/content/projects/<slug>.mdx`. Frontmatter:
-  `title, date, kind, stack[], summary, order, featured, links{repo,demo}, cover?, hero?, video?`.
-- **Photography** - add `src/content/photography/<slug>.md` with EXIF frontmatter
-  (`title, date, location, camera, lens, settings, coords?, ratio, order`).
+  `title, date, kind, stack[], summary, order, featured, links{repo,demo},
+  cover?, hero?, heroVideo?, video?, draft?`.
+- **Photography** - add `src/content/photography/<NN-slug>.md`. Frontmatter:
+  `title, kind (photo|video), date, story?, location?, camera?, lens?, iso?,
+  aperture?, focal?, fps?, quality?, image?, video?, ratio, order`.
+
+### Videos: ship webm + mp4 pairs
+
+Every clip in `public/videos/` must be provided as **two files with the same
+basename**, e.g. `clip.webm` and `clip.mp4`. The `.webm` is listed first and
+tried first: Firefox on macOS can fail its H.264 decoder (especially after a
+`ClientRouter` navigation), and `src/scripts/footage.ts` rebuilds the video
+element on each swap so the software-decoded webm keeps background/title clips
+playing. Reference the `.mp4` path in frontmatter (`video: /videos/clip.mp4`,
+`heroVideo: /videos/clip.mp4`); the webm sibling is derived automatically.
 
 ### Real images
 
@@ -80,7 +118,8 @@ data with the team first.
 
 ## Deploy
 
-Static output in `dist/` - deploys anywhere. Zero-config on **Vercel** or
-**Netlify** (both auto-detect Astro): connect the repo and deploy. Set the
-production domain in `astro.config.mjs` first so the sitemap and canonical/OG
-URLs are correct.
+Automatic via **GitHub Actions to GitHub Pages** (`.github/workflows/deploy.yml`):
+every push to `main` rebuilds and redeploys. Served from the custom domain
+**calebpollreis.com** (`public/CNAME`); `site` in `astro.config.mjs` must match so
+the sitemap and canonical/OG URLs are correct. The static `dist/` output also
+deploys anywhere else (Vercel, Netlify, any static host) if needed.
