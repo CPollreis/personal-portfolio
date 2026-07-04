@@ -1,0 +1,61 @@
+topic: Best domain registrar for a reliable, affordable personal portfolio domain (GitHub Pages, apex calebpollreis.com + www)
+context: |
+  Portfolio is an Astro site deployed to GitHub Pages via GitHub Actions.
+  Goal: register calebpollreis.com, serve it at the apex AND www.calebpollreis.com.
+  Apex on GitHub Pages needs four A records (185.199.108-111.153) or an
+  apex CNAME/ALIAS via CNAME flattening; www needs a CNAME to CPollreis.github.io.
+  Priorities: low long-term cost, reliability, easy DNS setup for GitHub Pages.
+
+items:
+  - name: Cloudflare Registrar
+    note: Wholesale-cost pricing, zero markup; free DNS with apex CNAME flattening.
+      Caveat: locks you to Cloudflare nameservers (no partial/CNAME setup).
+  - name: Porkbun
+    note: Among cheapest first-year and renewal; free WHOIS privacy and email
+      forwarding; strong developer reputation.
+  - name: NameSilo
+    note: Top-3 cheapest by 5-year total cost; free WHOIS privacy, no upsells,
+      flat renewals, solid API. Added from web search (was missing).
+  - name: Namecheap
+    note: Popular budget registrar; cheap first year, moderate renewals; free
+      WHOIS privacy; frequent promos.
+  - name: Spaceship
+    note: Namecheap's newer low-cost brand; among the cheapest .com prices
+      (~$9.98 snapshot, floats with Verisign wholesale fee).
+  - name: Dynadot
+    note: Budget registrar with flat low renewals ($10.88 .com snapshot) and a
+      solid API.
+  - name: Squarespace Domains
+    note: Absorbed Google Domains 2023-2024; clean UX but post-migration price
+      hikes and a July 2024 domain-hijacking incident.
+  - name: GoDaddy
+    note: Market baseline; heavy upsells, steep renewals, refund window cut from
+      30 to 7 days in Feb 2025.
+  - name: Name.com
+    note: Mid-tier registrar; now powers Netlify/Vercel/Replit/Bolt domain
+      registration via its API (late 2025).
+  - name: AWS Route 53
+    note: Registrar + DNS for AWS-centric users; flat pricing, ALIAS records at
+      apex supported.
+  - name: Hover
+    note: Simple, no-upsell registrar; slightly higher prices, good support
+      reputation.
+  - name: Gandi.net
+    note: Cautionary comparison point; post-acquisition price hikes and removal
+      of free email (2023) illustrate registrar-acquisition risk.
+  - name: IONOS
+    note: Promo-trap baseline; ~$1 first year, steep renewals; shows the
+      first-year vs renewal gap alongside GoDaddy.
+
+footnotes:
+  - Netlify and Vercel now resell domains via Name.com's API (late 2025). Only
+    relevant if migrating off GitHub Pages; not a primary item.
+  - ICANN is replacing the 60-day post-registration/transfer lock with a 30-day
+    lock (approved at ICANN 82, rolling out ~2026).
+  - Cheapest .com prices float with Verisign's annual wholesale increases;
+    treat any price as a snapshot and verify at purchase time.
+
+execution:
+  batch_size: 3
+  items_per_agent: 2
+  output_dir: ./results
