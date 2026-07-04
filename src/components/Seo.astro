@@ -4,6 +4,7 @@
  * and Twitter cards. OG image generation is finalized in Phase 8.
  */
 import { site } from '../config/site';
+import { withBase } from '../config/paths';
 
 interface Props {
   title?: string;
@@ -22,8 +23,12 @@ const {
 } = Astro.props;
 
 const fullTitle = title ? `${title} · ${site.name}` : `${site.name} · ${site.role}`;
-const canonical = new URL(Astro.url.pathname, site.url).href;
-const ogImage = new URL(image, site.url).href;
+/* Astro.site is the config `site` (host, no base); Astro.url.pathname already
+   carries the base, so the canonical resolves correctly without double-prefixing.
+   The OG image is a root-absolute public path, so it needs the base joined on. */
+const origin = Astro.site ?? new URL(site.url);
+const canonical = new URL(Astro.url.pathname, origin).href;
+const ogImage = new URL(withBase(image), origin).href;
 ---
 
 <title>{fullTitle}</title>

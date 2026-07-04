@@ -1,0 +1,66 @@
+---
+/**
+ * HeaderMedia - optional full-bleed footage behind a page header's title,
+ * home-hero style. Pass a `video` (public/ path, e.g. '/videos/hero-loop-web.mp4')
+ * or an `image` (an astro:assets import from a collection, or a public/ path);
+ * video wins when both are set. Renders nothing when neither is given, so every
+ * header can carry the option at zero cost. The parent header must be
+ * `relative overflow-hidden` and its content wrapper `relative` to stay on top.
+ * Playback across ClientRouter swaps is handled globally by
+ * src/scripts/footage.ts via the data-header-video attribute.
+ */
+import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
+import { withBase } from '../../config/paths';
+
+interface Props {
+  video?: string;
+  image?: ImageMetadata | string;
+}
+
+const { video: videoProp, image } = Astro.props;
+const imgAsset = typeof image === 'string' ? undefined : image;
+/* public/ paths need the base prefix; astro:assets imports are rewritten for us. */
+const video = videoProp ? withBase(videoProp) : undefined;
+const imgUrl = typeof image === 'string' ? withBase(image) : undefined;
+/* For .mp4 clips, offer a sibling .webm first: Firefox's macOS H.264 decoder
+   can fail after client-side navigation (see src/scripts/footage.ts), and VP9
+   decodes in software. A missing .webm just falls through to the .mp4. */
+const videoWebm = video?.endsWith('.mp4') ? video.replace(/\.mp4$/, '.webm') : undefined;
+---
+
+{
+  (video || image) && (
+    <div class="absolute inset-0" aria-hidden="true">
+      {video ? (
+        <video
+          data-header-video
+          class="h-full w-full object-cover"
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="metadata"
+          tabindex="-1"
+        >
+          {videoWebm && <source src={videoWebm} type="video/webm" />}
+          <source src={video} type={video.endsWith('.webm') ? 'video/webm' : 'video/mp4'} />
+        </video>
+      ) : imgAsset ? (
+        <Image
+          src={imgAsset}
+          alt=""
+          widths={[960, 1600, 2400]}
+          sizes="100vw"
+          class="h-full w-full object-cover"
+        />
+      ) : (
+        <img src={imgUrl} alt="" class="h-full w-full object-cover" loading="eager" />
+      )}
+      {/* dimming + focus gradient so the title stays legible over footage */}
+      <div class="absolute inset-0 bg-bg/60" />
+      <div class="absolute inset-0 bg-gradient-to-r from-bg/85 via-bg/45 to-bg/25" />
+      <div class="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-bg to-transparent" />
+    </div>
+  )
+}

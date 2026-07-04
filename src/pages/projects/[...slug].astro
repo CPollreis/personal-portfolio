@@ -6,6 +6,8 @@ import Button from '../../components/ui/Button.astro';
 import VideoEmbed from '../../components/content/VideoEmbed.astro';
 import Placeholder from '../../components/media/Placeholder.astro';
 import CoordinateAxis from '../../components/hud/CoordinateAxis.astro';
+import HeaderMedia from '../../components/layout/HeaderMedia.astro';
+import { withBase } from '../../config/paths';
 
 export async function getStaticPaths() {
   const projects = (await getCollection('projects', ({ data }) => !data.draft)).sort(
@@ -19,10 +21,11 @@ export async function getStaticPaths() {
 
 const { project, prev, next } = Astro.props;
 const { Content } = await render(project);
-const { title, kind, stack, summary, links, cover, video, date, hero } = project.data;
+const { title, kind, stack, summary, links, cover, video, date, hero, heroVideo } = project.data;
 const dateStr = date.toISOString().slice(0, 7);
-/* Image behind the title: dedicated hero, else the cover. */
+/* Media behind the title: dedicated clip, else dedicated hero image, else the cover. */
 const heroImg = hero ?? cover;
+const hasHeroMedia = Boolean(heroVideo || heroImg);
 ---
 
 <Base title={title} description={summary}>
@@ -30,27 +33,12 @@ const heroImg = hero ?? cover;
     <header
       class:list={[
         'relative overflow-hidden border-b border-line py-14',
-        heroImg ? 'md:py-28' : 'md:py-20',
+        hasHeroMedia ? 'md:py-28' : 'md:py-20',
       ]}
     >
-      {
-        heroImg && (
-          <div class="absolute inset-0" aria-hidden="true">
-            <Image
-              src={heroImg}
-              alt=""
-              widths={[960, 1600, 2400]}
-              sizes="100vw"
-              class="h-full w-full object-cover"
-            />
-            <div class="absolute inset-0 bg-bg/60" />
-            <div class="absolute inset-0 bg-gradient-to-r from-bg/85 via-bg/45 to-bg/25" />
-            <div class="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-bg to-transparent" />
-          </div>
-        )
-      }
+      <HeaderMedia video={heroVideo} image={heroImg} />
       <div class="container-hud relative max-w-3xl">
-        <a href="/projects" class="link-hud mb-8 inline-block font-mono text-xs uppercase tracking-widest text-muted hover:text-ink">
+        <a href={withBase('/projects')} class="link-hud mb-8 inline-block font-mono text-xs uppercase tracking-widest text-muted hover:text-ink">
           ← Projects
         </a>
         <div class="mb-5 flex flex-wrap items-center gap-3">
@@ -92,7 +80,7 @@ const heroImg = hero ?? cover;
 
     <div class="container-hud max-w-3xl">
       {
-        (video || (hero && cover) || !heroImg) && (
+        (video || (hero && cover) || !hasHeroMedia) && (
           <div class="mt-10">
             {video ? (
               <VideoEmbed url={video} title={title} />
@@ -123,7 +111,7 @@ const heroImg = hero ?? cover;
           {
             prev ? (
               <a
-                href={`/projects/${prev.id}`}
+                href={withBase(`/projects/${prev.id}`)}
                 class="card-hud group border border-line bg-surface p-5 transition-colors"
               >
                 <span class="hud-label">← Previous</span>
@@ -138,7 +126,7 @@ const heroImg = hero ?? cover;
           {
             next && (
               <a
-                href={`/projects/${next.id}`}
+                href={withBase(`/projects/${next.id}`)}
                 class="card-hud group border border-line bg-surface p-5 text-right transition-colors"
               >
                 <span class="hud-label">Next →</span>
@@ -150,7 +138,7 @@ const heroImg = hero ?? cover;
           }
         </nav>
 
-        <a href="/projects" class="link-hud mt-8 inline-block font-mono text-xs uppercase tracking-widest text-muted hover:text-ink">
+        <a href={withBase('/projects')} class="link-hud mt-8 inline-block font-mono text-xs uppercase tracking-widest text-muted hover:text-ink">
           ← Back to all projects
         </a>
       </div>

@@ -6,7 +6,13 @@
  */
 import Base from '../layouts/Base.astro';
 import Constellation from '../components/timeline/Constellation.astro';
+import HeaderMedia from '../components/layout/HeaderMedia.astro';
 import { timeline, kindLabels } from '../config/timeline';
+
+/* Optional footage behind the floating title, home-hero style: set a video
+   (public/ path, e.g. '/videos/hero-loop-web.mp4') or an image path to switch
+   it on. It renders over the constellation canvas, behind the title text. */
+const headerMedia: { video?: string; image?: string } = {};
 
 const eventCount = timeline.reduce((n, y) => n + y.events.length, 0);
 const fmt = (iso: string) =>
@@ -27,8 +33,9 @@ const fmt = (iso: string) =>
     <Constellation />
 
     <!-- floating header, over the canvas but under the nav -->
-    <header class="pointer-events-none absolute inset-x-0 top-0 z-20 pt-24">
-      <div class="container-hud">
+    <header class="pointer-events-none absolute inset-x-0 top-0 z-20 overflow-hidden pt-24">
+      <HeaderMedia {...headerMedia} />
+      <div class="container-hud relative">
         <p class="hud-label">
           05 · Timeline <span class="text-cyan">·</span> {eventCount} moments since 2022
         </p>

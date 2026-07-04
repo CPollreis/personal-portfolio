@@ -21,15 +21,18 @@
 
 /* ---- typography ------------------------------------------------------- */
 
-/* The giant cropped wordmark ("Moments"). Deliberately wider than the
-   viewport; the hosting section crops it like the reference. */
+/* The wordmark ("Moments"). Elegant script/cursive, centered, sized in vw so
+   the word spans roughly two-thirds of the viewport across screen sizes. Uses
+   a system script stack that degrades to an italic serif, so no web font is
+   fetched. */
 .m-display {
-  font-family: var(--grotesk);
-  font-weight: 550;
-  font-stretch: 112%;
-  font-size: clamp(6rem, 27vw, 26rem);
-  line-height: 0.82;
-  letter-spacing: -0.045em;
+  font-family: "Snell Roundhand", "Apple Chancery", "Segoe Script",
+    "Brush Script MT", "Palatino Linotype", "Book Antiqua", Georgia, cursive;
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(3.5rem, 17vw, 17rem);
+  line-height: 0.9;
+  letter-spacing: normal;
   white-space: nowrap;
   color: #f5f5f4;
   user-select: none;
@@ -234,7 +237,7 @@
 .m-strip {
   overflow: hidden;
   pointer-events: none;
-  opacity: 0.55;
+  opacity: 0.8;
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
   mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
 }
@@ -243,7 +246,7 @@
   width: max-content;
   height: 100%;
   align-items: center;
-  filter: brightness(0.8) saturate(0.9);
+  filter: brightness(0.95) saturate(0.95);
   animation: m-strip-scroll 80s linear infinite;
 }
 .m-strip-cell {
@@ -253,7 +256,7 @@
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(5, 5, 5, 0.3), rgba(5, 5, 5, 0.55));
+  background: linear-gradient(180deg, rgba(5, 5, 5, 0.22), rgba(5, 5, 5, 0.42));
 }
 @keyframes m-strip-scroll {
   to {

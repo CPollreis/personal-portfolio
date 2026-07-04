@@ -18,6 +18,8 @@ const fsae = defineCollection({
       cover: image().optional(),
       /** Full-bleed image behind the entry title (falls back to `cover`). */
       hero: image().optional(),
+      /** Full-bleed looping clip behind the entry title (public/ path, e.g. '/videos/clip.mp4'); wins over `hero`/`cover`. */
+      heroVideo: z.string().optional(),
       tags: z.array(z.string()).default([]),
       /** Optional YouTube/Vimeo URL rendered as an embed in the post header. */
       video: z.url().optional(),
@@ -38,6 +40,8 @@ const projects = defineCollection({
       cover: image().optional(),
       /** Full-bleed image behind the entry title (falls back to `cover`). */
       hero: image().optional(),
+      /** Full-bleed looping clip behind the entry title (public/ path, e.g. '/videos/clip.mp4'); wins over `hero`/`cover`. */
+      heroVideo: z.string().optional(),
       /** Optional demo video (YouTube/Vimeo) shown as the lead media. */
       video: z.url().optional(),
       links: z

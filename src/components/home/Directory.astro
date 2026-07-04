@@ -8,6 +8,7 @@ import Stagger from '../motion/Stagger.astro';
 import CornerBrackets from '../hud/CornerBrackets.astro';
 import Placeholder from '../media/Placeholder.astro';
 import SlamTrack from '../fsae/SlamTrack.astro';
+import { withBase } from '../../config/paths';
 
 const subsystems = ['Firmware', 'Manufacturing', 'Autonomy'];
 const projects = ['Music Spectrum Analyzer', 'BMO · Embodied AI Agent', 'Rocket League RL Bot'];
@@ -20,7 +21,7 @@ const projects = ['Music Spectrum Analyzer', 'BMO · Embodied AI Agent', 'Rocket
   >
     <!-- FSAE - hero cell -->
     <a
-      href="/fsae"
+      href={withBase('/fsae')}
       data-stagger-item
       class="card-hud group relative flex flex-col justify-between overflow-hidden border border-line bg-surface p-6 transition-all duration-300 hover:border-cyan/60 lg:col-span-2 lg:row-span-2"
     >
@@ -55,7 +56,7 @@ const projects = ['Music Spectrum Analyzer', 'BMO · Embodied AI Agent', 'Rocket
 
     <!-- Projects -->
     <a
-      href="/projects"
+      href={withBase('/projects')}
       data-stagger-item
       class="card-hud group relative flex flex-col justify-between overflow-hidden border border-line bg-surface p-6 transition-all duration-300 hover:border-cyan/60 lg:col-span-2"
     >
@@ -78,7 +79,7 @@ const projects = ['Music Spectrum Analyzer', 'BMO · Embodied AI Agent', 'Rocket
 
     <!-- Photography -->
     <a
-      href="/photography"
+      href={withBase('/photography')}
       data-stagger-item
       class="card-hud group relative flex flex-col justify-between overflow-hidden border border-line bg-surface p-6 transition-all duration-300 hover:border-cyan/60"
     >
@@ -94,7 +95,7 @@ const projects = ['Music Spectrum Analyzer', 'BMO · Embodied AI Agent', 'Rocket
 
     <!-- About -->
     <a
-      href="/about"
+      href={withBase('/about')}
       data-stagger-item
       class="card-hud group relative flex flex-col justify-between overflow-hidden border border-line bg-surface p-6 transition-all duration-300 hover:border-cyan/60"
     >
@@ -109,7 +110,7 @@ const projects = ['Music Spectrum Analyzer', 'BMO · Embodied AI Agent', 'Rocket
 
     <!-- Timeline - full-width constellation banner -->
     <a
-      href="/timeline"
+      href={withBase('/timeline')}
       data-stagger-item
       class="card-hud group relative flex min-h-[150px] flex-col justify-center overflow-hidden border border-line bg-surface p-6 transition-all duration-300 hover:border-cyan/60 sm:col-span-2 lg:col-span-4"
     >
@@ -155,6 +156,25 @@ const projects = ['Music Spectrum Analyzer', 'BMO · Embodied AI Agent', 'Rocket
           </p>
         </div>
         <span class="hud-label transition-colors group-hover:text-cyan">EXPLORE →</span>
+      </div>
+    </a>
+
+    <!-- Photography - full-width banner, mirrors the timeline treatment -->
+    <a
+      href={withBase('/photography')}
+      data-stagger-item
+      class="card-hud group relative flex min-h-[150px] flex-col justify-center overflow-hidden border border-line bg-surface p-6 transition-all duration-300 hover:border-cyan/60 sm:col-span-2 lg:col-span-4"
+    >
+      <CornerBrackets size={16} inset={10} color="var(--color-line)" />
+      <div class="relative flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <span class="hud-label text-accent">06 · OPTICS</span>
+          <h3 class="mt-2 font-display text-2xl text-ink md:text-3xl">Through the lens</h3>
+          <p class="mt-1 max-w-md text-sm text-muted">
+            Frames from the field: 35mm to 85mm, everything the shutter caught between builds.
+          </p>
+        </div>
+        <span class="hud-label transition-colors group-hover:text-cyan">VIEW GALLERY →</span>
       </div>
     </a>
   </Stagger>
