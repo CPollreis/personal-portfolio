@@ -108,14 +108,14 @@ const projects = ['Music Spectrum Analyzer', 'BMO · Embodied AI Agent', 'Rocket
       <span class="hud-label mt-4 transition-colors group-hover:text-cyan">CONNECT →</span>
     </a>
 
-    <!-- Timeline - full-width constellation banner -->
+    <!-- Timeline - full-width spine banner -->
     <a
       href={withBase('/timeline')}
       data-stagger-item
       class="card-hud group relative flex min-h-[150px] flex-col justify-center overflow-hidden border border-line bg-surface p-6 transition-all duration-300 hover:border-cyan/60 sm:col-span-2 lg:col-span-4"
     >
       <CornerBrackets size={16} inset={10} color="var(--color-line)" />
-      <!-- decorative constellation sweep, drawn in on scroll -->
+      <!-- decorative spine sweep (the /timeline channel on its side), drawn in on scroll -->
       <svg
         viewBox="0 0 900 150"
         preserveAspectRatio="xMidYMid slice"
@@ -124,19 +124,19 @@ const projects = ['Music Spectrum Analyzer', 'BMO · Embodied AI Agent', 'Rocket
         aria-hidden="true"
         data-draw
       >
-        <path
-          d="M30 105 L140 55 L265 90 L390 38 L520 95 L650 50 L780 80 L870 45"
-          stroke="var(--color-cyan)"
-          stroke-opacity="0.35"
-          stroke-width="1"
-        />
+        <path d="M30 75 H870" stroke="var(--color-cyan)" stroke-opacity="0.35" stroke-width="1" />
+        <g stroke="var(--color-cyan)" stroke-opacity="0.25" stroke-width="1">
+          {
+            [140, 265, 390, 520, 650, 780].map((x, i) => (
+              <path d={`M${x} 75 V${i % 2 === 0 ? 42 : 108}`} />
+            ))
+          }
+        </g>
         <g fill="var(--color-cyan)">
           {
-            [
-              [30, 105], [140, 55], [265, 90], [390, 38],
-              [520, 95], [650, 50], [780, 80], [870, 45],
-            ].map(([x, y], i) => {
+            [30, 140, 265, 390, 520, 650, 780, 870].map((x, i) => {
               const s = i % 3 === 1 ? 5 : 3.5;
+              const y = 75;
               return (
                 <path
                   d={`M${x} ${y - s} L${x + s * 0.32} ${y - s * 0.32} L${x + s} ${y} L${x + s * 0.32} ${y + s * 0.32} L${x} ${y + s} L${x - s * 0.32} ${y + s * 0.32} L${x - s} ${y} L${x - s * 0.32} ${y - s * 0.32} Z`}
@@ -152,7 +152,7 @@ const projects = ['Music Spectrum Analyzer', 'BMO · Embodied AI Agent', 'Rocket
           <span class="hud-label text-accent">05 · TIMELINE</span>
           <h3 class="mt-2 font-display text-2xl text-ink md:text-3xl">A universe of moments</h3>
           <p class="mt-1 max-w-md text-sm text-muted">
-            Every milestone since 2022, mapped as constellations you can fly through.
+            Every milestone since 2022 on one line, with the year keeping pace as you scroll.
           </p>
         </div>
         <span class="hud-label transition-colors group-hover:text-cyan">EXPLORE →</span>
