@@ -20,10 +20,26 @@ interface Props {
   video?: string;
   /** Hide the caption on decorative placements (hero, marquee overlaps). */
   caption?: boolean;
+  /** Archive-grid mode: the media covers the parent cell instead of sizing
+      itself by `ratio`, the caption becomes a hover overlay, and videos are
+      scroll-managed ([data-scrollplay]: play in view, pause off-screen)
+      rather than always-on. */
+  fill?: boolean;
   class?: string;
 }
 
-const { index, title, year, kind, ratio, image, video, caption = true, class: className = '' } = Astro.props;
+const {
+  index,
+  title,
+  year,
+  kind,
+  ratio,
+  image,
+  video,
+  caption = true,
+  fill = false,
+  class: className = '',
+} = Astro.props;
 const alt = index % 2 === 1 ? 'm-tilt-alt' : '';
 // webm-first sibling: Firefox's macOS H.264 decoder can fail after client-side
 // navigation (see src/scripts/footage.ts), so prefer the .webm when we have an
@@ -34,15 +50,15 @@ const videoWebm = video?.endsWith('.mp4') ? video.replace(/\.mp4$/, '.webm') : n
 <button
   type="button"
   data-moment-index={index}
-  class={`m-frame group ${alt} ${className}`}
+  class={`m-frame group ${fill ? 'm-frame-fill' : ''} ${alt} ${className}`}
   aria-haspopup="dialog"
   aria-label={`Open ${kind}: ${title}`}
 >
-  <span class="m-media" data-media style={`aspect-ratio:${ratio}`}>
+  <span class="m-media" data-media style={fill ? undefined : `aspect-ratio:${ratio}`}>
     {
       kind === 'video' && video ? (
         <video
-          data-header-video
+          {...(fill ? { 'data-scrollplay': true } : { 'data-header-video': true })}
           class="absolute inset-0 h-full w-full object-cover"
           autoplay
           muted
@@ -74,10 +90,22 @@ const videoWebm = video?.endsWith('.mp4') ? video.replace(/\.mp4$/, '.webm') : n
     >
       {String(index + 1).padStart(2, '0')}
     </span>
+
+    {
+      fill && caption && (
+        <span class="m-cap-hover" aria-hidden="true">
+          <b>{title}</b>
+          <i>
+            ({year}
+            {kind === 'video' ? ' · film' : ''})
+          </i>
+        </span>
+      )
+    }
   </span>
 
   {
-    caption && (
+    !fill && caption && (
       <>
         <span class="m-cap">{title}</span>
         <span class="m-cap-year">

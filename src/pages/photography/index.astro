@@ -1,15 +1,16 @@
 ---
 /**
  * /photography - "Moments". The creative counterpart to the rest of the site:
- * near-pure black, huge cropped Archivo display type with frames overlapping
- * it, hairline dividers, a bright italic marquee, and an editorial scatter
- * archive. Clicking any frame opens the shared-element lightbox.
+ * pure black, huge cropped Archivo display type with frames overlapping it,
+ * hairline dividers, a bright italic marquee, and a "Feature Lead" archive
+ * grid (archiveGrid.ts). Clicking any frame opens the shared-element lightbox.
  */
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import MomentFrame from '../../components/photography/MomentFrame.astro';
 import MomentLightbox, { type Moment } from '../../components/photography/MomentLightbox.tsx';
 import { momentBackdrop } from '../../components/photography/backdrop';
+import { archiveShape, packArchive } from '../../components/photography/archiveGrid';
 import { stripArt } from '../../components/photography/stripArt';
 import HeaderMedia from '../../components/layout/HeaderMedia.astro';
 import { withBase } from '../../config/paths';
@@ -63,43 +64,25 @@ const frameProps = (i: number) => ({
   video: frames[i].data.video,
 });
 
-// Editorial scatter: column placements + vertical offsets per archive slot.
-const LAYOUTS = [
-  'col-span-12 md:col-span-7',
-  'col-span-9 col-start-4 md:col-span-4 md:col-start-9 md:mt-36',
-  'col-span-10 md:col-span-5 md:col-start-2 md:mt-4',
-  'col-span-8 col-start-5 md:col-span-3 md:col-start-9 md:-mt-10',
-  'col-span-12 md:col-span-6 md:mt-8',
-  'col-span-9 md:col-span-4 md:col-start-8 md:mt-28',
-  'col-span-7 md:col-span-3 md:col-start-2 md:mt-6',
-  'col-span-6 col-start-7 md:col-span-3 md:col-start-7 md:-mt-12',
-  'col-span-9 col-start-2 md:col-span-3 md:col-start-10 md:mt-16',
-  'col-span-8 md:col-span-4 md:col-start-1 md:mt-10',
-  'col-span-12 md:col-span-6 md:col-start-6 md:-mt-4',
-  'col-span-12 md:col-span-8 md:col-start-3 md:mt-16',
-];
+// "Feature Lead" archive grid: placements computed from the content
+// collection (see archiveGrid.ts), so new entries flow in automatically.
+const archive = packArchive(
+  frames.map((f, i) => ({ index: i, shape: archiveShape(f.data.ratio, f.data.feature) })),
+);
+const filmCount = frames.filter((f) => f.data.kind === 'video').length;
 
-// Contact-sheet connective tissue for the scatter's dead space. Every marker is
-// decorative (aria-hidden, desktop-only) and pulls its text from real frame
-// data, so nothing here is invented. `place` is the first segment of a real
-// location (e.g. "Lake Superior, MN" -> "LAKE SUPERIOR").
-const shortPlace = (loc?: string) => (loc ?? '').split(',')[0].trim().toUpperCase();
-const tag = (i: number) => ({
-  no: String(i + 1).padStart(2, '0'),
-  year: yearOf(i),
-  place: shortPlace(frames[i].data.location),
-});
-
-// "What I chase" call and response: each ghost word is the index entry for one
+// "Highlights" call and response: each ghost word is the index entry for one
 // moment. The section auto-cycles word + photo together; hovering a word jumps
 // the frame to its photo. Indices reference the sorted `frames` order.
 const CHASE = [
   { label: 'Long drives', frame: 5 },
   { label: 'City nights', frame: 11 },
-  { label: 'Open water', frame: 9 },
   { label: 'Northern lights', frame: 0 },
   { label: 'Race weekends', frame: 1 },
 ];
+// Empty spacer row inserted before this word index: the full-bleed marquee
+// crosses the list's vertical center, so the middle of the column stays clear.
+const GAP_BEFORE = 2;
 ---
 
 <Base
@@ -180,60 +163,35 @@ const CHASE = [
       </div>
     </header>
 
-    <!-- ===== ABOUT: statement with overlapping frames ===== -->
-    <section class="relative border-b border-white/10">
-      <div class="container-hud grid gap-14 py-20 md:grid-cols-[1.15fr_1px_0.85fr] md:gap-0 md:py-28">
-        <div class="relative md:pr-14">
-          <span class="m-label" data-reveal>✳ About this page</span>
-          <div class="mt-8" data-reveal="clip">
-            <h2 class="m-statement relative z-[1]">
-              Not everything<br />needs a spec sheet.
-            </h2>
-          </div>
-          <div class="relative z-[2] ml-[30%] mt-[-1rem] w-[58%] md:mt-[-2.25rem]" data-reveal data-reveal-delay="180">
-            <MomentFrame {...frameProps(6)} caption={false} />
-          </div>
-          <p class="relative z-[3] ml-auto mt-[-3rem] max-w-md bg-[#050505]/85 p-4 text-sm leading-relaxed text-white/65 backdrop-blur-sm md:mt-[-4.5rem]" data-reveal data-reveal-delay="300">
-            The rest of this site is the engineering half: benches, builds, telemetry. This page is
-            everything those pages leave out. Some of it is sharp, some of it is grain at ISO 6400,
-            and every frame earned its spot by being a night I still think about.
-          </p>
-        </div>
-
-        <div class="m-hairline-y hidden md:block" aria-hidden="true"></div>
-
-        <div class="relative md:pl-14">
-          <div class="md:mt-24" data-reveal data-reveal-delay="140">
-            <MomentFrame {...frameProps(3)} />
-          </div>
-        </div>
-      </div>
-    </section>
-
     <!-- ===== MARQUEE: ghost list crossed by a bright italic line ===== -->
     <section class="relative overflow-hidden border-b border-white/10 py-20 md:py-28">
       <div class="container-hud">
-        <span class="m-label" data-reveal>✳ What I chase</span>
+        <span class="m-label" data-reveal>✳ Highlights</span>
       </div>
 
       <div class="relative mt-12">
         <div class="flex flex-col gap-1 pl-[10%] md:pl-[42%]" data-reveal>
           {
             CHASE.map((c, i) => (
-              <span class={`m-ghost m-chase-word${i === 0 ? ' is-lit' : ''}`} data-chase-word>
-                {c.label}
-              </span>
+              <Fragment>
+                {i === GAP_BEFORE && <span class="m-chase-gap" aria-hidden="true"></span>}
+                <span class={`m-ghost m-chase-word${i === 0 ? ' is-lit' : ''}`} data-chase-word>
+                  {c.label}
+                </span>
+              </Fragment>
             ))
           }
         </div>
 
-        <!-- bright line crossing the middle, full-bleed -->
-        <div class="ticker absolute inset-x-0 top-1/2 z-[2] -translate-y-1/2" aria-hidden="true">
+        <!-- bright line crossing the middle, full-bleed. pointer-events-none:
+             it crosses the middle ghost word, and a hit-testable ticker would
+             swallow that word's hover/click -->
+        <div class="ticker pointer-events-none absolute inset-x-0 top-1/2 z-[2] -translate-y-1/2" aria-hidden="true">
           <div class="ticker-track">
             {
               [0, 1].map(() => (
                 <span class="m-marquee-text pr-4">
-                  chasing light · chasing light · chasing light · chasing light · chasing light ·&nbsp;
+                  highlights · highlights · highlights · highlights · highlights · highlights ·&nbsp;
                 </span>
               ))
             }
@@ -242,7 +200,7 @@ const CHASE = [
 
         <!-- portrait frame overlapping the list: a stack of one photo per ghost
              word, crossfading in step with the lit word -->
-        <div class="absolute left-[6%] top-1/2 z-[3] hidden w-[220px] -translate-y-1/2 md:block" data-reveal data-reveal-delay="160">
+        <div class="absolute left-[6%] top-1/2 z-[3] hidden w-[min(440px,32vw)] -translate-y-1/2 md:block" data-reveal data-reveal-delay="160">
           <div class="m-chase-stack">
             {
               CHASE.map((c, i) => (
@@ -256,7 +214,7 @@ const CHASE = [
       </div>
     </section>
 
-    <!-- ===== ARCHIVE: the scatter grid ===== -->
+    <!-- ===== ARCHIVE: the "Feature Lead" grid ===== -->
     <section id="archive" class="relative scroll-mt-16">
       <div class="container-hud py-20 md:py-28">
         <div class="flex flex-wrap items-end justify-between gap-4">
@@ -266,54 +224,35 @@ const CHASE = [
           </span>
         </div>
 
-        <div class="relative mt-16 grid grid-cols-12 gap-x-5 gap-y-16 md:gap-x-7 md:gap-y-24">
-          <!-- Light-table substrate: quiet connective tissue that fills the
-               scatter's dead space so the layout reads as art-directed, not
-               accidental. Ruled column guides, crosshair registration marks,
-               oversized ghost catalog numbers, and mono index tags (real frame
-               data). Purely decorative, behind the prints, desktop-only. -->
-          <div class="m-archive-field hidden md:block" aria-hidden="true">
-            <div class="m-field-grid"></div>
-
-            <!-- oversized ghost catalog numerals drifting in the big pockets -->
-            <span class="m-field-num" style="top:-2%; left:59%">{tag(0).no}</span>
-            <span class="m-field-num" style="top:40%; left:0.5%">{tag(6).no}</span>
-            <span class="m-field-num" style="top:79%; left:66%">{tag(11).no}</span>
-
-            <!-- mono index tags, each drawn from a real frame -->
-            <span class="m-field-tag" style="top:15%; left:29%">
-              NO. <b>{tag(3).no}</b> · {tag(3).year}<br />{tag(3).place}
-            </span>
-            <span class="m-field-tag" style="top:32%; right:5%; text-align:right">
-              NO. <b>{tag(5).no}</b> · {tag(5).year}<br />{tag(5).place}
-            </span>
-            <span class="m-field-tag" style="top:59%; left:45%">
-              NO. <b>{tag(7).no}</b> · {tag(7).year}<br />{tag(7).place}
-            </span>
-            <span class="m-field-tag" style="top:73%; left:9%">
-              NO. <b>{tag(9).no}</b> · {tag(9).year}<br />{tag(9).place}
-            </span>
-
-            <!-- registration crosshairs, like a print proofing sheet -->
-            <span class="m-plus" style="top:9%; left:56%"></span>
-            <span class="m-plus" style="top:27%; left:7%"></span>
-            <span class="m-plus" style="top:51%; left:69%"></span>
-            <span class="m-plus" style="top:57%; left:32%"></span>
-            <span class="m-plus" style="top:70%; left:87%"></span>
-            <span class="m-plus" style="top:88%; left:58%"></span>
-
-            <!-- film-strip connector hairlines between staggered frames -->
-            <span class="m-field-rule" style="top:19%; left:56%; height:14%"></span>
-            <span class="m-field-rule" style="top:61%; left:32%; height:12%"></span>
+        <div class="m-archive mt-16">
+          <div class="m-archive-grid">
+            {
+              archive.placements.map((p) => (
+                <div
+                  class={`m-cell-${p.shape}`}
+                  style={`--ga:${p.row} / ${p.col} / span ${p.rowSpan} / span ${p.colSpan}`}
+                  data-reveal
+                >
+                  <MomentFrame {...frameProps(p.index)} fill />
+                </div>
+              ))
+            }
+            {
+              archive.fillers.map((f) => (
+                <div
+                  class="m-index-tile"
+                  style={`--ga:${f.row} / ${f.col} / span ${f.rowSpan} / span ${f.colSpan}`}
+                  aria-hidden="true"
+                >
+                  <b>{moments.length} moments</b>
+                  <span>{span}</span>
+                  <span>
+                    {moments.length - filmCount} photographs · {filmCount} films
+                  </span>
+                </div>
+              ))
+            }
           </div>
-
-          {
-            frames.map((_, i) => (
-              <div class={`${LAYOUTS[i] ?? 'col-span-12 md:col-span-6'} relative z-[1]`} data-reveal>
-                <MomentFrame {...frameProps(i)} />
-              </div>
-            ))
-          }
         </div>
       </div>
     </section>
@@ -321,7 +260,7 @@ const CHASE = [
     <MomentLightbox client:load moments={moments} />
 
     <script>
-      /* "What I chase" call and response: one ghost word lights up while its
+      /* "Highlights" call and response: one ghost word lights up while its
          photo swaps into the frame; hovering a word jumps straight to it.
          Nodes are fresh after every ClientRouter swap, so listeners rebind per
          pass; only the interval needs clearing between passes. */
@@ -360,7 +299,43 @@ const CHASE = [
         start();
       }
 
+      /* Archive films play only while on screen: [data-scrollplay] videos are
+         excluded from footage.ts's always-on management, so this observer owns
+         their playback. Nodes are fresh after every ClientRouter swap; the old
+         observer is dropped wholesale and rebuilt. */
+      let playIO: IntersectionObserver | undefined;
+
+      function initScrollPlay() {
+        playIO?.disconnect();
+        const vids = Array.from(
+          document.querySelectorAll<HTMLVideoElement>('video[data-scrollplay]'),
+        );
+        if (!vids.length) return;
+
+        if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
+          vids.forEach((v) => v.pause());
+          return;
+        }
+
+        playIO = new IntersectionObserver(
+          (entries) => {
+            for (const e of entries) {
+              const v = e.target as HTMLVideoElement;
+              if (e.isIntersecting) {
+                v.muted = true; // required for programmatic autoplay
+                v.play().catch(() => {});
+              } else {
+                v.pause();
+              }
+            }
+          },
+          { threshold: 0.2 },
+        );
+        vids.forEach((v) => playIO!.observe(v));
+      }
+
       document.addEventListener('astro:page-load', initChase);
+      document.addEventListener('astro:page-load', initScrollPlay);
     </script>
   </div>
 </Base>

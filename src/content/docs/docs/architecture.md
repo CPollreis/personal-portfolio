@@ -24,7 +24,9 @@ Routes come from files in `src/pages/`:
   route per build-log entry.
 - `projects/index.astro` plus `projects/[...slug].astro`: same pattern for projects.
 - `photography/index.astro`: the gallery (a single page that mounts the lightbox
-  island).
+  island). Its archive section is laid out by the "Feature Lead" packer in
+  `src/components/photography/archiveGrid.ts`, computed from the photography
+  collection at build time.
 
 The dynamic `[...slug]` pages read their collection with `getStaticPaths()` and
 render each entry, so adding a Markdown file is all it takes to publish a new

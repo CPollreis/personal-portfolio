@@ -91,6 +91,9 @@ const photography = defineCollection({
       /** Looping clip for `kind: video` moments (public/ path, e.g. '/videos/clip.mp4'). A co-hosted .webm sibling is tried first for Firefox. */
       video: z.string().optional(),
       ratio: z.enum(['1/1', '4/3', '3/4', '3/2', '2/3', '16/9', '9/16']).default('3/2'),
+      /** Renders as an oversized 2x2 lead in the archive grid (landscape
+          crop, so it has no effect on vertical ratios). */
+      feature: z.boolean().default(false),
       order: z.number().default(99),
     }),
 });
