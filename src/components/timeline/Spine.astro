@@ -1,0 +1,441 @@
+---
+/**
+ * Spine - the /timeline "flight log": one channel down the center, moments
+ * branching off left and right in date order.
+ *
+ * Rendering split:
+ *   server -> the entire timeline (cards, nodes, year marks) as plain HTML,
+ *             so the page reads fully with JavaScript off
+ *   client -> only the ghost year numeral: a fixed, stroke-outlined numeral
+ *             on the right edge that crossfades to whichever year currently
+ *             crosses the middle of the viewport, so you always know where
+ *             in time you are mid-scroll
+ *
+ * The spine line itself draws in with the site's data-draw="scroll" motion
+ * hook; cards use data-reveal, both handled by scripts/motion.ts.
+ */
+import { timeline, kindLabels } from '../../config/timeline';
+
+const MONTHS = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+function dateLabel(iso: string): string {
+  const d = new Date(iso + 'T00:00:00Z');
+  return `${MONTHS[d.getUTCMonth()]} ${String(d.getUTCDate()).padStart(2, '0')} ${d.getUTCFullYear()}`;
+}
+
+/* Sides alternate across the whole log, not per year, so two cards never
+   land on the same side back to back across a year boundary. */
+let flip = 0;
+const side = () => (flip++ % 2 === 0 ? 'left' : 'right');
+---
+
+<section id="tl-spine" class="tls" aria-label="Timeline of moments since 2022">
+  <!-- ghost year: fixed layer behind the log, driven by the observer below -->
+  <div class="tls-ghost" aria-hidden="true">
+    {
+      timeline.map((yr) => (
+        <div class="tls-ghost-year" data-ghost={String(yr.year)}>
+          <span class="tls-ghost-num">{yr.year}</span>
+          <span class="tls-ghost-theme hud-label">{yr.theme}</span>
+        </div>
+      ))
+    }
+  </div>
+
+  <div class="tls-body container-hud">
+    <ol class="tls-list">
+      <!-- the channel: drawn in sync with scroll by the motion engine -->
+      <svg
+        class="tls-line"
+        viewBox="0 0 2 100"
+        preserveAspectRatio="none"
+        fill="none"
+        data-draw="scroll"
+        aria-hidden="true"
+      >
+        <line x1="1" y1="0" x2="1" y2="100" stroke="currentColor" stroke-width="2"></line>
+      </svg>
+
+      {
+        timeline.map((yr) => (
+          <li class="tls-group" data-tl-year={String(yr.year)}>
+            <div class="tls-yearmark" data-reveal>
+              <span class="tls-year-num">{yr.year}</span>
+              <span class="hud-label">{yr.theme}</span>
+            </div>
+            <ol class="tls-events">
+              {yr.events.map((ev) => {
+                const s = side();
+                return (
+                <li
+                  class="tls-row"
+                  data-side={s}
+                  data-kind={ev.kind}
+                  data-w={ev.weight ?? 1}
+                >
+                  <span class="tls-node" aria-hidden="true" />
+                  <article class="tls-card card-hud" data-reveal={s}>
+                    <div class="tls-head">
+                      <span class="tls-kind hud-label">{kindLabels[ev.kind]}</span>
+                      <time class="hud-label tabular tls-date" datetime={ev.date}>
+                        {dateLabel(ev.date)}
+                      </time>
+                    </div>
+                    <h3 class="tls-title">{ev.title}</h3>
+                    <p class="tls-why">{ev.why}</p>
+                    {ev.media &&
+                      (ev.media.src ? (
+                        <figure class="tls-media">
+                          {ev.media.type === 'video' ? (
+                            <video
+                              src={ev.media.src}
+                              controls
+                              muted
+                              playsinline
+                              preload="metadata"
+                              aria-label={ev.media.alt}
+                            />
+                          ) : (
+                            <img src={ev.media.src} alt={ev.media.alt} loading="lazy" />
+                          )}
+                        </figure>
+                      ) : (
+                        <figure class="tls-media tls-media-pending">
+                          <span class="hud-label">
+                            {ev.media.type === 'video' ? 'Video' : 'Photo'} · to be added
+                          </span>
+                          <p>{ev.media.alt}</p>
+                        </figure>
+                      ))}
+                  </article>
+                </li>
+                );
+              })}
+            </ol>
+          </li>
+        ))
+      }
+
+      <li class="tls-endcap" aria-hidden="true">
+        <span class="tls-endcap-node"></span>
+        <span class="hud-label">To be continued</span>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<style>
+  .tls {
+    position: relative;
+  }
+
+  /* ---------- ghost year (fixed, behind everything) ---------- */
+  .tls-ghost {
+    position: fixed;
+    top: 50%;
+    right: clamp(0.25rem, 3vw, 3rem);
+    z-index: 0;
+    pointer-events: none;
+  }
+  .tls-ghost-year {
+    position: absolute;
+    right: 0;
+    top: 0;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 1.1rem;
+    opacity: 0;
+    transition: opacity 550ms var(--ease-out-hud);
+  }
+  .tls-ghost-year.is-on {
+    opacity: 1;
+  }
+  .tls-ghost-num {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(6.5rem, 19vw, 16rem);
+    line-height: 0.8;
+    letter-spacing: -0.04em;
+    color: transparent;
+    -webkit-text-stroke: 1.5px color-mix(in srgb, var(--color-line) 88%, var(--color-accent));
+    user-select: none;
+  }
+  .tls-ghost-theme {
+    letter-spacing: 0.5em;
+  }
+
+  /* content rides above the ghost layer */
+  .tls-body {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ---------- the channel ---------- */
+  .tls-list {
+    position: relative;
+    max-width: 920px;
+    margin-inline: auto;
+    padding: 0.5rem 0 4rem;
+    list-style: none;
+  }
+  .tls-line {
+    position: absolute;
+    top: 0.25rem;
+    bottom: 0;
+    left: 9px;
+    width: 2px;
+    height: calc(100% - 0.25rem);
+    color: var(--color-line);
+    pointer-events: none;
+  }
+
+  /* ---------- year marks ---------- */
+  .tls-group {
+    position: relative;
+  }
+  .tls-yearmark {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    padding: 3.25rem 0 0.5rem 2.75rem;
+  }
+  .tls-year-num {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 2rem;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--color-ink);
+  }
+
+  /* ---------- rows ---------- */
+  .tls-events {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .tls-row {
+    position: relative;
+    margin-top: 1.6rem;
+    padding-left: 2.75rem;
+    --star-c: #fafafa;
+  }
+  .tls-row[data-kind='fsae'] { --star-c: var(--color-cyan); }
+  .tls-row[data-kind='project'] { --star-c: var(--color-accent); }
+  .tls-row[data-kind='photo'] { --star-c: color-mix(in srgb, var(--color-indigo) 72%, #b1a2ff); }
+
+  /* node: the same four-spur star the constellation used, kept as a mark */
+  .tls-node {
+    position: absolute;
+    left: 10px;
+    top: 1.35rem;
+    width: 11px;
+    height: 11px;
+    transform: translateX(-50%);
+    background: color-mix(in srgb, var(--star-c) 85%, #ffffff);
+    clip-path: polygon(50% 0, 61% 39%, 100% 50%, 61% 61%, 50% 100%, 39% 61%, 0 50%, 39% 39%);
+    filter: drop-shadow(0 0 5px color-mix(in srgb, var(--star-c) 70%, transparent));
+  }
+  .tls-row[data-w='2'] .tls-node {
+    width: 17px;
+    height: 17px;
+    filter: drop-shadow(0 0 9px color-mix(in srgb, var(--star-c) 90%, transparent));
+  }
+
+  /* ---------- cards ---------- */
+  .tls-card {
+    position: relative;
+    border: 1px solid var(--color-line);
+    background: var(--color-surface);
+    padding: 0.95rem 1.1rem 1.1rem;
+  }
+  /* branch stub from the card back to the channel; part of the card so it
+     reveals with it */
+  .tls-card::before {
+    content: '';
+    position: absolute;
+    top: 1.55rem;
+    left: -2.1rem;
+    width: 2.1rem;
+    height: 1px;
+    background: var(--color-line);
+  }
+  .tls-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+  }
+  .tls-kind {
+    color: color-mix(in srgb, var(--star-c) 78%, var(--color-muted));
+  }
+  .tls-title {
+    margin: 0.6rem 0 0;
+    font-size: 1.15rem;
+    color: var(--color-ink);
+  }
+  .tls-why {
+    margin: 0.45rem 0 0;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    color: var(--color-muted);
+  }
+  .tls-media {
+    margin: 0.85rem 0 0;
+    border: 1px solid var(--color-line);
+    overflow: hidden;
+  }
+  .tls-media img,
+  .tls-media video {
+    display: block;
+    width: 100%;
+    max-height: 220px;
+    object-fit: cover;
+  }
+  .tls-media-pending {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    justify-content: flex-end;
+    min-height: 100px;
+    padding: 1rem;
+    background:
+      radial-gradient(120% 130% at 20% 0%, color-mix(in srgb, var(--color-indigo) 16%, transparent), transparent 60%),
+      radial-gradient(120% 130% at 90% 100%, color-mix(in srgb, var(--color-cyan) 10%, transparent), transparent 60%),
+      var(--color-raised);
+  }
+  .tls-media-pending p {
+    margin: 0;
+    font-size: 0.8rem;
+    line-height: 1.5;
+    font-style: italic;
+    color: var(--color-muted);
+  }
+
+  /* ---------- end cap ---------- */
+  .tls-endcap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 2.75rem 0 0 2.75rem;
+  }
+  .tls-endcap-node {
+    position: absolute;
+    left: 10px;
+    width: 9px;
+    height: 9px;
+    transform: translateX(-50%) rotate(45deg);
+    border: 1.5px solid var(--color-faint);
+    background: var(--color-bg);
+  }
+
+  /* ---------- desktop: center the channel, alternate the branches ---------- */
+  @media (min-width: 768px) {
+    .tls-line {
+      left: 50%;
+      transform: translateX(-1px);
+    }
+    .tls-yearmark {
+      align-items: center;
+      text-align: center;
+      padding: 4rem 0 0.75rem;
+    }
+    .tls-year-num {
+      font-size: 2.4rem;
+      background: var(--color-bg);
+      padding-inline: 1.25rem;
+    }
+    .tls-row {
+      display: grid;
+      grid-template-columns: 1fr 76px 1fr;
+      align-items: start;
+      padding-left: 0;
+      margin-top: 1.75rem;
+    }
+    .tls-node {
+      grid-column: 2;
+      grid-row: 1;
+      position: static;
+      justify-self: center;
+      margin-top: 1.35rem;
+      transform: none;
+    }
+    .tls-card {
+      grid-row: 1;
+      max-width: 400px;
+      width: 100%;
+    }
+    .tls-row[data-side='left'] .tls-card {
+      grid-column: 1;
+      justify-self: end;
+    }
+    .tls-row[data-side='right'] .tls-card {
+      grid-column: 3;
+      justify-self: start;
+    }
+    .tls-row[data-side='left'] .tls-card::before {
+      left: auto;
+      right: -2rem;
+      width: 2rem;
+    }
+    .tls-row[data-side='right'] .tls-card::before {
+      left: -2rem;
+      width: 2rem;
+    }
+    .tls-endcap {
+      justify-content: center;
+      padding: 3.5rem 0 0;
+    }
+    .tls-endcap-node {
+      position: static;
+      transform: rotate(45deg);
+    }
+  }
+</style>
+
+<script>
+  /**
+   * Ghost year driver. Each year group is watched against the vertical
+   * middle of the viewport (a zero-height band via rootMargin); whichever
+   * group covers it owns the numeral. When none does (header, footer),
+   * every numeral fades out.
+   */
+  function initSpine() {
+    const root = document.getElementById('tl-spine');
+    if (!root || root.dataset.bound) return;
+    root.dataset.bound = '1';
+
+    const ghosts = new Map<string, HTMLElement>();
+    root.querySelectorAll<HTMLElement>('[data-ghost]').forEach((el) => {
+      ghosts.set(el.dataset.ghost!, el);
+    });
+
+    let active = '';
+    function setActive(year: string) {
+      if (year === active) return;
+      ghosts.get(active)?.classList.remove('is-on');
+      ghosts.get(year)?.classList.add('is-on');
+      active = year;
+    }
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          const year = (entry.target as HTMLElement).dataset.tlYear!;
+          if (entry.isIntersecting) setActive(year);
+          else if (year === active) setActive('');
+        }
+      },
+      { rootMargin: '-50% 0px -50% 0px', threshold: 0 },
+    );
+    root.querySelectorAll<HTMLElement>('[data-tl-year]').forEach((el) => io.observe(el));
+
+    document.addEventListener('astro:before-swap', () => io.disconnect(), { once: true });
+  }
+
+  initSpine();
+  document.addEventListener('astro:page-load', initSpine);
+</script>

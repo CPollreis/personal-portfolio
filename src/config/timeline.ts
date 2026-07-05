@@ -1,11 +1,11 @@
 /**
- * Timeline data - the single source of truth for the /timeline constellation.
+ * Timeline data - the single source of truth for the /timeline spine.
  *
  * >>> EVERY EVENT BELOW IS A REALISTIC PLACEHOLDER. <<<
  * Edit titles, dates, `why` blurbs, and point `media.src` at real files in
  * /public (e.g. src: '/timeline/first-drive.jpg') to make this yours. The
- * constellation layout, edges, and zoom behavior all derive from this file;
- * nothing else needs to change when you edit it.
+ * spine layout, branch sides, and ghost year numerals all derive from this
+ * file; nothing else needs to change when you edit it.
  *
  * media.src supports images (.jpg/.png/.webp) and video (.mp4/.webm). When
  * src is omitted the detail card shows an on-brand "media pending" frame

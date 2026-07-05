@@ -1,85 +1,33 @@
 ---
 /**
- * /timeline - "A universe of moments": the full-viewport constellation map.
- * The header floats over the canvas; a <noscript> chronological log keeps the
- * content readable (and indexable) without JavaScript.
+ * /timeline - "A universe of moments": a single channel down the page with
+ * every moment branching off it in date order. A fixed, stroke-outlined year
+ * numeral rides the right edge and follows the scroll, so you always know
+ * which year you are in. Fully server-rendered; JavaScript only drives the
+ * ghost numeral and the reveal motion.
  */
 import Base from '../layouts/Base.astro';
-import Constellation from '../components/timeline/Constellation.astro';
-import HeaderMedia from '../components/layout/HeaderMedia.astro';
-import { timeline, kindLabels } from '../config/timeline';
-
-/* Optional footage behind the floating title, home-hero style: set a video
-   (public/ path, e.g. '/videos/hero-loop-web.mp4') or an image path to switch
-   it on. It renders over the constellation canvas, behind the title text. */
-const headerMedia: { video?: string; image?: string } = {};
+import Spine from '../components/timeline/Spine.astro';
+import { timeline } from '../config/timeline';
 
 const eventCount = timeline.reduce((n, y) => n + y.events.length, 0);
-const fmt = (iso: string) =>
-  new Date(iso + 'T00:00:00Z').toLocaleDateString('en-CA', {
-    year: 'numeric',
-    month: 'short',
-    day: '2-digit',
-    timeZone: 'UTC',
-  });
 ---
 
 <Base
   title="Timeline"
-  description="An interactive constellation map of Caleb Pollreis's journey since 2022: university, FSAE Electric, projects, and photography, one star per moment."
-  padTop={false}
+  description="A scrolling timeline of Caleb Pollreis's journey since 2022: university, FSAE Electric, projects, and photography, one moment at a time."
 >
-  <div class="relative">
-    <Constellation />
+  <header class="glow-header relative overflow-hidden">
+    <div class="container-hud relative py-14 md:py-18">
+      <p class="hud-label">
+        05 · Timeline <span class="text-cyan">·</span> {eventCount} moments since 2022
+      </p>
+      <h1 class="mt-3 font-display text-4xl text-ink md:text-5xl">A universe of moments</h1>
+      <p class="mt-3 max-w-md text-sm text-muted">
+        One line through five years. Scroll, and the year on the right keeps pace with you.
+      </p>
+    </div>
+  </header>
 
-    <!-- floating header, over the canvas but under the nav -->
-    <header class="pointer-events-none absolute inset-x-0 top-0 z-20 overflow-hidden pt-24">
-      <HeaderMedia {...headerMedia} />
-      <div class="container-hud relative">
-        <p class="hud-label">
-          05 · Timeline <span class="text-cyan">·</span> {eventCount} moments since 2022
-        </p>
-        <h1 class="mt-3 font-display text-4xl text-ink md:text-5xl">A universe of moments</h1>
-        <p class="mt-3 max-w-md text-sm text-muted">
-          Every star is a moment. Zoom into a year, click a star, and see why it mattered.
-        </p>
-      </div>
-    </header>
-  </div>
-
-  <noscript>
-    <style>
-      /* without JS the canvas and star layer cannot run; show the log instead */
-      #constellation { display: none; }
-    </style>
-    <section class="container-hud py-16">
-      <p class="hud-label">05 · Timeline · JavaScript is off, showing the flight log</p>
-      <h1 class="mt-3 font-display text-4xl text-ink">A universe of moments</h1>
-      {
-        timeline.map((yr) => (
-          <div class="mt-12">
-            <h2 class="font-display text-2xl text-ink">
-              {yr.year} <span class="hud-label ml-3">{yr.theme}</span>
-            </h2>
-            <ul class="mt-4 space-y-6">
-              {yr.events.map((ev) => (
-                <li class="border-l-2 border-line pl-5">
-                  <p class="hud-label">
-                    {fmt(ev.date)} · {kindLabels[ev.kind]}
-                  </p>
-                  <h3 class="mt-1 font-display text-lg text-ink">{ev.title}</h3>
-                  <p class="mt-1 max-w-xl text-sm text-muted">{ev.why}</p>
-                  {ev.media && !ev.media.src && (
-                    <p class="mt-1 text-sm italic text-faint">
-                      {ev.media.type === 'video' ? 'Video' : 'Photo'}: {ev.media.alt}
-                    </p>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))
-      }
-    </section>
-  </noscript>
+  <Spine />
 </Base>
