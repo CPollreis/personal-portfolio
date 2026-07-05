@@ -20,6 +20,14 @@ Full build-and-maintain documentation lives on the site itself at **`/docs`**
 step-by-step content recipes, media rules, and the deploy pipeline. The sections
 below are the short version.
 
+To read the docs:
+
+- **Locally** - run `npm run dev`, then open http://localhost:4321/docs.
+- **In production** - open https://calebpollreis.com/docs on the live site.
+
+The pages are Markdown/MDX files in `src/content/docs/`. Edit one while
+`npm run dev` is running and the docs site hot-reloads with your changes.
+
 ## Develop
 
 ```bash
@@ -59,7 +67,24 @@ full field reference and worked examples.
   cover?, hero?, heroVideo?, video?, draft?`.
 - **Photography** - add `src/content/photography/<NN-slug>.md`. Frontmatter:
   `title, kind (photo|video), date, story?, location?, camera?, lens?, iso?,
-  aperture?, focal?, fps?, quality?, image?, video?, ratio, order`.
+  aperture?, focal?, fps?, quality?, image?, video?, ratio, feature?, order`.
+
+### The photography archive grid
+
+The archive on `/photography` is a modular "Feature Lead" grid
+(`src/components/photography/archiveGrid.ts`): it packs moments into repeating
+2-row bands from the content collection alone, so **adding a Markdown entry is
+all it takes to extend it**. Placement is driven by two frontmatter fields:
+
+- `ratio` - vertical ratios (`3/4`, `2/3`, `9/16`) render as full-band talls,
+  exactly twice the height of a `3/2` still; everything else is a standard cell.
+- `feature: true` - renders as an oversized 2x2 band lead. Leads alternate
+  sides band to band; the flag is ignored on vertical ratios, which stay tall.
+
+`kind: video` moments autoplay muted while scrolled into view and pause
+off-screen; every tile (photo or video) still opens the lightbox. Leftover
+cells in the final band are filled by an auto-computed index tile, so the grid
+always closes cleanly no matter how many moments exist.
 
 ### Videos: ship webm + mp4 pairs
 

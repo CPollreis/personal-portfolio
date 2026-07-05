@@ -187,7 +187,7 @@ export default function MomentLightbox({ moments }: Props) {
       role="dialog"
       aria-modal="true"
       aria-label={`${m.kind === 'video' ? 'Film' : 'Photograph'}: ${m.title}`}
-      className="fixed inset-0 z-[80] flex flex-col bg-[#050505]/95 backdrop-blur-md md:flex-row"
+      className="fixed inset-0 z-[80] flex flex-col bg-black/95 backdrop-blur-md md:flex-row"
       style={{
         transition: `opacity ${CLOSE_MS}ms ${EASE}`,
         opacity: closing ? 0 : 1,
