@@ -9,6 +9,12 @@ import tailwindcss from '@tailwindcss/vite';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://calebpollreis.com',
+  // Old tab URLs from the multi-page era land on their one-page section.
+  redirects: {
+    '/about': '/',
+    '/fsae': '/#fsae',
+    '/projects': '/#projects',
+  },
   integrations: [
     react(),
     // Starlight injects astro-expressive-code, which must be registered before

@@ -1,7 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
 import Section from '../components/layout/Section.astro';
-import Reveal from '../components/motion/Reveal.astro';
 import Stagger from '../components/motion/Stagger.astro';
 import SpecLabel from '../components/hud/SpecLabel.astro';
 import DimensionLine from '../components/hud/DimensionLine.astro';
@@ -23,12 +22,12 @@ const decisions = [
   {
     code: 'D.02',
     title: 'No WebGL, on purpose',
-    body: 'The isometric SLAM map and the exploded lens are not 3D scenes. Their geometry (spline sampling, isometric projection, cone offsets, checker polygons) is computed at build time and shipped as plain SVG; anime.js only drives the car along the path and blows the lens apart. The result works on a phone, costs almost no battery, and weighs kilobytes.',
+    body: 'The decorative instruments (the timeline spine, the ghost year numerals, the HUD rules and brackets) are plain SVG and CSS computed at build time. Nothing on the site needs a GPU. The result works on a phone, costs almost no battery, and weighs kilobytes.',
   },
   {
     code: 'D.03',
     title: 'One motion engine',
-    body: 'A single script (src/scripts/motion.ts) reads declarative data-attributes (data-reveal, data-stagger, data-counter, data-scramble, data-draw, data-parallax) and wires IntersectionObserver + anime.js v4. Pages ship zero per-effect JavaScript. With JS off or prefers-reduced-motion on, all content is simply visible.',
+    body: 'A single script (src/scripts/motion.ts) reads declarative data-attributes (data-reveal, data-stagger, data-draw, data-parallax) and wires IntersectionObserver + anime.js v4. Pages ship zero per-effect JavaScript, and the home page opts out of motion entirely. With JS off or prefers-reduced-motion on, all content is simply visible.',
   },
   {
     code: 'D.04',
@@ -43,7 +42,7 @@ const decisions = [
   {
     code: 'D.06',
     title: 'Honest instruments',
-    body: 'Every readout on this site is a real fact: the ticker values, the stats, the clock (actual Winnipeg time). The cone map renders a synthetic circuit today and is built to render a real logged run from the car; it says SIM on it until it does.',
+    body: 'Every readout on this site is a real fact: the roles, the dates, the coordinates. When an image or video is still a placeholder, the frame says so instead of pretending. Nothing is invented to look busy.',
   },
 ];
 ---
@@ -52,23 +51,19 @@ const decisions = [
   title="Colophon"
   description="How calebpollreis.com works: Astro 7 static output, one shared anime.js motion engine, build-time SVG instead of WebGL, and honest instruments."
 >
-  <header class="glow-header relative overflow-hidden border-b border-line py-20 md:py-28">
+  <header class="glow-header relative overflow-hidden border-b border-line py-12 md:py-16">
     <HeaderMedia {...headerMedia} />
     <div class="container-hud relative">
       <SpecLabel code="DIV.05" text="COLOPHON · SPEC SHEET" accent />
-      <div class="mt-6" data-reveal="clip">
-        <h1 class="font-display text-5xl font-semibold leading-[0.95] md:text-7xl">
-          How this <span class="text-grad">site</span> works
-        </h1>
-      </div>
-      <div class="mt-6 max-w-xl"><DimensionLine value="ASTRO 7 · ANIME.JS 4 · ZERO WEBGL" /></div>
-      <Reveal delay={140}>
-        <p class="mt-6 max-w-2xl text-lg text-muted">
-          This portfolio is itself a build log entry. It's a static site that treats motion
-          as an engineering budget: computed at build time, animated sparingly, and honest
-          about what its instruments show.
-        </p>
-      </Reveal>
+      <h1 class="mt-5 font-display text-4xl font-semibold leading-tight md:text-5xl">
+        How this <span class="text-grad">site</span> works
+      </h1>
+      <div class="mt-5 max-w-xl"><DimensionLine value="ASTRO 7 · ANIME.JS 4 · ZERO WEBGL" /></div>
+      <p class="mt-5 max-w-2xl text-base text-muted">
+        This portfolio is itself a build log entry. It's a static site that treats motion
+        as an engineering budget: computed at build time, animated sparingly, and honest
+        about what its instruments show.
+      </p>
     </div>
   </header>
 

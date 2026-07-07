@@ -1,5 +1,7 @@
 # build output
 dist/
+# verify-script output
+.screenshots/
 # generated types
 .astro/
 # dependencies
