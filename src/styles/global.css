@@ -410,26 +410,6 @@
     pointer-events: none;
   }
 
-  /* Crosshair cursor: the pointer IS a cyan plus sign (with a dark halo so
-     it stays visible over bright elements). Desktop pointers only. */
-  @media (pointer: fine) {
-    html,
-    body,
-    a,
-    button,
-    [role="button"],
-    summary,
-    label,
-    input,
-    select,
-    textarea {
-      cursor:
-        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Cpath d='M12 3v18M3 12h18' stroke='%2309090b' stroke-width='4.5'/%3E%3Cpath d='M12 3v18M3 12h18' stroke='%2325c6eb' stroke-width='2'/%3E%3C/svg%3E")
-          12 12,
-        crosshair;
-    }
-  }
-
   /* Thin interactive link underline that draws in on hover */
   .link-hud {
     position: relative;

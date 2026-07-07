@@ -1,12 +1,422 @@
 ---
+/**
+ * Home - the whole site on one page.
+ *
+ * Structure (anchors match the nav): compact bio hero with the car footage
+ * kept small behind a blurred text panel, then #fsae, #projects,
+ * #photography, #timeline. Everything a visitor needs is reachable without
+ * guessing; deep pages (post writeups, the gallery, the timeline) hang off
+ * their sections.
+ *
+ * Content sources: src/config/site.ts (positions, links, availability),
+ * src/config/fsae.ts (trajectory), and the fsae/projects/photography
+ * content collections. To append a project or post, add a file to the
+ * collection; to change a position, edit site.ts.
+ */
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
-import Hero from '../components/home/Hero.astro';
-import Directory from '../components/home/Directory.astro';
-import Telemetry from '../components/home/Telemetry.astro';
+import SubsystemBadge from '../components/fsae/SubsystemBadge.astro';
+import SocialIcon from '../components/ui/SocialIcon.astro';
+import Button from '../components/ui/Button.astro';
+import Placeholder from '../components/media/Placeholder.astro';
+import MomentLightbox, { type Moment } from '../components/photography/MomentLightbox.tsx';
+import { momentBackdrop } from '../components/photography/backdrop';
+import { subsystems } from '../config/fsae';
+import { site, positions, socials } from '../config/site';
+import { timeline } from '../config/timeline';
+import { trajectory } from '../config/fsae';
+import { withBase } from '../config/paths';
+
+const fsaePosts = (await getCollection('fsae', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime(),
+);
+const projects = (await getCollection('projects', ({ data }) => !data.draft)).sort(
+  (a, b) => a.data.order - b.data.order || b.data.date.getTime() - a.data.date.getTime(),
+);
+/* Photography frames in the same sorted order the gallery uses, so a highlight's
+   index lines up with its generated backdrop art on /photography. Highlighted =
+   the featured moments first, then filled by order, capped at three thumbnails. */
+const photoFrames = (await getCollection('photography')).sort(
+  (a, b) => a.data.order - b.data.order || b.data.date.getTime() - a.data.date.getTime(),
+);
+const momentCount = photoFrames.length;
+const seenPhoto = new Set<number>();
+const photoHighlights = [
+  ...photoFrames.map((f, i) => ({ f, i })).filter((x) => x.f.data.feature),
+  ...photoFrames.map((f, i) => ({ f, i })),
+]
+  .filter((x) => (seenPhoto.has(x.i) ? false : seenPhoto.add(x.i)))
+  .slice(0, 3);
+
+/* Full serialized payload for the in-page lightbox, indexed to match photoFrames
+   so a highlight's data-moment-index lines up. Clicking a highlight opens the
+   viewer; arrow keys / the prev-next buttons then step through every moment. */
+const fmtMomentDate = (d: Date) =>
+  d
+    .toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' })
+    .toUpperCase();
+const moments: Moment[] = photoFrames.map((f, i) => ({
+  title: f.data.title,
+  kind: f.data.kind,
+  dateDisplay: fmtMomentDate(f.data.date),
+  story: f.data.story,
+  location: f.data.location,
+  camera: f.data.camera,
+  lens: f.data.lens,
+  iso: f.data.iso,
+  aperture: f.data.aperture,
+  focal: f.data.focal,
+  fps: f.data.fps,
+  quality: f.data.quality,
+  ratio: f.data.ratio,
+  src: f.data.image?.src,
+  video: f.data.video,
+  backdrop: momentBackdrop(i),
+}));
+const eventCount = timeline.reduce((n, y) => n + y.events.length, 0);
+
+const fmtDate = (d: Date) =>
+  d
+    .toLocaleDateString('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' })
+    .toUpperCase();
+
+/* Shared thumbnail frame classes: light grey outline, YouTube-card style. */
+const thumbFrame = 'border border-faint/50 transition-colors group-hover:border-faint';
 ---
 
 <Base padTop={false}>
-  <Hero />
-  <Directory />
-  <Telemetry />
+  <!-- ============ hero: full-screen footage, who / where / what ============ -->
+  <!-- Full viewport so the car footage is the hero's visual object; the text
+       sits in a compact panel on the left and the work buttons jump to the
+       on-page sections below. -->
+  <section class="relative flex min-h-[100dvh] flex-col justify-center overflow-hidden border-b border-line pt-16">
+    <!-- background footage layer -->
+    <div class="absolute inset-0" aria-hidden="true">
+      <video
+        data-header-video
+        class="h-full w-full object-cover"
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="metadata"
+        tabindex="-1"
+      >
+        <!-- stabilized variants (ffmpeg vidstab from hero-loop.MP4); webm first:
+             Firefox's macOS H.264 decoder can fail after client-side navigation
+             (see src/scripts/footage.ts); VP9 decodes in software -->
+        <source src={withBase('/videos/hero-loop-stab-web.webm')} type="video/webm" />
+        <source src={withBase('/videos/hero-loop-stab-web.mp4')} type="video/mp4" />
+      </video>
+      <!-- dimming: heavy on the text side, fading to nothing on the right so the
+           footage itself carries the right half of the frame -->
+      <div class="absolute inset-0 bg-bg/40"></div>
+      <div class="absolute inset-0 bg-gradient-to-r from-bg/85 via-bg/35 via-45% to-transparent"></div>
+      <!-- fade the footage into the page so the next section meets it seamlessly -->
+      <div class="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-bg to-transparent"></div>
+    </div>
+
+    <div class="container-hud relative py-20">
+      <!-- blurred panel, sized to hug the text (no empty space on the right) -->
+      <div class="w-fit max-w-lg border border-line/80 bg-bg/60 p-6 backdrop-blur-md md:p-8">
+        <p class="hud-label">Portfolio</p>
+        <h1 class="mt-3 font-display text-4xl font-semibold tracking-tight md:text-5xl">
+          Caleb <span class="text-grad">Pollreis</span>
+        </h1>
+
+        <ul class="mt-5 space-y-1.5">
+          {
+            positions.map((p) => (
+              <li class="text-sm text-muted">
+                {p.href ? (
+                  <a href={p.href} class="link-hud text-ink">{p.role}</a>
+                ) : (
+                  <span class="text-ink">{p.role}</span>
+                )}
+                <span class="text-faint"> · </span>{p.org}
+                {p.note && <span class="text-faint"> · {p.note}</span>}
+              </li>
+            ))
+          }
+        </ul>
+
+        <p class="mt-5 max-w-md text-sm leading-relaxed text-muted">
+          I work on the boundary between hardware and software: embedded firmware and CAN
+          networking on our formula-style race car, high-voltage accumulator work, and now
+          the driverless program I lead. Off the team I build personal projects and shoot
+          photography.
+        </p>
+
+        <p class="mt-6 flex items-center gap-2.5">
+          <span class="h-1.5 w-1.5 rounded-full bg-cyan" aria-hidden="true"></span>
+          <span class="hud-label text-ink">{site.availability}</span>
+        </p>
+
+        <!-- work buttons: in-page jumps to the sections below (no new tab) -->
+        <div class="mt-7 grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <Button href="#fsae">View FSAE work</Button>
+          <Button href="#projects" variant="ghost">Personal projects</Button>
+          <Button href="#photography" variant="ghost">Photography</Button>
+          <Button href={site.resume} variant="ghost" external>Download resume</Button>
+        </div>
+
+        <ul class="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2">
+          {
+            socials.map((s) => (
+              <li>
+                <a
+                  href={s.href}
+                  class="link-hud inline-flex text-muted hover:text-ink"
+                  aria-label={s.label}
+                  rel={s.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                  target={s.href.startsWith('http') ? '_blank' : undefined}
+                >
+                  <SocialIcon label={s.label} />
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 01 · FSAE ============ -->
+  <section id="fsae" class="scroll-mt-16 border-b border-line">
+    <div class="container-hud py-12 md:py-16">
+      <p class="hud-label text-accent">01 · FSAE</p>
+      <h2 class="mt-3 font-display text-2xl text-ink md:text-3xl">FSAE Electric</h2>
+
+      <!-- role progression -->
+      <ol class="mt-8 grid gap-6 md:grid-cols-3">
+        {
+          trajectory.map((step) => (
+            <li class="border-l-2 border-line pl-4">
+              <p class="hud-label tabular text-accent">{step.marker}{step.tag && ` · ${step.tag}`}</p>
+              <h3 class="mt-2 font-display text-base text-ink">{step.title}</h3>
+              <p class="mt-1.5 text-sm leading-relaxed text-muted">{step.detail}</p>
+            </li>
+          ))
+        }
+      </ol>
+
+      <!-- build log: one thumbnail card per entry; the grid absorbs any count -->
+      <p class="hud-label mt-10 border-b border-line pb-3">Build log · {fsaePosts.length} entries</p>
+      <ul class="mt-6 grid gap-x-6 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          fsaePosts.map((p, i) => (
+            <li>
+              <a href={withBase(`/fsae/${p.id}`)} class="group block">
+                {p.data.cover ? (
+                  <div class={thumbFrame}>
+                    <Image
+                      src={p.data.cover}
+                      alt={p.data.title}
+                      widths={[480, 960]}
+                      sizes="(min-width: 1024px) 430px, (min-width: 640px) 50vw, 100vw"
+                      class="aspect-video w-full object-cover"
+                    />
+                  </div>
+                ) : (
+                  <Placeholder
+                    ratio="16/9"
+                    label={`${subsystems[p.data.subsystem].code} · FIG.0${i + 1}`}
+                    seed={i}
+                    class="!border-faint/50 transition-colors group-hover:!border-faint"
+                  />
+                )}
+                <div class="mt-3 flex flex-wrap items-center gap-3">
+                  <SubsystemBadge subsystem={p.data.subsystem} />
+                  <span class="hud-label tabular">{fmtDate(p.data.date)}</span>
+                </div>
+                <h3 class="mt-2 font-display text-base text-ink transition-colors group-hover:text-cyan">
+                  {p.data.title}
+                </h3>
+                <p class="mt-1 line-clamp-2 text-sm text-muted">{p.data.summary}</p>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ 02 · Projects ============ -->
+  <section id="projects" class="scroll-mt-16 border-b border-line">
+    <div class="container-hud py-12 md:py-16">
+      <!-- about strip: portrait + a personal, first-person intro, sitting directly
+           above the project grid so a visitor meets the person and the work in one
+           block. Swap the Placeholder for an <Image> once the real portrait exists. -->
+      <div class="grid gap-6 sm:grid-cols-[auto_1fr] sm:items-center sm:gap-8">
+        <div class="w-40 justify-self-start sm:w-44 md:w-52">
+          <Placeholder
+            ratio="4/5"
+            label="CP · REPLACE"
+            seed={3}
+            class="!border-faint/50"
+          />
+        </div>
+        <div>
+          <p class="hud-label text-accent">02 · Projects</p>
+          <h2 class="mt-3 font-display text-2xl text-ink md:text-3xl">A bit about me</h2>
+          <p class="mt-3 max-w-xl text-sm leading-relaxed text-muted">
+            I'm a computer engineering student in Winnipeg who likes building things that reach into
+            the physical world. Off the race car I chase personal projects end to end and keep a
+            camera close. The work below is where that goes when no one assigns it.
+          </p>
+          <p class="mt-4 font-mono text-xs tracking-wide text-cyan">/ Caleb Pollreis</p>
+        </div>
+      </div>
+
+      <p class="hud-label mt-10 border-b border-line pb-3">Personal projects · {projects.length}</p>
+      <ul class="mt-6 grid gap-x-6 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          projects.map((p, i) => (
+            <li>
+              <a href={withBase(`/projects/${p.id}`)} class="group block">
+                {p.data.cover ? (
+                  <div class={thumbFrame}>
+                    <Image
+                      src={p.data.cover}
+                      alt={p.data.title}
+                      widths={[480, 960]}
+                      sizes="(min-width: 1024px) 430px, (min-width: 640px) 50vw, 100vw"
+                      class="aspect-video w-full object-cover"
+                    />
+                  </div>
+                ) : (
+                  <Placeholder
+                    ratio="16/9"
+                    label={`PRJ · FIG.0${i + 1}`}
+                    seed={i + 1}
+                    class="!border-faint/50 transition-colors group-hover:!border-faint"
+                  />
+                )}
+                <div class="mt-3 flex flex-wrap items-center gap-3">
+                  <span class="hud-label text-accent">{p.data.kind}</span>
+                  <span class="hud-label tabular">{fmtDate(p.data.date)}</span>
+                </div>
+                <h3 class="mt-2 font-display text-base text-ink transition-colors group-hover:text-cyan">
+                  {p.data.title}
+                </h3>
+                <p class="mt-1 line-clamp-2 text-sm text-muted">{p.data.summary}</p>
+                {p.data.stack.length > 0 && (
+                  <p class="mt-1.5 font-mono text-xs tracking-wide text-faint">
+                    {p.data.stack.join(' · ')}
+                  </p>
+                )}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ 03 · Photography / 04 · Timeline ============ -->
+  <div class="border-b border-line">
+    <div class="container-hud grid gap-px py-12 md:grid-cols-2 md:gap-6 md:py-16">
+      <section id="photography" class="scroll-mt-16">
+        <div class="card-hud relative flex h-full flex-col gap-6 border border-line bg-surface p-6">
+          <a href={withBase('/photography')} class="group/head block">
+            <p class="hud-label text-accent">03 · Photography</p>
+            <h2 class="mt-3 font-display text-2xl text-ink transition-colors group-hover/head:text-cyan">
+              Through the lens
+            </h2>
+            <p class="mt-2 max-w-md text-sm text-muted">
+              {momentCount} moments from the field: race cars, prairie storms, and Winnipeg at
+              minus 30.
+            </p>
+          </a>
+
+          <!-- highlighted frames: click any to open the viewer in place, then
+               arrow / click through every moment. Drawn with the same generated
+               art the gallery uses so indices (and the flight) line up; real
+               photos flow through once added. -->
+          <div class="grid grid-cols-3 gap-2">
+            {
+              photoHighlights.map(({ f, i }) => (
+                <button
+                  type="button"
+                  data-moment-index={i}
+                  class="group/frame relative aspect-square overflow-hidden border border-line/60 transition-colors hover:border-cyan"
+                  aria-haspopup="dialog"
+                  aria-label={`Open ${f.data.kind === 'video' ? 'film' : 'photo'}: ${f.data.title}`}
+                >
+                  <span data-media class="absolute inset-0 overflow-hidden">
+                    <span
+                      class="absolute inset-0 transition-transform duration-500 group-hover/frame:scale-105"
+                      style={`background:${momentBackdrop(i)}`}
+                      aria-hidden="true"
+                    />
+                  </span>
+                  <span class="absolute bottom-1.5 left-2 font-mono text-[0.55rem] tracking-[0.14em] text-white/70">
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                </button>
+              ))
+            }
+          </div>
+
+          <a
+            href={withBase('/photography')}
+            class="hud-label mt-auto inline-flex w-fit transition-colors hover:text-cyan"
+          >
+            Open the gallery →
+          </a>
+        </div>
+      </section>
+
+      <section id="timeline" class="mt-6 scroll-mt-16 md:mt-0">
+        <a
+          href={withBase('/timeline')}
+          class="card-hud group relative flex h-full flex-col justify-between gap-6 overflow-hidden border border-line bg-surface p-6"
+        >
+          <!-- static spine motif: the /timeline channel on its side -->
+          <svg
+            viewBox="0 0 600 60"
+            preserveAspectRatio="xMidYMid slice"
+            class="pointer-events-none absolute inset-x-0 bottom-14 h-10 w-full opacity-40 transition-opacity group-hover:opacity-70"
+            fill="none"
+            aria-hidden="true"
+          >
+            <path d="M20 30 H580" stroke="var(--color-cyan)" stroke-opacity="0.35" stroke-width="1" />
+            <g stroke="var(--color-cyan)" stroke-opacity="0.25" stroke-width="1">
+              {[110, 220, 330, 440].map((x, i) => <path d={`M${x} 30 V${i % 2 === 0 ? 14 : 46}`} />)}
+            </g>
+            <g fill="var(--color-cyan)" fill-opacity="0.7">
+              {[20, 110, 220, 330, 440, 550].map((x) => <circle cx={x} cy="30" r="2.5" />)}
+            </g>
+          </svg>
+          <div>
+            <p class="hud-label text-accent">04 · Timeline</p>
+            <h2 class="mt-3 font-display text-2xl text-ink">A universe of moments</h2>
+            <p class="mt-2 max-w-md text-sm text-muted">
+              {eventCount} milestones since 2022 on one line, year by year.
+            </p>
+          </div>
+          <span class="hud-label transition-colors group-hover:text-cyan">Open the timeline →</span>
+        </a>
+      </section>
+    </div>
+  </div>
+
+  <!-- In-page viewer for the photography highlights: opens on a highlight click
+       and steps through every moment with the arrow keys or the prev/next
+       buttons. Same component the /photography gallery uses. -->
+  <MomentLightbox client:load moments={moments} />
 </Base>
+
+<!-- keyframes the lightbox references for its fade-in and info-panel slide
+     (defined in moments.css for /photography; scoped copy for this page) -->
+<style is:global>
+  @keyframes m-fade {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes m-slide {
+    from { opacity: 0; transform: translateX(28px); }
+    to { opacity: 1; transform: none; }
+  }
+</style>

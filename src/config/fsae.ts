@@ -44,3 +44,38 @@ export const subsystems: Record<Subsystem, SubsystemMeta> = {
 };
 
 export const subsystemOrder: Subsystem[] = ['firmware', 'manufacturing', 'autonomous'];
+
+/**
+ * Role progression on the team, oldest first. Rendered on the home page
+ * FSAE section; append a row when the role changes.
+ */
+export interface TrajectoryStep {
+  marker: string;
+  title: string;
+  detail: string;
+  tag?: string;
+}
+
+export const trajectory: TrajectoryStep[] = [
+  {
+    marker: '2022',
+    title: 'Joined the team on firmware',
+    detail:
+      'Programmed STM32 microcontrollers on the custom PCBs that run the car, learned to troubleshoot electrical systems through their schematics, and wrote a Python tool that logs high-current tab-test measurements through an ADC.',
+    tag: 'FW',
+  },
+  {
+    marker: '2024',
+    title: 'Software System Lead',
+    detail:
+      'Led 10+ software members across 5+ vehicle codebases: CI/CD test pipelines with GitHub Actions, and CAN 2.0 communication between the custom PCBs, the battery-management system, and the 3-phase motor controller.',
+    tag: 'FW · MFG',
+  },
+  {
+    marker: '2026',
+    title: 'Autonomous Systems Lead (DSO)',
+    detail:
+      'Leading 10+ members standing up the driverless program: a C++/ROS 2 monorepo targeting the NVIDIA Jetson Orin, $30k in sponsored LiDARs and cameras, and system architecture built around the FS driverless ruleset. Target: driverless by 2028.',
+    tag: 'AV',
+  },
+];

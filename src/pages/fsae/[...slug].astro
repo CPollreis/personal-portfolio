@@ -34,14 +34,14 @@ const hasHeroMedia = Boolean(post.data.heroVideo || heroImg);
     <!-- header (title in focus over the entry's hero image, home-hero style) -->
     <header
       class:list={[
-        'relative overflow-hidden border-b border-line py-14',
-        hasHeroMedia ? 'md:py-28' : 'md:py-20',
+        'relative overflow-hidden border-b border-line py-10',
+        hasHeroMedia ? 'md:py-16' : 'md:py-12',
       ]}
       style={`--sc:${meta.color}`}
     >
       <HeaderMedia video={post.data.heroVideo} image={heroImg} />
       <div class="container-hud relative max-w-3xl">
-        <a href={withBase('/fsae')} class="link-hud mb-8 inline-block font-mono text-xs uppercase tracking-widest text-muted hover:text-ink">
+        <a href={withBase('/#fsae')} class="link-hud mb-8 inline-block font-mono text-xs uppercase tracking-widest text-muted hover:text-ink">
           ← Build log
         </a>
         <div class="mb-5 flex flex-wrap items-center gap-3">
@@ -128,7 +128,7 @@ const hasHeroMedia = Boolean(post.data.heroVideo || heroImg);
         </nav>
 
         <a
-          href={withBase('/fsae')}
+          href={withBase('/#fsae')}
           class="link-hud mt-8 inline-block font-mono text-xs uppercase tracking-widest text-muted hover:text-ink"
         >
           ← Back to all entries

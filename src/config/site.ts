@@ -1,6 +1,8 @@
 /**
- * Single source of truth for site-wide metadata, navigation, and socials.
- * Keep copy edits here rather than scattered across components.
+ * Single source of truth for site-wide metadata, navigation, socials, and
+ * the "current positions" list on the home page. When something about you
+ * changes (new role, new availability window, new link), edit it here and
+ * nowhere else.
  */
 import { withBase } from './paths';
 
@@ -13,11 +15,39 @@ export const site = {
     'Computer engineering student at the University of Manitoba, leading a 10-person team building the driverless system for our Formula SAE electric race car. Target: autonomous by 2028.',
   availability: 'Open to internships · Jan to Aug 2027',
   description:
-    'Portfolio of Caleb Pollreis, computer engineering student at the University of Manitoba and FSAE Electric autonomous systems lead. Firmware, HV accumulator work, driverless autonomy, personal projects, and photography.',
+    'Caleb Pollreis, computer engineering student at the University of Manitoba and FSAE Electric autonomous systems lead. Firmware, HV accumulator work, driverless autonomy, personal projects, and photography.',
   url: 'https://calebpollreis.com',
   locale: 'en',
   email: 'calebpollreis@gmail.com',
+  resume: '/resume.pdf',
 } as const;
+
+/**
+ * Current positions, newest first. These render verbatim at the top of the
+ * home page; append or edit rows here as things change.
+ */
+export interface Position {
+  role: string;
+  org: string;
+  /** Short qualifier shown after the org (dates, class year, target). */
+  note?: string;
+  /** Where the row links (in-page anchor or external URL). */
+  href?: string;
+}
+
+export const positions: Position[] = [
+  {
+    role: 'Autonomous Systems Lead',
+    org: 'UMSAE Formula Electric',
+    note: 'driverless target 2028',
+    href: '#fsae',
+  },
+  {
+    role: 'B.Sc. Computer Engineering, Co-op',
+    org: 'University of Manitoba',
+    note: 'class of 2028',
+  },
+];
 
 export interface NavItem {
   label: string;
@@ -26,13 +56,17 @@ export interface NavItem {
   index: string;
 }
 
-export const nav: NavItem[] = [
+/** Top bar: wordmark only. Every section is reachable from the one-page home
+   (hero buttons + the photography preview card) and the footer index. */
+export const nav: NavItem[] = [];
+
+/** Full section index, used by the footer. */
+export const sections: NavItem[] = [
   { label: 'Home', href: '/', index: '00' },
-  { label: 'FSAE', href: '/fsae', index: '01' },
-  { label: 'Projects', href: '/projects', index: '02' },
+  { label: 'FSAE', href: '/#fsae', index: '01' },
+  { label: 'Projects', href: '/#projects', index: '02' },
   { label: 'Photography', href: '/photography', index: '03' },
-  { label: 'About', href: '/about', index: '04' },
-  { label: 'Timeline', href: '/timeline', index: '05' },
+  { label: 'Timeline', href: '/timeline', index: '04' },
 ];
 
 export interface SocialLink {
@@ -48,9 +82,11 @@ export const socials: SocialLink[] = [
 
 /**
  * Returns true when `href` is the active top-level route for `pathname`.
- * Home only matches exactly; other routes match their prefix.
+ * Home only matches exactly; other routes match their prefix. Anchor hrefs
+ * (/#section) never report active; section highlighting is not tracked.
  */
 export function isActive(href: string, pathname: string): boolean {
+  if (href.includes('#')) return false;
   // pathname includes the base at build time, so compare against base-prefixed hrefs.
   const clean = pathname.replace(/\/+$/, '') || '/';
   const target = withBase(href).replace(/\/+$/, '') || '/';

@@ -1,12 +1,29 @@
 ---
 title: Adding content
-description: Step-by-step recipes for a new build log, project, photo, and video moment.
+description: Step-by-step recipes for a new build log, project, photo, video moment, timeline event, and position.
 ---
 
 Every recipe below is a git-tracked file edit. Run `npm run dev` while you work
 so you see the result live, then commit and push to publish (see
 [Local dev and deploy](/docs/dev-and-deploy)). Full field reference lives in
 [Content collections](/docs/content-collections).
+
+## The one-file rule
+
+Every kind of entry is exactly one file (or one config row). Nothing else needs
+editing: no layout files, no page files, no counts.
+
+| To add a... | Touch only | It appears |
+| --- | --- | --- |
+| FSAE build-log post | `src/content/fsae/<slug>.mdx` | Thumbnail card in the home `#fsae` grid + its own page at `/fsae/<slug>` |
+| Project | `src/content/projects/<slug>.mdx` | Thumbnail card in the home `#projects` grid + its own page at `/projects/<slug>` |
+| Photo or film moment | `src/content/photography/<NN-slug>.md` | Auto-packed into the `/photography` archive grid; the home photography card's count updates |
+| Timeline event | one object in `src/config/timeline.ts` | A card on the `/timeline` spine, branch side and year handled automatically |
+| Position / affiliation | one object in `positions[]` in `src/config/site.ts` | The lines under your name in the home hero |
+
+The home grids wrap at three columns, so any number of entries lays out
+correctly. Sorting is automatic: FSAE by `date` (newest first), projects by
+`order` then `date`, photography by `order`, timeline by year and date.
 
 ## A new FSAE build-log post
 
@@ -36,9 +53,12 @@ so you see the result live, then commit and push to publish (see
    <Gallery labels={['SCOPE · isoSPI', 'BUS · CAN TRACE']} cols={2} />
    ```
 
-4. (Optional) Add a `hero`/`cover` image (co-locate the file and reference it,
-   e.g. `cover: ./can-trace.jpg`) or a `heroVideo` (`public/` path). Set
-   `draft: true` to keep it out of the build until it is ready.
+4. (Optional) Add a `cover` image (co-locate the file and reference it,
+   e.g. `cover: ./can-trace.jpg`). The cover doubles as the entry's **thumbnail
+   on the home page card**; without one, an on-brand placeholder frame renders
+   instead. A `hero` image or `heroVideo` (`public/` path) sits behind the
+   entry page title. Set `draft: true` to keep it out of the build until it is
+   ready.
 
 ## A new project
 
@@ -68,7 +88,9 @@ so you see the result live, then commit and push to publish (see
    ```
 
 3. Write the MDX body. Add a `video` (YouTube/Vimeo URL) for a lead demo video,
-   or a `cover`/`hero` image for the header.
+   or a `cover`/`hero` image for the header. As with FSAE posts, `cover` is also
+   the thumbnail on the home page card; leave it out and the placeholder frame
+   renders until you have a real shot.
 
 ## A new photography moment: photo
 
@@ -165,6 +187,35 @@ Practical notes:
   index tile hides itself.
 - To reorder the archive, change `order` values (and ideally the `NN-` filename
   prefix to match); the packer re-lays everything out at build time.
+
+## A new timeline event
+
+The `/timeline` page renders entirely from `src/config/timeline.ts`. Add an
+object to the `events` array of the right year (or add a whole new year block
+with a `theme` word) and the spine lays it out: branch side, node color by
+`kind`, and the ghost year numeral all derive from the data.
+
+```ts
+{
+  id: 'first-track-day',            // unique, kebab-case
+  date: '2026-08-15',               // ISO date, shown on the card
+  title: 'First track day with the DSO stack',
+  kind: 'fsae',                     // 'milestone' | 'fsae' | 'project' | 'photo'
+  weight: 2,                        // optional: 2 = major event, bigger glowing node
+  why: 'A few honest lines on why this moment mattered.',
+  media: { type: 'photo', alt: 'The car lined up at the first cone gate.' },
+},
+```
+
+`media.src` is optional: leave it off and the card shows a "photo pending"
+frame with the alt text; point it at a file under `public/` when you have one.
+
+## A new position or affiliation
+
+The lines under your name in the home hero come from `positions[]` in
+`src/config/site.ts`. Each row is `{ role, org, note?, href? }`; edit or append
+and the hero updates. The availability line is `site.availability` in the same
+file, and the socials/resume links are `socials[]` / `site.resume`.
 
 ## Verifying before you publish
 

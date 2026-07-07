@@ -16,17 +16,25 @@ are correct.
 
 ## Pages and routing
 
-Routes come from files in `src/pages/`:
+The site is a one-pager with satellite pages. Routes come from files in
+`src/pages/`:
 
-- `index.astro` (`/`), `about.astro`, `timeline.astro`, `colophon.astro`,
-  `404.astro`: one file per route.
-- `fsae/index.astro` plus `fsae/[...slug].astro`: the FSAE index and one dynamic
-  route per build-log entry.
-- `projects/index.astro` plus `projects/[...slug].astro`: same pattern for projects.
+- `index.astro` (`/`): the whole site in one scroll. A compact bio hero
+  (positions and links from `src/config/site.ts`) over the stabilized car
+  footage, then anchor sections `#fsae` (role trajectory from
+  `src/config/fsae.ts` plus build-log thumbnail cards), `#projects`
+  (project thumbnail cards), and two link-out cards for `#photography` and
+  `#timeline`. The card grids render straight from the content collections,
+  so they grow automatically as entries are added.
+- `fsae/[...slug].astro` and `projects/[...slug].astro`: one dynamic route per
+  build-log entry / project writeup.
 - `photography/index.astro`: the gallery (a single page that mounts the lightbox
   island). Its archive section is laid out by the "Feature Lead" packer in
   `src/components/photography/archiveGrid.ts`, computed from the photography
   collection at build time.
+- `timeline.astro`, `colophon.astro`, `404.astro`: one file per route.
+- The old tab URLs redirect: `/fsae` → `/#fsae`, `/projects` → `/#projects`,
+  `/about` → `/` (see `redirects` in `astro.config.mjs`).
 
 The dynamic `[...slug]` pages read their collection with `getStaticPaths()` and
 render each entry, so adding a Markdown file is all it takes to publish a new
@@ -95,15 +103,12 @@ Supported attributes include:
   and slide (or clip-wipe) an element in on scroll.
 - `data-stagger` on a container (with optional `data-stagger-gap`): staggers its
   `[data-stagger-item]` children.
-- `data-counter="1240"` (plus `data-counter-prefix` / `data-counter-suffix`):
-  count up to a number.
-- `data-scramble`: scramble-reveal the element's text.
 - `data-draw[="scroll"]`: draw inline SVG strokes on enter or synced to scroll.
 - `data-parallax="0.15"`: slow scroll drift for decorative layers.
 
-Helper components in `src/components/motion/` (`Reveal.astro`, `Stagger.astro`,
-`Counter.astro`, `ScrambleText.astro`) wrap these attributes so you rarely write
-them by hand. Everything degrades gracefully: with no JavaScript, content is fully
+Helper components in `src/components/motion/` (`Reveal.astro`, `Stagger.astro`)
+wrap these attributes so you rarely write them by hand. The home page uses none
+of them on purpose: it stays static so nothing distracts from navigation. Everything degrades gracefully: with no JavaScript, content is fully
 visible (the initial-hidden CSS is scoped to `html.motion`, a class only this
 script adds); with `prefers-reduced-motion`, final states are applied instantly.
 The engine re-initializes after every `ClientRouter` swap (`astro:page-load`), and

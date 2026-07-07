@@ -32,13 +32,13 @@ const hasHeroMedia = Boolean(heroVideo || heroImg);
   <article class="pb-24">
     <header
       class:list={[
-        'relative overflow-hidden border-b border-line py-14',
-        hasHeroMedia ? 'md:py-28' : 'md:py-20',
+        'relative overflow-hidden border-b border-line py-10',
+        hasHeroMedia ? 'md:py-16' : 'md:py-12',
       ]}
     >
       <HeaderMedia video={heroVideo} image={heroImg} />
       <div class="container-hud relative max-w-3xl">
-        <a href={withBase('/projects')} class="link-hud mb-8 inline-block font-mono text-xs uppercase tracking-widest text-muted hover:text-ink">
+        <a href={withBase('/#projects')} class="link-hud mb-8 inline-block font-mono text-xs uppercase tracking-widest text-muted hover:text-ink">
           ← Projects
         </a>
         <div class="mb-5 flex flex-wrap items-center gap-3">
@@ -138,7 +138,7 @@ const hasHeroMedia = Boolean(heroVideo || heroImg);
           }
         </nav>
 
-        <a href={withBase('/projects')} class="link-hud mt-8 inline-block font-mono text-xs uppercase tracking-widest text-muted hover:text-ink">
+        <a href={withBase('/#projects')} class="link-hud mt-8 inline-block font-mono text-xs uppercase tracking-widest text-muted hover:text-ink">
           ← Back to all projects
         </a>
       </div>

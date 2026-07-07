@@ -11,6 +11,9 @@ edit instead of an archaeology session.
 ## What the site is
 
 - A statically generated Astro site (no server at runtime, just files in `dist/`).
+- A one-pager: `/` carries the bio and the FSAE / Projects / Photography /
+  Timeline sections; writeups, the gallery, and the timeline are satellite
+  pages linked from their sections.
 - Content lives in Markdown and MDX under `src/content/`, validated by typed
   schemas in `src/content.config.ts`.
 - The visual language is an engineering-HUD look: OLED-black base, a
@@ -27,8 +30,9 @@ edit instead of an archaeology session.
   motion, and the background-video keeper (`footage.ts`) fit together.
 - [Content collections](/docs/content-collections): every frontmatter field for
   FSAE posts, projects, and photography moments, with worked examples.
-- [Adding content](/docs/adding-content): step-by-step recipes for a new build
-  log, project, photo, and video moment.
+- [Adding content](/docs/adding-content): the one-file rule, plus step-by-step
+  recipes for a new build log, project, photo, video moment, timeline event,
+  and position.
 - [Media guidelines](/docs/media): where images and videos live, the webm plus
   mp4 pairing rule, and how to swap the resume, favicon, and OG image.
 - [Local dev and deploy](/docs/dev-and-deploy): the dev and build commands, the

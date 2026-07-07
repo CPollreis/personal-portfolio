@@ -11,7 +11,7 @@ are three content collections (plus the `docs` collection that powers these page
 ## FSAE build log
 
 - Location: `src/content/fsae/<slug>.mdx` (or `.md`).
-- Renders at `/fsae/<slug>`, indexed on `/fsae`.
+- Renders at `/fsae/<slug>`, listed as a thumbnail card in the home page FSAE section.
 - `subsystem` drives color-coding across the site (firmware is blue,
   manufacturing is cyan, autonomous is indigo).
 
@@ -49,7 +49,7 @@ draft: false
 ## Projects
 
 - Location: `src/content/projects/<slug>.mdx` (or `.md`).
-- Renders at `/projects/<slug>`, indexed on `/projects`.
+- Renders at `/projects/<slug>`, listed as a thumbnail card in the home page Projects section.
 
 | Field | Type | Meaning |
 | --- | --- | --- |
