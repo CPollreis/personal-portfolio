@@ -29,28 +29,35 @@ const year = new Date().getFullYear();
         <p class="mt-2 max-w-sm text-sm text-muted">{site.tagline}</p>
       </div>
 
-      <div>
-        <p class="hud-label mb-4">Connect</p>
-        <ul class="flex items-center gap-4">
-          {
-            socials.map((s) => (
-              <li>
-                <a
-                  href={s.href}
-                  class="link-hud inline-flex text-muted hover:text-ink"
-                  aria-label={s.label}
-                  rel={s.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                  target={s.href.startsWith('http') ? '_blank' : undefined}
-                >
-                  <SocialIcon label={s.label} />
-                </a>
-              </li>
-            ))
-          }
-          <li>
-            <a href={withBase(site.resume)} class="link-hud hud-label hover:text-ink">Resume</a>
-          </li>
-        </ul>
+      <div class="flex flex-col gap-5 sm:items-end">
+        <div>
+          <p class="hud-label mb-4">Connect</p>
+          <ul class="flex items-center gap-4">
+            {
+              socials.map((s) => (
+                <li>
+                  <a
+                    href={s.href}
+                    class="link-hud inline-flex text-muted hover:text-ink"
+                    aria-label={s.label}
+                    rel={s.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                    target={s.href.startsWith('http') ? '_blank' : undefined}
+                  >
+                    <SocialIcon label={s.label} />
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+        <a
+          href={withBase(site.resume)}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="hud-label inline-flex items-center gap-1.5 border border-line px-3 py-1.5 text-muted transition-colors hover:border-faint hover:text-ink"
+        >
+          Resume <span aria-hidden="true">↗</span>
+        </a>
       </div>
     </div>
 

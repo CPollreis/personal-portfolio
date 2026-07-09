@@ -16,6 +16,7 @@
 import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
+import ChapterNum from '../components/layout/ChapterNum.astro';
 import SubsystemBadge from '../components/fsae/SubsystemBadge.astro';
 import SocialIcon from '../components/ui/SocialIcon.astro';
 import Button from '../components/ui/Button.astro';
@@ -182,11 +183,94 @@ const thumbFrame = 'border border-faint/50 transition-colors group-hover:border-
     </div>
   </section>
 
-  <!-- ============ 01 · FSAE ============ -->
+  <!-- ============ 01 · About ============ -->
+  <section id="about" class="scroll-mt-16 border-b border-line">
+    <div class="container-hud py-12 md:py-16">
+      <!-- about strip: portrait + a personal, first-person intro. Sits directly
+           above the personal-projects grid so a visitor meets the person and the
+           work in one block. Swap the Placeholder for an <Image> once the real
+           portrait exists. -->
+      <div class="grid gap-6 sm:grid-cols-[auto_1fr] sm:items-center sm:gap-8">
+        <div class="w-40 justify-self-start sm:w-44 md:w-52">
+          <Placeholder
+            ratio="4/5"
+            label="CP · REPLACE"
+            seed={3}
+            class="!border-faint/50"
+          />
+        </div>
+        <div>
+          <div class="flex items-start gap-4 md:gap-5">
+            <ChapterNum n="01" />
+            <div>
+              <p class="hud-label text-accent">About</p>
+              <h2 class="mt-2 font-display text-2xl text-ink md:text-3xl">About me</h2>
+            </div>
+          </div>
+          <p class="mt-3 max-w-xl text-sm leading-relaxed text-muted">
+            I'm a computer engineering student in Winnipeg who likes building things that reach into
+            the physical world. Off the race car I chase personal projects end to end and keep a
+            camera close. The work below is where that goes when no one assigns it.
+          </p>
+          <p class="mt-4 font-mono text-xs tracking-wide text-cyan">/ Caleb Pollreis</p>
+        </div>
+      </div>
+
+      <p id="projects" class="hud-label mt-10 scroll-mt-16 border-b border-line pb-3">Personal projects · {projects.length}</p>
+      <ul class="mt-6 grid gap-x-6 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          projects.map((p, i) => (
+            <li>
+              <a href={withBase(`/projects/${p.id}`)} class="group block">
+                {p.data.cover ? (
+                  <div class={thumbFrame}>
+                    <Image
+                      src={p.data.cover}
+                      alt={p.data.title}
+                      widths={[480, 960]}
+                      sizes="(min-width: 1024px) 430px, (min-width: 640px) 50vw, 100vw"
+                      class="aspect-video w-full object-cover"
+                    />
+                  </div>
+                ) : (
+                  <Placeholder
+                    ratio="16/9"
+                    label={`PRJ · FIG.0${i + 1}`}
+                    seed={i + 1}
+                    class="!border-faint/50 transition-colors group-hover:!border-faint"
+                  />
+                )}
+                <div class="mt-3 flex flex-wrap items-center gap-3">
+                  <span class="hud-label text-accent">{p.data.kind}</span>
+                  <span class="hud-label tabular">{fmtDate(p.data.date)}</span>
+                </div>
+                <h3 class="mt-2 font-display text-base text-ink transition-colors group-hover:text-cyan">
+                  {p.data.title}
+                </h3>
+                <p class="mt-1 line-clamp-2 text-sm text-muted">{p.data.summary}</p>
+                {p.data.stack.length > 0 && (
+                  <p class="mt-1.5 font-mono text-xs tracking-wide text-faint">
+                    {p.data.stack.join(' · ')}
+                  </p>
+                )}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ 02 · FSAE ============ -->
   <section id="fsae" class="scroll-mt-16 border-b border-line">
     <div class="container-hud py-12 md:py-16">
-      <p class="hud-label text-accent">01 · FSAE</p>
-      <h2 class="mt-3 font-display text-2xl text-ink md:text-3xl">FSAE Electric</h2>
+      <div class="flex items-start gap-4 md:gap-5">
+        <ChapterNum n="02" />
+        <div>
+          <p class="hud-label text-accent">FSAE</p>
+          <h2 class="mt-2 font-display text-2xl text-ink md:text-3xl">FSAE Electric</h2>
+        </div>
+      </div>
 
       <!-- role progression -->
       <ol class="mt-8 grid gap-6 md:grid-cols-3">
@@ -242,88 +326,21 @@ const thumbFrame = 'border border-faint/50 transition-colors group-hover:border-
     </div>
   </section>
 
-  <!-- ============ 02 · Projects ============ -->
-  <section id="projects" class="scroll-mt-16 border-b border-line">
-    <div class="container-hud py-12 md:py-16">
-      <!-- about strip: portrait + a personal, first-person intro, sitting directly
-           above the project grid so a visitor meets the person and the work in one
-           block. Swap the Placeholder for an <Image> once the real portrait exists. -->
-      <div class="grid gap-6 sm:grid-cols-[auto_1fr] sm:items-center sm:gap-8">
-        <div class="w-40 justify-self-start sm:w-44 md:w-52">
-          <Placeholder
-            ratio="4/5"
-            label="CP · REPLACE"
-            seed={3}
-            class="!border-faint/50"
-          />
-        </div>
-        <div>
-          <p class="hud-label text-accent">02 · Projects</p>
-          <h2 class="mt-3 font-display text-2xl text-ink md:text-3xl">A bit about me</h2>
-          <p class="mt-3 max-w-xl text-sm leading-relaxed text-muted">
-            I'm a computer engineering student in Winnipeg who likes building things that reach into
-            the physical world. Off the race car I chase personal projects end to end and keep a
-            camera close. The work below is where that goes when no one assigns it.
-          </p>
-          <p class="mt-4 font-mono text-xs tracking-wide text-cyan">/ Caleb Pollreis</p>
-        </div>
-      </div>
-
-      <p class="hud-label mt-10 border-b border-line pb-3">Personal projects · {projects.length}</p>
-      <ul class="mt-6 grid gap-x-6 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
-        {
-          projects.map((p, i) => (
-            <li>
-              <a href={withBase(`/projects/${p.id}`)} class="group block">
-                {p.data.cover ? (
-                  <div class={thumbFrame}>
-                    <Image
-                      src={p.data.cover}
-                      alt={p.data.title}
-                      widths={[480, 960]}
-                      sizes="(min-width: 1024px) 430px, (min-width: 640px) 50vw, 100vw"
-                      class="aspect-video w-full object-cover"
-                    />
-                  </div>
-                ) : (
-                  <Placeholder
-                    ratio="16/9"
-                    label={`PRJ · FIG.0${i + 1}`}
-                    seed={i + 1}
-                    class="!border-faint/50 transition-colors group-hover:!border-faint"
-                  />
-                )}
-                <div class="mt-3 flex flex-wrap items-center gap-3">
-                  <span class="hud-label text-accent">{p.data.kind}</span>
-                  <span class="hud-label tabular">{fmtDate(p.data.date)}</span>
-                </div>
-                <h3 class="mt-2 font-display text-base text-ink transition-colors group-hover:text-cyan">
-                  {p.data.title}
-                </h3>
-                <p class="mt-1 line-clamp-2 text-sm text-muted">{p.data.summary}</p>
-                {p.data.stack.length > 0 && (
-                  <p class="mt-1.5 font-mono text-xs tracking-wide text-faint">
-                    {p.data.stack.join(' · ')}
-                  </p>
-                )}
-              </a>
-            </li>
-          ))
-        }
-      </ul>
-    </div>
-  </section>
-
   <!-- ============ 03 · Photography / 04 · Timeline ============ -->
   <div class="border-b border-line">
     <div class="container-hud grid gap-px py-12 md:grid-cols-2 md:gap-6 md:py-16">
       <section id="photography" class="scroll-mt-16">
         <div class="card-hud relative flex h-full flex-col gap-6 border border-line bg-surface p-6">
           <a href={withBase('/photography')} class="group/head block">
-            <p class="hud-label text-accent">03 · Photography</p>
-            <h2 class="mt-3 font-display text-2xl text-ink transition-colors group-hover/head:text-cyan">
-              Through the lens
-            </h2>
+            <div class="flex items-start gap-4">
+              <ChapterNum n="03" />
+              <div>
+                <p class="hud-label text-accent">Photography</p>
+                <h2 class="mt-2 font-display text-2xl text-ink transition-colors group-hover/head:text-cyan">
+                  Through the lens
+                </h2>
+              </div>
+            </div>
             <p class="mt-2 max-w-md text-sm text-muted">
               {momentCount} moments from the field: race cars, prairie storms, and Winnipeg at
               minus 30.
@@ -390,8 +407,13 @@ const thumbFrame = 'border border-faint/50 transition-colors group-hover:border-
             </g>
           </svg>
           <div>
-            <p class="hud-label text-accent">04 · Timeline</p>
-            <h2 class="mt-3 font-display text-2xl text-ink">A universe of moments</h2>
+            <div class="flex items-start gap-4">
+              <ChapterNum n="04" />
+              <div>
+                <p class="hud-label text-accent">Timeline</p>
+                <h2 class="mt-2 font-display text-2xl text-ink">A universe of moments</h2>
+              </div>
+            </div>
             <p class="mt-2 max-w-md text-sm text-muted">
               {eventCount} milestones since 2022 on one line, year by year.
             </p>
