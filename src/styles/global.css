@@ -317,6 +317,22 @@
     user-select: none;
   }
 
+  /* Chapter numeral - the big solid section index (01-04) printed beside a
+     section's kicker + heading on the home page. Filled white, static; the size
+     is what marks the section break.
+     Sized to stay legible in the compact side-by-side cards and the full bands. */
+  .chapter-num {
+    display: inline-block;
+    flex: none;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(2.75rem, 5.5vw, 4rem);
+    line-height: 0.8;
+    letter-spacing: -0.05em;
+    font-variant-numeric: tabular-nums;
+    color: var(--color-ink);
+  }
+
   /* Huge outlined wordmark (footer sign-off). Line-height 1 so the glyph
      bottoms (and their 1px stroke) never get cropped by the line box. */
   .ghost-word {

@@ -99,9 +99,83 @@ all it takes to extend it**. Placement is driven by two frontmatter fields:
   sides band to band; the flag is ignored on vertical ratios, which stay tall.
 
 `kind: video` moments autoplay muted while scrolled into view and pause
-off-screen; every tile (photo or video) still opens the lightbox. Leftover
-cells in the final band are filled by an auto-computed index tile, so the grid
-always closes cleanly no matter how many moments exist.
+off-screen; every tile (photo or video) still opens the lightbox. Any leftover
+cells in the final band are simply left open, so the grid ends cleanly no matter
+how many moments exist.
+
+### Adding a photo to the gallery, step by step
+
+A gallery moment is one Markdown file plus, optionally, one co-located image.
+The archive re-packs itself at build time, so there is nothing else to wire up.
+
+1. **Get a web-ready image.** Astro's image pipeline cannot read camera RAW
+   (`.ARW`, `.NEF`, `.CR2`, ...), and you don't want a 24 MB original in the
+   repo. Convert to a JPG about 2400 px on the long edge (the grid never renders
+   wider than ~960 px, and Astro emits the responsive `srcset` from your source):
+
+   ```bash
+   # macOS: sips reads Sony/Nikon/Canon RAW via the system decoder
+   sips -s format jpeg -s formatOptions 82 -Z 2400 IMG_1234.ARW --out bougainvillea.jpg
+   ```
+
+2. **Fix the orientation tag.** RAW-to-JPG conversion often leaves an EXIF
+   orientation tag that Astro (libvips) honors, which can silently rotate a
+   landscape shot into a sideways portrait once it lands in the grid. Check it,
+   then correct:
+
+   ```bash
+   magick identify -format '%wx%h  orientation=%[orientation]\n' bougainvillea.jpg
+   ```
+
+   - If the image looks correct in Preview but orientation is not `TopLeft` /
+     `Undefined`, the tag is bogus: drop it without rotating pixels with
+     `magick bougainvillea.jpg -strip bougainvillea.jpg`.
+   - If the image itself looks rotated, rotate then strip with
+     `magick bougainvillea.jpg -auto-orient -strip bougainvillea.jpg`.
+
+   Re-run `identify` and confirm the dimensions read upright (e.g. `2400x1600`
+   for a landscape frame).
+
+3. **Drop the image into the collection folder**, next to the entries:
+   `src/content/photography/bougainvillea.jpg`. Keep the RAW/original out of the
+   repo (it is large and unused).
+
+4. **Add the Markdown entry** `src/content/photography/<NN-slug>.md` (the `NN`
+   prefix just keeps the folder tidy; real ordering comes from `order`). Point
+   `image:` at the file and set `ratio:` to the frame's real aspect so it is not
+   cropped:
+
+   ```markdown
+   ---
+   title: Bougainvillea
+   kind: photo            # photo | video
+   date: 2025-06-08
+   story: The one line shown in the lightbox detail panel.
+   location: Brainerd, MN
+   camera: Sony a6400
+   lens: 70-200mm f/2.8
+   iso: "100"
+   aperture: f/8
+   focal: 200mm
+   image: ./bougainvillea.jpg
+   ratio: 3/2             # must match the image; 3/4, 2/3, 9/16 render as talls
+   feature: false         # true = oversized 2x2 lead (landscape only)
+   order: 2               # lower = earlier in the archive
+   ---
+   ```
+
+   Only `title`, `date`, `ratio`, and `order` really matter; the rest is
+   optional (omit `image` entirely and an on-brand placeholder renders). Every
+   field and its type is defined in `src/content.config.ts`.
+
+5. **Restart `npm run dev`.** Adding a new image or a new `image:` field is a
+   content-collection change the dev server does not reliably hot-reload: if a
+   photo doesn't appear, stop and restart the server (a stale dev server keeps
+   serving the old content). `npm run build` always reflects the current files.
+
+For a `kind: video` moment, skip the image steps: put a `clip.webm` + `clip.mp4`
+pair in `public/videos/` and set `video: /videos/clip.mp4` instead of `image`
+(see **Videos** below).
 
 ### Videos: ship webm + mp4 pairs
 
@@ -117,8 +191,10 @@ playing. Reference the `.mp4` path in frontmatter (`video: /videos/clip.mp4`,
 
 `cover` / `image` are optional - until set, on-brand placeholders render. To add
 a real image, drop it next to the content file and reference it, e.g.
-`cover: ./front-wing.jpg`. Astro's `astro:assets` then optimizes it
-(AVIF/WebP, responsive `srcset`) automatically.
+`cover: ./front-wing.jpg`. Astro's `astro:assets` then optimizes it (WebP,
+responsive `srcset`) automatically. Same prep as the gallery steps above applies
+to any real image: convert RAW / oversized originals to a ~2400 px JPG and strip
+a stray EXIF orientation tag first, or the entry-title image can render rotated.
 
 On entry pages the title is drawn over a full-bleed image (home-hero style,
 minus the video). It uses `hero:` if set, otherwise falls back to `cover:`;

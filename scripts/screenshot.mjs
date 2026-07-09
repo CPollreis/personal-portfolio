@@ -4,6 +4,12 @@
 //   node scripts/screenshot.mjs /fsae /timeline  # specific paths
 //   node scripts/screenshot.mjs --firefox /      # Firefox engine (matches Zen)
 //   node scripts/screenshot.mjs --full /         # full-page instead of viewport
+//   node scripts/screenshot.mjs --reduced-motion /photography  # settle scroll-reveal content immediately
+//
+// --reduced-motion emulates prefers-reduced-motion, which the site's motion
+// runtime treats as "show everything now" (no [data-reveal] hide-class). Use it
+// to capture content gated behind scroll-reveal (e.g. the /photography archive)
+// that a static full-page shot would otherwise leave invisible.
 //
 // Output: .screenshots/<engine><path>.png, printed as absolute paths.
 import { chromium, firefox } from 'playwright';
@@ -14,6 +20,7 @@ import { ensureServer, projectRoot } from './lib/server.mjs';
 const args = process.argv.slice(2);
 const useFirefox = args.includes('--firefox');
 const fullPage = args.includes('--full');
+const reducedMotion = args.includes('--reduced-motion');
 const paths = args.filter((a) => a.startsWith('/'));
 const pages = paths.length ? paths : ['/', '/fsae', '/photography', '/projects', '/timeline', '/about'];
 
@@ -27,10 +34,26 @@ const browser = useFirefox
   : await chromium.launch({ channel: 'chrome' });
 
 try {
-  const page = await browser.newPage({ viewportSize: { width: 1440, height: 900 } });
+  const page = await browser.newPage({
+    viewportSize: { width: 1440, height: 900 },
+    ...(reducedMotion ? { reducedMotion: 'reduce' } : {}),
+  });
   for (const p of pages) {
     await page.goto(baseUrl + p, { waitUntil: 'networkidle' });
     await page.waitForTimeout(800); // let entrance animations settle
+    if (fullPage) {
+      // Walk the page top-to-bottom so loading="lazy" media enters the viewport
+      // and fetches; a full-page shot alone leaves below-fold images blank.
+      await page.evaluate(async () => {
+        const step = window.innerHeight;
+        for (let y = 0; y < document.body.scrollHeight; y += step) {
+          window.scrollTo(0, y);
+          await new Promise((r) => setTimeout(r, 120));
+        }
+        window.scrollTo(0, 0);
+      });
+      await page.waitForTimeout(400);
+    }
     const name = `${engine}${p === '/' ? '/home' : p}`.replaceAll('/', '_');
     const file = path.join(outDir, `${name}.png`);
     await page.screenshot({ path: file, fullPage });

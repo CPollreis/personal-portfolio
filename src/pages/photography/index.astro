@@ -2,8 +2,9 @@
 /**
  * /photography - "Moments". The creative counterpart to the rest of the site:
  * pure black, huge cropped Archivo display type with frames overlapping it,
- * hairline dividers, a bright italic marquee, and a "Feature Lead" archive
- * grid (archiveGrid.ts). Clicking any frame opens the shared-element lightbox.
+ * hairline dividers, a highlights reel (one photo per lit word), and a
+ * "Feature Lead" archive grid (archiveGrid.ts). Clicking any frame opens the
+ * shared-element lightbox.
  */
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
@@ -50,8 +51,6 @@ const moments: Moment[] = frames.map((f, i) => ({
   backdrop: momentBackdrop(i),
 }));
 
-const years = frames.map((f) => f.data.date.getUTCFullYear());
-const span = `${Math.min(...years)} – ${Math.max(...years)}`;
 const yearOf = (i: number) => String(frames[i].data.date.getUTCFullYear());
 
 const frameProps = (i: number) => ({
@@ -69,7 +68,6 @@ const frameProps = (i: number) => ({
 const archive = packArchive(
   frames.map((f, i) => ({ index: i, shape: archiveShape(f.data.ratio, f.data.feature) })),
 );
-const filmCount = frames.filter((f) => f.data.kind === 'video').length;
 
 // "Highlights" call and response: each ghost word is the index entry for one
 // moment. The section auto-cycles word + photo together; hovering a word jumps
@@ -80,9 +78,6 @@ const CHASE = [
   { label: 'Northern lights', frame: 0 },
   { label: 'Race weekends', frame: 1 },
 ];
-// Empty spacer row inserted before this word index: the full-bleed marquee
-// crosses the list's vertical center, so the middle of the column stays clear.
-const GAP_BEFORE = 2;
 ---
 
 <Base
@@ -93,15 +88,11 @@ const GAP_BEFORE = 2;
     <!-- ===== HERO: giant cropped wordmark with a frame overlapping it ===== -->
     <header class="relative overflow-hidden border-b border-white/10">
       <HeaderMedia {...headerMedia} />
-      <div class="container-hud relative flex items-start justify-between pt-10 md:pt-14">
-        <span class="m-label" data-reveal>✳ Caleb Pollreis · The other side of the brain</span>
-        <p class="hidden max-w-xs text-right text-sm leading-relaxed text-white/55 md:block" data-reveal data-reveal-delay="120">
-          Where the engineering stops. A running archive of light, noise, motion, and the people I
-          got to share it with.
-        </p>
+      <div class="container-hud relative pt-8 md:pt-10">
+        <span class="m-label" data-reveal>Caleb Pollreis</span>
       </div>
 
-      <div class="relative mt-4 md:mt-0">
+      <div class="relative mt-4 pb-10 md:mt-2 md:pb-14">
         <!-- ambient filmstrip: an auto-scrolling, non-interactive slideshow of
              the archive drifting behind the wordmark -->
         <div class="m-strip absolute inset-0 z-0" aria-hidden="true">
@@ -148,59 +139,30 @@ const GAP_BEFORE = 2;
         </div>
       </div>
 
-      <div class="container-hud relative flex items-end justify-between gap-8 pb-10 pt-12 md:pb-14 md:pt-10">
-        <a href="#archive" class="m-scroll" data-reveal>
-          <span class="m-scroll-ring">
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-              <path d="M6 1v10M2 7l4 4 4-4" stroke="#f5f5f4" stroke-width="1.2" />
-            </svg>
-          </span>
-          the archive
-        </a>
-        <p class="max-w-[16rem] text-right text-sm leading-relaxed text-white/55 md:hidden">
-          A running archive of light, noise, motion, and the people I got to share it with.
-        </p>
-      </div>
     </header>
 
-    <!-- ===== MARQUEE: ghost list crossed by a bright italic line ===== -->
-    <section class="relative overflow-hidden border-b border-white/10 py-20 md:py-28">
+    <!-- ===== HIGHLIGHTS: ghost list with the overlapping photo that swaps
+         to the lit word ===== -->
+    <section class="relative overflow-hidden border-b border-white/10 py-12 md:py-16">
       <div class="container-hud">
-        <span class="m-label" data-reveal>✳ Highlights</span>
+        <span class="m-label" data-reveal>Highlights</span>
       </div>
 
-      <div class="relative mt-12">
+      <div class="relative mt-6">
         <div class="flex flex-col gap-1 pl-[10%] md:pl-[42%]" data-reveal>
           {
             CHASE.map((c, i) => (
-              <Fragment>
-                {i === GAP_BEFORE && <span class="m-chase-gap" aria-hidden="true"></span>}
-                <span class={`m-ghost m-chase-word${i === 0 ? ' is-lit' : ''}`} data-chase-word>
-                  {c.label}
-                </span>
-              </Fragment>
+              <span class={`m-ghost m-chase-word${i === 0 ? ' is-lit' : ''}`} data-chase-word>
+                {c.label}
+              </span>
             ))
           }
         </div>
 
-        <!-- bright line crossing the middle, full-bleed. pointer-events-none:
-             it crosses the middle ghost word, and a hit-testable ticker would
-             swallow that word's hover/click -->
-        <div class="ticker pointer-events-none absolute inset-x-0 top-1/2 z-[2] -translate-y-1/2" aria-hidden="true">
-          <div class="ticker-track">
-            {
-              [0, 1].map(() => (
-                <span class="m-marquee-text pr-4">
-                  highlights · highlights · highlights · highlights · highlights · highlights ·&nbsp;
-                </span>
-              ))
-            }
-          </div>
-        </div>
-
         <!-- portrait frame overlapping the list: a stack of one photo per ghost
-             word, crossfading in step with the lit word -->
-        <div class="absolute left-[6%] top-1/2 z-[3] hidden w-[min(440px,32vw)] -translate-y-1/2 md:block" data-reveal data-reveal-delay="160">
+             word, crossfading in step with the lit word. Top-aligned so it sits
+             high in the section rather than floating in the middle. -->
+        <div class="absolute left-[6%] top-0 z-[3] hidden w-[min(440px,32vw)] md:block" data-reveal data-reveal-delay="160">
           <div class="m-chase-stack">
             {
               CHASE.map((c, i) => (
@@ -216,15 +178,8 @@ const GAP_BEFORE = 2;
 
     <!-- ===== ARCHIVE: the "Feature Lead" grid ===== -->
     <section id="archive" class="relative scroll-mt-16">
-      <div class="container-hud py-20 md:py-28">
-        <div class="flex flex-wrap items-end justify-between gap-4">
-          <span class="m-label" data-reveal>✳ The archive</span>
-          <span class="text-[0.72rem] font-medium uppercase tracking-[0.16em] text-white/40" data-reveal>
-            {moments.length} moments · {span}
-          </span>
-        </div>
-
-        <div class="m-archive mt-16">
+      <div class="container-hud py-12 md:py-16">
+        <div class="m-archive">
           <div class="m-archive-grid">
             {
               archive.placements.map((p) => (
@@ -234,21 +189,6 @@ const GAP_BEFORE = 2;
                   data-reveal
                 >
                   <MomentFrame {...frameProps(p.index)} fill />
-                </div>
-              ))
-            }
-            {
-              archive.fillers.map((f) => (
-                <div
-                  class="m-index-tile"
-                  style={`--ga:${f.row} / ${f.col} / span ${f.rowSpan} / span ${f.colSpan}`}
-                  aria-hidden="true"
-                >
-                  <b>{moments.length} moments</b>
-                  <span>{span}</span>
-                  <span>
-                    {moments.length - filmCount} photographs · {filmCount} films
-                  </span>
                 </div>
               ))
             }
