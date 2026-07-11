@@ -1,0 +1,19 @@
+---
+/**
+ * ChapterNum - the big outlined section index (01-04) printed beside a
+ * section's kicker + heading on the home page. The "you are entering a new
+ * section" marker: a large ghost numeral (same neutral outline as .ghost-index)
+ * so the jump reads at a glance instead of relying on the 12px mono tag alone.
+ *
+ * Static by design - the size carries it, no accent colour or motion. Renders
+ * identically with or without JS.
+ */
+interface Props {
+  /** Two-digit index, e.g. "03". */
+  n: string;
+  class?: string;
+}
+const { n, class: className = '' } = Astro.props;
+---
+
+<span class={`chapter-num ${className}`} aria-hidden="true">{n}</span>
