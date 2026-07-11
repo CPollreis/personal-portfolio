@@ -36,6 +36,10 @@
   white-space: nowrap;
   color: #f5f5f4;
   user-select: none;
+  /* Optical centering: the italic script's slant and the M's left swash push
+     the ink right of the text box, so text-align alone reads off-center. The
+     nudge is in em, so it stays proportional at every viewport/font size. */
+  transform: translateX(-0.14em);
 }
 
 /* Small crosshead label: "✳ THE ARCHIVE" */
@@ -84,54 +88,6 @@
   letter-spacing: -0.02em;
   color: #f5f5f4;
   white-space: nowrap;
-}
-
-/* ---- "Highlights" call and response ------------------------------------ */
-/* One ghost word at a time lights up while its photo crossfades into the
-   overlapping frame (script at the bottom of pages/photography/index.astro). */
-
-.m-chase-word {
-  cursor: pointer;
-  transition: color 450ms var(--ease-out-hud);
-}
-
-.m-chase-word.is-lit {
-  color: #f5f5f4;
-}
-
-/* Clear lane in the middle of the ghost list for the marquee to cross:
-   sized a touch taller than .m-marquee-text's line box at every viewport. */
-.m-chase-gap {
-  height: clamp(3.4rem, 7.4vw, 6.4rem);
-}
-
-/* Slides stack in one grid cell so the tallest photo sizes the frame slot. */
-.m-chase-stack {
-  display: grid;
-}
-
-.m-chase-slide {
-  grid-area: 1 / 1;
-  align-self: center;
-  opacity: 0;
-  transform: scale(0.985);
-  transition:
-    opacity 550ms var(--ease-out-hud),
-    transform 550ms var(--ease-out-hud);
-  pointer-events: none;
-}
-
-.m-chase-slide.is-lit {
-  opacity: 1;
-  transform: none;
-  pointer-events: auto;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .m-chase-word,
-  .m-chase-slide {
-    transition: none;
-  }
 }
 
 /* ---- frames (gallery tiles) ------------------------------------------- */
