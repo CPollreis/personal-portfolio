@@ -22,3 +22,6 @@ pnpm-debug.log*
 !.vscode/extensions.json
 # raw hero footage (web-compressed copy is what ships)
 public/videos/hero-loop.MP4
+# claude
+.claude/
+CLAUDE.md
