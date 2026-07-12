@@ -11,9 +11,10 @@ edit instead of an archaeology session.
 ## What the site is
 
 - A statically generated Astro site (no server at runtime, just files in `dist/`).
-- A one-pager: `/` carries the bio and the FSAE / Projects / Photography /
-  Timeline sections; writeups, the gallery, and the timeline are satellite
-  pages linked from their sections.
+- A one-pager: `/` scrolls through a bio hero, an About strip, a filterable
+  **Build log** (FSAE posts and personal projects in one feed), and teaser
+  cards for Photography and Timeline; the post writeups, the gallery, and the
+  timeline are satellite pages linked from their sections.
 - Content lives in Markdown and MDX under `src/content/`, validated by typed
   schemas in `src/content.config.ts`.
 - The visual language is an engineering-HUD look: OLED-black base, a
@@ -27,7 +28,8 @@ edit instead of an archaeology session.
 ## Where to go next
 
 - [Architecture](/docs/architecture): how pages, layouts, islands, tokens,
-  motion, and the background-video keeper (`footage.ts`) fit together.
+  motion, the Build log filter, and the background-video keeper (`footage.ts`)
+  fit together.
 - [Content collections](/docs/content-collections): every frontmatter field for
   FSAE posts, projects, and photography moments, with worked examples.
 - [Adding content](/docs/adding-content): the one-file rule, plus step-by-step
