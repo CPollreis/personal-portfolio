@@ -44,7 +44,7 @@ export const positions: Position[] = [
   {
     role: 'B.Sc. Computer Engineering, Co-op',
     org: 'University of Manitoba',
-    note: 'class of 2028',
+    note: 'Class of 2028',
   },
 ];
 
