@@ -230,17 +230,17 @@ const toolchain = [
                   <span class="text-ink">{p.role}</span>
                 )}
                 <span class="text-faint"> · </span>{p.org}
-                {p.note && <span class="mt-0.5 block text-faint">{p.note}</span>}
+                {p.note && <span class="mt-0.5 block font-medium text-cyan">{p.note}</span>}
               </li>
             ))
           }
         </ul>
 
-        <p class="mt-5 max-w-md text-sm leading-relaxed text-muted">
-          My student team designs and builds an electric race car from scratch. My job is
-          making it drive itself by 2028. Day to day that means firmware, vehicle
-          networking, and high-voltage battery work. Off the team I build personal
-          projects and shoot photography.
+        <p class="mt-5 max-w-sm text-sm leading-relaxed text-muted">
+          My student team designs and builds an electric race car from scratch. Day to
+          day, I make system design choices that bring our team one step closer to a
+          driverless car by 2028. Off the team I build personal projects and shoot
+          photography.
         </p>
 
         <p class="mt-6 flex items-center gap-2.5">
@@ -248,30 +248,35 @@ const toolchain = [
           <span class="hud-label text-ink">{site.availability}</span>
         </p>
 
-        <!-- work buttons: My work jumps to the build log with the All-entries
-             filter selected (#buildlog); resume opens in a new tab. -->
-        <div class="mt-7 grid grid-cols-2 gap-3">
-          <Button href="#buildlog">My work</Button>
-          <Button href={site.resume} variant="ghost" external>Download resume</Button>
-        </div>
+        <!-- action row: work buttons jump to the build log (#buildlog) / open the
+             resume; social icons sit in the opposite corner, inline with them. -->
+        <div class="mt-7 flex flex-wrap items-center gap-x-6 gap-y-4">
+          <div class="flex flex-wrap gap-3">
+            <Button href="#buildlog" size="sm">Work</Button>
+            <Button href={site.resume} variant="ghost" size="sm" external>Resume</Button>
+          </div>
 
-        <ul class="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2">
-          {
-            socials.map((s) => (
-              <li>
-                <a
-                  href={s.href}
-                  class="link-hud inline-flex text-muted hover:text-ink"
-                  aria-label={s.label}
-                  rel={s.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                  target={s.href.startsWith('http') ? '_blank' : undefined}
-                >
-                  <SocialIcon label={s.label} />
-                </a>
-              </li>
-            ))
-          }
-        </ul>
+          <ul class="flex items-center gap-x-5">
+            {
+              socials.map((s) => (
+                <li>
+                  <a
+                    href={s.href}
+                    class="link-hud inline-flex text-muted hover:text-ink"
+                    aria-label={s.label}
+                    rel={s.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                    target={s.href.startsWith('http') ? '_blank' : undefined}
+                  >
+                    <SocialIcon
+                      label={s.label}
+                      class={s.label === 'Email' ? 'h-5 w-5' : 'h-[18px] w-[18px]'}
+                    />
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
       </div>
     </div>
   </section>
