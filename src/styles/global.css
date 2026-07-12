@@ -177,6 +177,16 @@
     color: var(--color-faint);
   }
 
+  /* Section title - the hud-label scaled up and in ink for section headers */
+  .hud-title {
+    font-family: var(--font-mono);
+    font-size: 1.125rem;
+    line-height: 1;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-ink);
+  }
+
   /* Accent gradient text */
   .text-grad {
     background: var(--accent-grad);

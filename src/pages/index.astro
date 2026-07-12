@@ -16,14 +16,14 @@
  * (Nav breadcrumbs, 404, and project pages also link to #projects.)
  *
  * Content sources: src/config/site.ts (positions, links, availability),
- * src/config/fsae.ts (trajectory), and the fsae/projects/photography
+ * src/config/fsae.ts (subsystem metadata), and the fsae/projects/photography
  * content collections. To append a project or post, add a file to the
- * collection; to change a position, edit site.ts.
+ * collection; to change a position, edit site.ts. (The FSAE role trajectory
+ * now lives on the /timeline spine, not here.)
  */
 import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
-import ChapterNum from '../components/layout/ChapterNum.astro';
 import SubsystemBadge from '../components/fsae/SubsystemBadge.astro';
 import SocialIcon from '../components/ui/SocialIcon.astro';
 import Button from '../components/ui/Button.astro';
@@ -33,7 +33,6 @@ import { momentBackdrop } from '../components/photography/backdrop';
 import { subsystems, type Subsystem } from '../config/fsae';
 import { site, positions, socials } from '../config/site';
 import { timeline } from '../config/timeline';
-import { trajectory } from '../config/fsae';
 import { withBase } from '../config/paths';
 
 const fsaePosts = (await getCollection('fsae', ({ data }) => !data.draft)).sort(
@@ -131,6 +130,10 @@ const moments: Moment[] = photoFrames.map((f, i) => ({
   backdrop: momentBackdrop(i),
 }));
 const eventCount = timeline.reduce((n, y) => n + y.events.length, 0);
+/* Latest year on the spine: drives the ghost numeral on the timeline teaser
+   card, echoing the stroke-outlined year that rides the right edge of the
+   /timeline page. */
+const latestYear = timeline[timeline.length - 1].year;
 
 /* Three real stars for the timeline teaser: the earliest, a middle, and the
    latest weight-2 event, so the card previews the actual spine instead of a
@@ -147,6 +150,34 @@ const fmtDate = (d: Date) =>
 
 /* Shared thumbnail frame classes: light grey outline, YouTube-card style. */
 const thumbFrame = 'border border-faint/50 transition-colors group-hover:border-faint';
+
+/* About data modules that fill the space beside the portrait: a stat rail and
+   the toolchain (board options 01 + 02). Real numbers off the FSAE work. */
+const aboutStats = [
+  { n: '2022', l: 'Building since' },
+  { n: '10+', l: 'Team led' },
+  { n: '400 V', l: 'Accumulator' },
+  { n: '2028', l: 'Driverless target' },
+];
+/* Toolchain: the autonomy + firmware skills off the resume (public/resume.pdf).
+   Flagship two (C++, ROS 2) highlighted; the rest split firmware/embedded
+   (STM32, FreeRTOS, CAN, C) and autonomy/perception (Jetson Orin, CUDA,
+   TensorRT, PyTorch, OpenCV, Eigen). */
+const toolchain = [
+  { name: 'C++', hot: true },
+  { name: 'ROS 2', hot: true },
+  { name: 'C', hot: false },
+  { name: 'Python', hot: false },
+  { name: 'STM32', hot: false },
+  { name: 'FreeRTOS', hot: false },
+  { name: 'CAN', hot: false },
+  { name: 'Jetson Orin', hot: false },
+  { name: 'CUDA', hot: false },
+  { name: 'TensorRT', hot: false },
+  { name: 'PyTorch', hot: false },
+  { name: 'OpenCV', hot: false },
+  { name: 'Eigen', hot: false },
+];
 ---
 
 <Base padTop={false}>
@@ -199,7 +230,7 @@ const thumbFrame = 'border border-faint/50 transition-colors group-hover:border-
                   <span class="text-ink">{p.role}</span>
                 )}
                 <span class="text-faint"> · </span>{p.org}
-                {p.note && <span class="text-faint"> · {p.note}</span>}
+                {p.note && <span class="mt-0.5 block text-faint">{p.note}</span>}
               </li>
             ))
           }
@@ -217,14 +248,10 @@ const thumbFrame = 'border border-faint/50 transition-colors group-hover:border-
           <span class="hud-label text-ink">{site.availability}</span>
         </p>
 
-        <!-- work buttons: in-page jumps to the sections below (no new tab). The
-             two build-log buttons land on the log with a filter preselected:
-             FSAE work on the FSAE grouping (#buildlog), personal projects on
-             the Projects filter (#projects). -->
-        <div class="mt-7 grid grid-cols-1 gap-3 sm:grid-cols-2">
-          <Button href="#buildlog">View FSAE work</Button>
-          <Button href="#projects" variant="ghost">Personal projects</Button>
-          <Button href="#photography" variant="ghost">Photography</Button>
+        <!-- work buttons: My work jumps to the build log with the All-entries
+             filter selected (#buildlog); resume opens in a new tab. -->
+        <div class="mt-7 grid grid-cols-2 gap-3">
+          <Button href="#buildlog">My work</Button>
           <Button href={site.resume} variant="ghost" external>Download resume</Button>
         </div>
 
@@ -249,81 +276,108 @@ const thumbFrame = 'border border-faint/50 transition-colors group-hover:border-
     </div>
   </section>
 
-  <!-- ============ 01 · About ============ -->
-  <section id="about" class="scroll-mt-16 border-b border-line">
-    <div class="container-hud py-12 md:py-16">
-      <!-- about strip: portrait + a personal, first-person intro. Personal
-           projects live in the unified build log below (02). Swap the
-           Placeholder for an <Image> once the real portrait exists. -->
-      <div class="grid gap-6 sm:grid-cols-[auto_1fr] sm:items-center sm:gap-8">
-        <div class="w-40 justify-self-start sm:w-44 md:w-52">
+  <!-- ============ About ============ -->
+  <section id="about" class="scroll-mt-16">
+    <div class="container-hud pt-12 md:pt-16">
+      <!-- about strip, photo-led: the portrait takes half the section and the
+           intro leads with an oversized statement line above the description.
+           Swap the Placeholder for an <Image> once the portrait exists. -->
+      <p class="hud-title">About</p>
+      <div class="mt-8 grid gap-6 md:grid-cols-[1fr_2fr] md:items-start md:gap-10">
+        <div>
           <Placeholder
-            ratio="4/5"
+            ratio="3/4"
             label="CP · REPLACE"
             seed={3}
             class="!border-faint/50"
           />
         </div>
         <div>
-          <div class="flex items-start gap-4 md:gap-5">
-            <ChapterNum n="01" />
-            <div>
-              <p class="hud-label text-accent">About</p>
-              <h2 class="mt-2 font-display text-2xl text-ink md:text-3xl">About me</h2>
+          <h2 class="max-w-md text-balance font-display text-2xl font-medium leading-tight tracking-tight md:text-3xl">
+            The best way to understand something is to <span class="text-grad">build it from scratch.</span>
+          </h2>
+          <p class="mt-4 max-w-xl text-sm leading-relaxed text-muted">
+            I'm a computer engineering student in Winnipeg. Off the race car I chase personal
+            projects end to end and keep a camera close. The work below is where that goes when
+            no one assigns it.
+          </p>
+          <p class="mt-5 font-mono text-xs tracking-wide text-cyan">/ Caleb Pollreis</p>
+
+          <!-- data modules filling the space beside the portrait: the stat rail
+               and the toolchain (board options 01 + 02). -->
+          <div class="mt-10 border-t border-line pt-10">
+            <div class="grid grid-cols-2 gap-px border border-line bg-line sm:grid-cols-4">
+              {
+                aboutStats.map((s) => (
+                  <div class="bg-surface px-4 py-5">
+                    <div class="tabular font-display text-2xl font-semibold tracking-tight text-ink">
+                      {s.n}
+                    </div>
+                    <p class="hud-label mt-1.5">{s.l}</p>
+                  </div>
+                ))
+              }
+            </div>
+
+            <div class="mt-8">
+              <p class="hud-label">Toolchain</p>
+              <ul class="mt-3 flex flex-wrap gap-2">
+                {
+                  toolchain.map((t) => (
+                    <li
+                      class:list={[
+                        'border px-2.5 py-1 font-mono text-xs tracking-wide',
+                        t.hot ? 'border-cyan/45 text-cyan' : 'border-line text-muted',
+                      ]}
+                    >
+                      {t.name}
+                    </li>
+                  ))
+                }
+              </ul>
             </div>
           </div>
-          <p class="mt-3 max-w-xl text-sm leading-relaxed text-muted">
-            I'm a computer engineering student in Winnipeg who likes building things that reach into
-            the physical world. Off the race car I chase personal projects end to end and keep a
-            camera close. The work below is where that goes when no one assigns it.
-          </p>
-          <p class="mt-4 font-mono text-xs tracking-wide text-cyan">/ Caleb Pollreis</p>
         </div>
       </div>
-
     </div>
   </section>
 
-  <!-- ============ 02 · FSAE ============ -->
-  <!-- The centerpiece section: extra air and a larger heading than 01/03/04,
-       and the newest build-log entry pinned as a wide feature card, so the
-       page's hierarchy matches the pitch instead of dressing every section
-       identically. -->
+  <!-- ============ Build log ============ -->
+  <!-- One filterable feed of FSAE entries and personal projects. The newest
+       entry leads as a wide feature card, the rest follow as thumbnail cards.
+       Desktop filters via the sticky two-tier index rail; mobile collapses to
+       notched chips. #projects lands here with the Projects filter preselected
+       and #buildlog with the FSAE grouping (see the script at the bottom of
+       this page). The FSAE role trajectory that used to head this section now
+       lives on the /timeline spine. -->
   <section id="fsae" class="scroll-mt-16 border-b border-line">
     <div class="container-hud py-16 md:py-24">
-      <div class="flex items-start gap-4 md:gap-5">
-        <ChapterNum n="02" />
-        <div>
-          <p class="hud-label text-accent">FSAE</p>
-          <h2 class="mt-2 font-display text-3xl text-ink md:text-4xl">FSAE Electric</h2>
-        </div>
-      </div>
-
-      <!-- role progression -->
-      <ol class="mt-8 grid gap-6 md:grid-cols-3">
-        {
-          trajectory.map((step) => (
-            <li class="border-l-2 border-line pl-4">
-              <p class="hud-label tabular text-accent">{step.marker}{step.tag && ` · ${step.tag}`}</p>
-              <h3 class="mt-2 font-display text-base text-ink">{step.title}</h3>
-              <p class="mt-1.5 text-sm leading-relaxed text-muted">{step.detail}</p>
-            </li>
-          ))
-        }
-      </ol>
-
-      <!-- build log: one filterable feed of FSAE entries and personal projects.
-           The newest entry leads as a wide feature card, the rest follow as
-           thumbnail cards. Desktop filters via the sticky two-tier index rail;
-           mobile collapses to notched chips. #projects lands here with the
-           Projects filter preselected and #buildlog with the FSAE grouping
-           (see the script at the bottom of this page). -->
-      <p id="projects" class="hud-label mt-10 scroll-mt-16 border-b border-line pb-3">
+      <p id="projects" class="hud-title scroll-mt-16 border-b border-line pb-3">
         Build log · {feed.length} entries
       </p>
 
       <div id="buildlog" class="mt-6 scroll-mt-16 md:grid md:grid-cols-[200px_minmax(0,1fr)] md:items-start md:gap-8">
         <nav class="hidden md:sticky md:top-20 md:block" aria-label="Filter the build log">
+          <!-- filter header: names the rail as a control (board option 01). The
+               reset button clears back to All entries. -->
+          <div class="mb-1 flex items-center gap-2 border-b border-line px-3.5 pb-2.5">
+            <svg class="h-3 w-3 shrink-0 text-cyan" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+              <path
+                d="M1 2h10l-4 4.5V11L5 9.5V6.5L1 2Z"
+                stroke="currentColor"
+                stroke-width="1"
+                stroke-linejoin="round"
+              />
+            </svg>
+            <span class="font-mono text-[0.625rem] uppercase tracking-[0.18em] text-ink">Filter</span>
+            <button
+              type="button"
+              data-log-reset
+              class="ml-auto font-mono text-[0.5625rem] uppercase tracking-[0.14em] text-faint transition-colors hover:text-ink"
+            >
+              Reset
+            </button>
+          </div>
           <ul class="border-l border-line">
             {
               logFilters.map((f) => (
@@ -461,21 +515,13 @@ const thumbFrame = 'border border-faint/50 transition-colors group-hover:border-
     </div>
   </section>
 
-  <!-- ============ 03 · Photography / 04 · Timeline ============ -->
+  <!-- ============ Photography / Timeline ============ -->
   <div class="border-b border-line">
     <div class="container-hud grid gap-px py-12 md:grid-cols-2 md:gap-6 md:py-16">
       <section id="photography" class="scroll-mt-16">
         <div class="card-hud relative flex h-full flex-col gap-6 border border-line bg-surface p-6">
           <a href={withBase('/photography')} class="group/head block">
-            <div class="flex items-start gap-4">
-              <ChapterNum n="03" />
-              <div>
-                <p class="hud-label text-accent">Photography</p>
-                <h2 class="mt-2 font-display text-2xl text-ink transition-colors group-hover/head:text-cyan">
-                  Through the lens
-                </h2>
-              </div>
-            </div>
+            <p class="hud-title transition-colors group-hover/head:text-cyan">Photography</p>
             <p class="mt-2 max-w-md text-sm text-muted">
               {momentCount} moments from the field: race cars, prairie storms, and Winnipeg at
               minus 30.
@@ -525,14 +571,15 @@ const thumbFrame = 'border border-faint/50 transition-colors group-hover:border-
           href={withBase('/timeline')}
           class="card-hud group relative flex h-full flex-col justify-between gap-6 overflow-hidden border border-line bg-surface p-6"
         >
-          <div>
-            <div class="flex items-start gap-4">
-              <ChapterNum n="04" />
-              <div>
-                <p class="hud-label text-accent">Timeline</p>
-                <h2 class="mt-2 font-display text-2xl text-ink">A universe of moments</h2>
-              </div>
-            </div>
+          <!-- ghost year numeral: stroke-outlined, bleeding off the bottom-right
+               to fill the void beside the mini spine. Same motif that rides the
+               right edge of the /timeline page. -->
+          <span
+            class="tls-teaser-ghost pointer-events-none absolute -bottom-8 -right-3 select-none font-display font-bold leading-none tracking-tight text-transparent"
+            aria-hidden="true"
+          >{latestYear}</span>
+          <div class="relative">
+            <p class="hud-title">Timeline</p>
             <p class="mt-2 max-w-md text-sm text-muted">
               {eventCount} milestones since 2022 on one line, year by year.
             </p>
@@ -571,14 +618,14 @@ const thumbFrame = 'border border-faint/50 transition-colors group-hover:border-
      filter again clears back to all.
 
      Deep-links preselect a filter: #projects -> Projects (Nav breadcrumb, 404,
-     project pages, hero button), #buildlog -> the FSAE grouping (hero button).
+     project pages), #buildlog -> All entries (hero My work button).
      Two arrival paths, handled separately: cross-page nav fires astro:page-load
      (initLogFilter re-runs and reads location.hash); a same-page hero click is
      intercepted by ClientRouter, which updates the hash via history.pushState
      with NO hashchange event and NO swap, so we also bind the filter straight
      onto those anchors' click. Nodes are fresh after every swap, so everything
      re-initializes on astro:page-load. */
-  const HASH_FILTER: Record<string, string> = { '#projects': 'prj', '#buildlog': 'fsae' };
+  const HASH_FILTER: Record<string, string> = { '#projects': 'prj', '#buildlog': 'all' };
   const FSAE_CATS = new Set(['fw', 'mfg', 'av']);
   const showsEntry = (id: string, cat: string) =>
     id === 'all' || cat === id || (id === 'fsae' && FSAE_CATS.has(cat));
@@ -611,6 +658,9 @@ const thumbFrame = 'border border-faint/50 transition-colors group-hover:border-
       });
     }
 
+    // Filter header reset: clears back to All entries.
+    root.querySelector<HTMLButtonElement>('[data-log-reset]')?.addEventListener('click', () => set('all'));
+
     // Hero deep-link anchors: set the filter on click (the default scroll to the
     // target still runs). Covers the same-page case that hashchange misses.
     for (const a of document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]')) {
@@ -634,6 +684,12 @@ const thumbFrame = 'border border-faint/50 transition-colors group-hover:border-
 <!-- keyframes the lightbox references for its fade-in and info-panel slide
      (defined in moments.css for /photography; scoped copy for this page) -->
 <style is:global>
+  /* Timeline teaser ghost year: stroke-outlined transparent numeral, sized to
+     fill the card's right side. Matches the .tls-ghost-num motif on /timeline. */
+  .tls-teaser-ghost {
+    font-size: clamp(5rem, 13vw, 8.5rem);
+    -webkit-text-stroke: 1.5px color-mix(in srgb, var(--color-line) 88%, var(--color-accent));
+  }
   @keyframes m-fade {
     from { opacity: 0; }
     to { opacity: 1; }

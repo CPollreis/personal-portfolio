@@ -39,7 +39,6 @@ export const positions: Position[] = [
   {
     role: 'Autonomous Systems Lead',
     org: 'UMSAE Formula Electric',
-    note: 'driverless target 2028',
     href: '#fsae',
   },
   {
