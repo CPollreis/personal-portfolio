@@ -82,9 +82,9 @@ export const timeline: TimelineYear[] = [
       {
         id: 'first-firmware-task',
         date: '2023-10-05',
-        title: 'First firmware task on the car',
+        title: 'Joined the team on firmware',
         kind: 'fsae',
-        why: 'A small CAN bus node, but it ran on the actual vehicle. First time my code lived inside something that could hurt you if you got it wrong.',
+        why: 'Programmed STM32 microcontrollers on the custom PCBs that run the car and learned to read its electrical systems through their schematics. First time my code lived inside something that could hurt you if you got it wrong; I also wrote a Python tool that logs high-current tab-test measurements through an ADC.',
         media: { type: 'photo', alt: 'The bench setup: dev board, CAN analyzer, and a very long logic trace.' },
       },
     ],
@@ -93,6 +93,15 @@ export const timeline: TimelineYear[] = [
     year: 2024,
     theme: 'High voltage',
     events: [
+      {
+        id: 'software-system-lead',
+        date: '2024-01-12',
+        title: 'Software System Lead',
+        kind: 'fsae',
+        weight: 2,
+        why: 'Took the software lead: 10+ members across 5+ vehicle codebases, CI/CD test pipelines in GitHub Actions, and CAN 2.0 between the custom PCBs, the battery-management system, and the 3-phase motor controller.',
+        media: { type: 'photo', alt: 'Software team review in front of the vehicle CAN architecture diagram.' },
+      },
       {
         id: 'accumulator-build',
         date: '2024-02-09',
@@ -130,7 +139,7 @@ export const timeline: TimelineYear[] = [
         title: 'Named Autonomous Systems Lead',
         kind: 'fsae',
         weight: 2,
-        why: 'Handed the driverless program. Suddenly my job was not just writing code but deciding what a 10-person team builds and in what order.',
+        why: 'Handed the driverless program: leading 10+ members standing up a C++/ROS 2 monorepo on the NVIDIA Jetson Orin, $30k in sponsored LiDARs and cameras, and a system architecture built around the FS driverless ruleset. Target: driverless by 2028.',
         media: { type: 'photo', alt: 'Whiteboard photo from the first autonomy planning meeting.' },
       },
       {

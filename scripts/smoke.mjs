@@ -9,7 +9,7 @@
 //   3. Nav links on every core page are clickable (nothing overlays them).
 //   4. Build-log filter rail: PRJ isolates project entries, a second click
 //      clears back to all, the FSAE parent isolates its three subsystems, and
-//      /#projects and /#buildlog preselect the Projects and FSAE filters.
+//      /#projects and /#buildlog preselect the Projects and All-entries filters.
 // Exits 1 with a FAIL line per broken check.
 import { chromium, firefox } from 'playwright';
 import { ensureServer } from './lib/server.mjs';
@@ -103,7 +103,8 @@ async function run(engine, launcher, opts) {
       await clickUntil('#buildlog nav [data-log-filter="prj"]', counts.total, 'second-click clear');
       await clickUntil('#buildlog nav [data-log-filter="fsae"]', counts.fsae, 'FSAE grouping');
       await clickUntil('#buildlog nav [data-log-filter="fsae"]', counts.total, 'FSAE second-click clear');
-      // hash preselects: #projects -> Projects filter, #buildlog -> FSAE grouping
+      // hash preselects: #projects -> Projects filter, #buildlog -> All entries
+      // (the hero "My work" button lands on the whole feed)
       const preselect = async (hash, want, label) => {
         await page.goto(base + hash, { waitUntil: 'domcontentloaded' });
         const deadline = Date.now() + 5000;
@@ -116,7 +117,7 @@ async function run(engine, launcher, opts) {
         failures.push(`[${engine}] ${label} preselect: ${n} entries visible, wanted ${want}`);
       };
       await preselect('/#projects', counts.prj, '/#projects');
-      await preselect('/#buildlog', counts.fsae, '/#buildlog');
+      await preselect('/#buildlog', counts.total, '/#buildlog');
     }
   } catch (err) {
     failures.push(`[${engine}] crashed: ${err.message}`);
