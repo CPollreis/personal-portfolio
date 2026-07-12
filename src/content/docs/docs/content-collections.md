@@ -11,9 +11,11 @@ are three content collections (plus the `docs` collection that powers these page
 ## FSAE build log
 
 - Location: `src/content/fsae/<slug>.mdx` (or `.md`).
-- Renders at `/fsae/<slug>`, listed as a thumbnail card in the home page FSAE section.
+- Renders at `/fsae/<slug>`, listed as a card in the home page **Build log**
+  feed (the merged FSAE + projects feed with a filter rail).
 - `subsystem` drives color-coding across the site (firmware is blue,
-  manufacturing is cyan, autonomous is indigo).
+  manufacturing is cyan, autonomous is indigo) and picks the entry's sub-filter
+  in the Build log (Firmware / Manufacturing / Autonomy).
 
 | Field | Type | Meaning |
 | --- | --- | --- |
@@ -49,7 +51,8 @@ draft: false
 ## Projects
 
 - Location: `src/content/projects/<slug>.mdx` (or `.md`).
-- Renders at `/projects/<slug>`, listed as a thumbnail card in the home page Projects section.
+- Renders at `/projects/<slug>`, listed as a card in the home page **Build log**
+  feed under the Projects filter.
 
 | Field | Type | Meaning |
 | --- | --- | --- |
@@ -64,8 +67,8 @@ draft: false
 | `video` | URL, optional | Demo video (YouTube/Vimeo) shown as the lead media. |
 | `links.repo` | URL, optional | Source repository. |
 | `links.demo` | URL, optional | Live demo. |
-| `order` | number, default `99` | Sort order on the index (lower shows first). |
-| `featured` | boolean, default `false` | Highlights the project. |
+| `order` | number, default `99` | Legacy sort hint. The Build log feed sorts by `date`, so this no longer changes home-page placement. |
+| `featured` | boolean, default `false` | Legacy flag; the Build log feed does not read it (the newest entry always leads). |
 | `draft` | boolean, default `false` | When `true`, excluded from the built site. |
 
 ### Example frontmatter

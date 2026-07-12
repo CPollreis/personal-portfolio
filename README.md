@@ -39,8 +39,9 @@ npm run preview    # serve the production build
 
 ## Project structure
 
-The site is a **one-pager with satellite pages**: `/` holds the bio hero and
-the FSAE / Projects / Photography / Timeline sections; entry writeups, the
+The site is a **one-pager with satellite pages**: `/` scrolls through the bio
+hero, an About strip, a filterable **Build log** (FSAE posts + personal projects
+in one feed), and teaser cards for Photography and Timeline; entry writeups, the
 gallery, and the timeline live on their own pages linked from those sections.
 
 ```
@@ -60,20 +61,36 @@ public/           # served as-is: videos/, resume.pdf, favicon.svg, og-default.p
 ## Adding content: the one-file rule
 
 **Every kind of entry is exactly one file (or one config row).** No layout
-files, no page files, no counts to update; the home page grids and the
+files, no page files, no counts to update; the home Build log feed and the
 photography archive re-pack themselves at build time. Full worked recipes live
 in the [Starlight docs](https://calebpollreis.com/docs/adding-content).
 
 | To add a... | Touch only | It appears |
 | --- | --- | --- |
-| FSAE build-log post | `src/content/fsae/<slug>.mdx` | Home `#fsae` thumbnail grid + `/fsae/<slug>` |
-| Project | `src/content/projects/<slug>.mdx` | Home `#projects` thumbnail grid + `/projects/<slug>` |
+| FSAE build-log post | `src/content/fsae/<slug>.mdx` | Home Build log feed (subsystem filter count bumps) + `/fsae/<slug>` |
+| Project | `src/content/projects/<slug>.mdx` | Home Build log feed (Projects filter count bumps) + `/projects/<slug>` |
 | Photo / film moment | `src/content/photography/<NN-slug>.md` | Auto-packed `/photography` archive |
 | Timeline event | one object in `src/config/timeline.ts` | A card on the `/timeline` spine |
 | Position / affiliation | one row in `positions[]` in `src/config/site.ts` | Under your name in the hero |
 
-The `cover` image in an FSAE/project entry doubles as its home page thumbnail
-(light grey outlined card); until one is set, an on-brand placeholder renders.
+The `cover` image in an FSAE/project entry doubles as its Build log card
+thumbnail (light grey outlined card); until one is set, an on-brand placeholder
+renders.
+
+### The Build log and its filter
+
+The home `#fsae` section is **one merged feed** of FSAE posts and personal
+projects, newest first, not two separate grids. It has a filter: a two-tier
+index rail on desktop (`All entries` / `Projects` / `FSAE`, with the three FSAE
+subsystems - Firmware, Manufacturing, Autonomy - indented under FSAE) that
+collapses to notched chips on mobile. Adding a post or project is all it takes
+to extend the feed and bump the right filter count: **the filter reads its
+categories and counts from the feed at build time, so you never edit it to add
+an entry.** The wiring (categories, the `logFilters` rows, the client script,
+and the `#projects` / `#buildlog` deep-links) lives in `src/pages/index.astro`;
+the only time you touch the filter is to add a *new* category, e.g. a new FSAE
+subsystem - a three-file change documented in
+[Adding or changing a build-log filter](https://calebpollreis.com/docs/adding-content#adding-or-changing-a-build-log-filter).
 
 - **FSAE build log** - add `src/content/fsae/<slug>.mdx`. Frontmatter:
   `title, date, subsystem (firmware|manufacturing|autonomous), season, summary,

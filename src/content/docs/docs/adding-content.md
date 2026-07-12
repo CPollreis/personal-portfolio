@@ -15,15 +15,20 @@ editing: no layout files, no page files, no counts.
 
 | To add a... | Touch only | It appears |
 | --- | --- | --- |
-| FSAE build-log post | `src/content/fsae/<slug>.mdx` | Thumbnail card in the home `#fsae` grid + its own page at `/fsae/<slug>` |
-| Project | `src/content/projects/<slug>.mdx` | Thumbnail card in the home `#projects` grid + its own page at `/projects/<slug>` |
+| FSAE build-log post | `src/content/fsae/<slug>.mdx` | Card in the home **Build log** feed (its subsystem filter count bumps too) + its own page at `/fsae/<slug>` |
+| Project | `src/content/projects/<slug>.mdx` | Card in the home **Build log** feed (the Projects filter count bumps too) + its own page at `/projects/<slug>` |
 | Photo or film moment | `src/content/photography/<NN-slug>.md` | Auto-packed into the `/photography` archive grid; the home photography card's count updates |
 | Timeline event | one object in `src/config/timeline.ts` | A card on the `/timeline` spine, branch side and year handled automatically |
 | Position / affiliation | one object in `positions[]` in `src/config/site.ts` | The lines under your name in the home hero |
 
-The home grids wrap at three columns, so any number of entries lays out
-correctly. Sorting is automatic: FSAE by `date` (newest first), projects by
-`order` then `date`, photography by `order`, timeline by year and date.
+The Build log is one merged feed of FSAE posts and projects, newest first, with
+a filter rail; the grid wraps at three columns, so any number of entries lays
+out correctly. **You never touch the filter to add an entry** - the filter reads
+its categories and counts from the feed at build time, so a new post or project
+joins the right filter automatically. (Adding a whole new *filter* is a separate,
+rare task: see [Adding or changing a build-log filter](#adding-or-changing-a-build-log-filter).)
+Sorting is automatic: the feed by `date` (newest first), photography by `order`,
+timeline by year and date.
 
 ## A new FSAE build-log post
 
@@ -65,8 +70,9 @@ correctly. Sorting is automatic: FSAE by `date` (newest first), projects by
 1. Create `src/content/projects/<slug>.mdx`, e.g. `spectrum-analyzer.mdx`
    renders at `/projects/spectrum-analyzer`.
 2. Add the frontmatter. Required: `title`, `date`, `kind`, `summary`. Common
-   optional fields: `stack[]`, `links.repo`, `links.demo`, `order` (lower sorts
-   first on the index), `featured`.
+   optional fields: `stack[]`, `links.repo`, `links.demo`. (The Build log feed
+   sorts by `date`, so `order`/`featured` do not change its position; `date` is
+   what places a project in the feed.)
 
    ```mdx
    ---
@@ -91,6 +97,43 @@ correctly. Sorting is automatic: FSAE by `date` (newest first), projects by
    or a `cover`/`hero` image for the header. As with FSAE posts, `cover` is also
    the thumbnail on the home page card; leave it out and the placeholder frame
    renders until you have a real shot.
+
+## Adding or changing a build-log filter
+
+You almost never need this. The Build log filter (see
+[The build log and its filter](/docs/architecture/#the-build-log-and-its-filter))
+derives its rows and counts from the feed, so adding a post or project needs no
+filter edit. You only touch the filter to add a whole new category. There are two
+cases.
+
+### Add a new FSAE subsystem (a new sub-filter under FSAE)
+
+The subsystems are a fixed enum, so a new one is a three-file change:
+
+1. **`src/config/fsae.ts`** - add the id to the `Subsystem` union, add its entry
+   to the `subsystems` map (`label`, `code`, `color`, `text`, `blurb`, `focus`),
+   and add it to `subsystemOrder`. Pick a `color` from the token triad
+   (`--color-accent` / `--color-cyan` / `--color-indigo`) so it fits the palette.
+2. **`src/content.config.ts`** - add the id to the `subsystem` enum in the `fsae`
+   collection schema, or `astro check` will reject any post using it.
+3. **`src/pages/index.astro`** - add the id to the `LogCat` type and to the
+   `subsystemCat` map (which turns a subsystem into its short filter code), then
+   add a row to `logFilters` at `level: 1` with its `fc`/`ftc` colors. Its
+   `count` uses `catCount('<code>')`, and it is already covered by the `fsae`
+   group filter and the `fsaeCount` total.
+
+After that, any post with the new `subsystem` joins the feed and its new
+sub-filter automatically.
+
+### Add a new top-level filter (a sibling of Projects and FSAE)
+
+This is rarer and only makes sense if you add a new *kind* of content to the feed
+(not a new subsystem). In `src/pages/index.astro`: give the new content a
+`LogCat`, tag its feed entries with that `cat`, add a `level: 0` row to
+`logFilters`, and - if it should be reachable by deep link - add a `#hash → id`
+pair to the `HASH_FILTER` map in the page's `<script>`. The `showsEntry()` helper
+already handles any plain (non-group) category, so no other script change is
+needed.
 
 ## A new photography moment: photo
 
