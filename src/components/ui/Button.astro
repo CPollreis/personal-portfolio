@@ -37,10 +37,12 @@ const styles =
     )
   }
   {
-    /* diagonal edge closing the notched corner, completing the outline */
+    /* diagonal edge closing the notched corner, completing the outline;
+       offsets are from the padding box, so they compensate for the 1px border
+       to land the line on the clip-path notch (100%-11px,0 -> 100%,11px) */
     variant === 'ghost' && (
       <span
-        class="pointer-events-none absolute right-[-2px] top-[5.5px] h-px w-4 rotate-45 bg-line transition-colors duration-200 group-hover:bg-cyan"
+        class="pointer-events-none absolute right-[-3.15px] top-[4.35px] h-px w-4 rotate-45 bg-line transition-colors duration-200 group-hover:bg-cyan"
         aria-hidden="true"
       />
     )

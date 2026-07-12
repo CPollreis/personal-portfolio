@@ -3,10 +3,17 @@
  * Home - the whole site on one page.
  *
  * Structure (anchors match the nav): compact bio hero with the car footage
- * kept small behind a blurred text panel, then #fsae, #projects,
- * #photography, #timeline. Everything a visitor needs is reachable without
- * guessing; deep pages (post writeups, the gallery, the timeline) hang off
- * their sections.
+ * kept small behind a blurred text panel, then #about, #fsae (which hosts the
+ * unified work log), #photography, #timeline. Everything a visitor needs is
+ * reachable without guessing; deep pages (post writeups, the gallery, the
+ * timeline) hang off their sections.
+ *
+ * The build log is one filterable feed: FSAE entries and personal projects
+ * together, filtered by a two-tier index rail on desktop (top-level Projects
+ * and FSAE, the latter fanning into its three subsystems) that collapses to
+ * chips on mobile. The hero work buttons deep-link into it: #projects lands
+ * with the Projects filter preselected, #buildlog with the FSAE grouping.
+ * (Nav breadcrumbs, 404, and project pages also link to #projects.)
  *
  * Content sources: src/config/site.ts (positions, links, availability),
  * src/config/fsae.ts (trajectory), and the fsae/projects/photography
@@ -23,7 +30,7 @@ import Button from '../components/ui/Button.astro';
 import Placeholder from '../components/media/Placeholder.astro';
 import MomentLightbox, { type Moment } from '../components/photography/MomentLightbox.tsx';
 import { momentBackdrop } from '../components/photography/backdrop';
-import { subsystems } from '../config/fsae';
+import { subsystems, type Subsystem } from '../config/fsae';
 import { site, positions, socials } from '../config/site';
 import { timeline } from '../config/timeline';
 import { trajectory } from '../config/fsae';
@@ -35,6 +42,54 @@ const fsaePosts = (await getCollection('fsae', ({ data }) => !data.draft)).sort(
 const projects = (await getCollection('projects', ({ data }) => !data.draft)).sort(
   (a, b) => a.data.order - b.data.order || b.data.date.getTime() - a.data.date.getTime(),
 );
+
+/* Unified work log: FSAE entries and personal projects in one feed, newest
+   first. `cat` drives the client-side filter; `code` labels placeholders. */
+type LogCat = 'fw' | 'mfg' | 'av' | 'prj';
+const subsystemCat: Record<Subsystem, LogCat> = {
+  firmware: 'fw',
+  manufacturing: 'mfg',
+  autonomous: 'av',
+};
+const feed = [
+  ...fsaePosts.map((p) => ({
+    href: withBase(`/fsae/${p.id}`),
+    cat: subsystemCat[p.data.subsystem],
+    subsystem: p.data.subsystem as Subsystem | null,
+    code: subsystems[p.data.subsystem].code,
+    title: p.data.title,
+    summary: p.data.summary,
+    date: p.data.date,
+    cover: p.data.cover,
+  })),
+  ...projects.map((p) => ({
+    href: withBase(`/projects/${p.id}`),
+    cat: 'prj' as LogCat,
+    subsystem: null as Subsystem | null,
+    code: 'PRJ',
+    title: p.data.title,
+    summary: p.data.summary,
+    date: p.data.date,
+    cover: p.data.cover,
+  })),
+].sort((a, b) => b.date.getTime() - a.date.getTime());
+
+/* Rail is two-tier: top-level Projects and FSAE, and FSAE fans out into its
+   three subsystems (indented one level on desktop). `level` drives that indent;
+   the `fsae` row is a parent filter that matches all three subsystems at once.
+   --fc paints the active state (border on the rail, fill on the mobile chips),
+   --ftc is the text color on that fill. All and PRJ stay neutral so the FSAE
+   family keeps owning the blue. */
+const catCount = (c: LogCat) => feed.filter((e) => e.cat === c).length;
+const fsaeCount = catCount('fw') + catCount('mfg') + catCount('av');
+const logFilters = [
+  { id: 'all', label: 'All entries', count: feed.length, fc: 'var(--color-ink)', ftc: 'var(--color-bg)', level: 0 },
+  { id: 'prj', label: 'Projects', count: catCount('prj'), fc: 'var(--color-ink)', ftc: 'var(--color-bg)', level: 0 },
+  { id: 'fsae', label: 'FSAE', count: fsaeCount, fc: 'var(--color-accent)', ftc: 'var(--color-ink)', level: 0 },
+  { id: 'av', label: 'Autonomy', count: catCount('av'), fc: 'var(--color-indigo)', ftc: 'var(--color-ink)', level: 1 },
+  { id: 'fw', label: 'Firmware', count: catCount('fw'), fc: 'var(--color-accent)', ftc: 'var(--color-ink)', level: 1 },
+  { id: 'mfg', label: 'Manufacturing', count: catCount('mfg'), fc: 'var(--color-cyan)', ftc: 'var(--color-bg)', level: 1 },
+];
 /* Photography frames in the same sorted order the gallery uses, so a highlight's
    index lines up with its generated backdrop art on /photography. Highlighted =
    the featured moments first, then filled by order, capped at three thumbnails. */
@@ -76,6 +131,14 @@ const moments: Moment[] = photoFrames.map((f, i) => ({
   backdrop: momentBackdrop(i),
 }));
 const eventCount = timeline.reduce((n, y) => n + y.events.length, 0);
+
+/* Three real stars for the timeline teaser: the earliest, a middle, and the
+   latest weight-2 event, so the card previews the actual spine instead of a
+   decorative motif. */
+const stars = timeline.flatMap((y) =>
+  y.events.filter((e) => e.weight === 2).map((e) => ({ year: y.year, title: e.title })),
+);
+const timelineTeaser = [stars[0], stars[Math.floor(stars.length / 2)], stars[stars.length - 1]];
 
 const fmtDate = (d: Date) =>
   d
@@ -143,10 +206,10 @@ const thumbFrame = 'border border-faint/50 transition-colors group-hover:border-
         </ul>
 
         <p class="mt-5 max-w-md text-sm leading-relaxed text-muted">
-          I work on the boundary between hardware and software: embedded firmware and CAN
-          networking on our formula-style race car, high-voltage accumulator work, and now
-          the driverless program I lead. Off the team I build personal projects and shoot
-          photography.
+          My student team designs and builds an electric race car from scratch. My job is
+          making it drive itself by 2028. Day to day that means firmware, vehicle
+          networking, and high-voltage battery work. Off the team I build personal
+          projects and shoot photography.
         </p>
 
         <p class="mt-6 flex items-center gap-2.5">
@@ -154,9 +217,12 @@ const thumbFrame = 'border border-faint/50 transition-colors group-hover:border-
           <span class="hud-label text-ink">{site.availability}</span>
         </p>
 
-        <!-- work buttons: in-page jumps to the sections below (no new tab) -->
+        <!-- work buttons: in-page jumps to the sections below (no new tab). The
+             two build-log buttons land on the log with a filter preselected:
+             FSAE work on the FSAE grouping (#buildlog), personal projects on
+             the Projects filter (#projects). -->
         <div class="mt-7 grid grid-cols-1 gap-3 sm:grid-cols-2">
-          <Button href="#fsae">View FSAE work</Button>
+          <Button href="#buildlog">View FSAE work</Button>
           <Button href="#projects" variant="ghost">Personal projects</Button>
           <Button href="#photography" variant="ghost">Photography</Button>
           <Button href={site.resume} variant="ghost" external>Download resume</Button>
@@ -186,10 +252,9 @@ const thumbFrame = 'border border-faint/50 transition-colors group-hover:border-
   <!-- ============ 01 · About ============ -->
   <section id="about" class="scroll-mt-16 border-b border-line">
     <div class="container-hud py-12 md:py-16">
-      <!-- about strip: portrait + a personal, first-person intro. Sits directly
-           above the personal-projects grid so a visitor meets the person and the
-           work in one block. Swap the Placeholder for an <Image> once the real
-           portrait exists. -->
+      <!-- about strip: portrait + a personal, first-person intro. Personal
+           projects live in the unified build log below (02). Swap the
+           Placeholder for an <Image> once the real portrait exists. -->
       <div class="grid gap-6 sm:grid-cols-[auto_1fr] sm:items-center sm:gap-8">
         <div class="w-40 justify-self-start sm:w-44 md:w-52">
           <Placeholder
@@ -216,59 +281,21 @@ const thumbFrame = 'border border-faint/50 transition-colors group-hover:border-
         </div>
       </div>
 
-      <p id="projects" class="hud-label mt-10 scroll-mt-16 border-b border-line pb-3">Personal projects · {projects.length}</p>
-      <ul class="mt-6 grid gap-x-6 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
-        {
-          projects.map((p, i) => (
-            <li>
-              <a href={withBase(`/projects/${p.id}`)} class="group block">
-                {p.data.cover ? (
-                  <div class={thumbFrame}>
-                    <Image
-                      src={p.data.cover}
-                      alt={p.data.title}
-                      widths={[480, 960]}
-                      sizes="(min-width: 1024px) 430px, (min-width: 640px) 50vw, 100vw"
-                      class="aspect-video w-full object-cover"
-                    />
-                  </div>
-                ) : (
-                  <Placeholder
-                    ratio="16/9"
-                    label={`PRJ · FIG.0${i + 1}`}
-                    seed={i + 1}
-                    class="!border-faint/50 transition-colors group-hover:!border-faint"
-                  />
-                )}
-                <div class="mt-3 flex flex-wrap items-center gap-3">
-                  <span class="hud-label text-accent">{p.data.kind}</span>
-                  <span class="hud-label tabular">{fmtDate(p.data.date)}</span>
-                </div>
-                <h3 class="mt-2 font-display text-base text-ink transition-colors group-hover:text-cyan">
-                  {p.data.title}
-                </h3>
-                <p class="mt-1 line-clamp-2 text-sm text-muted">{p.data.summary}</p>
-                {p.data.stack.length > 0 && (
-                  <p class="mt-1.5 font-mono text-xs tracking-wide text-faint">
-                    {p.data.stack.join(' · ')}
-                  </p>
-                )}
-              </a>
-            </li>
-          ))
-        }
-      </ul>
     </div>
   </section>
 
   <!-- ============ 02 · FSAE ============ -->
+  <!-- The centerpiece section: extra air and a larger heading than 01/03/04,
+       and the newest build-log entry pinned as a wide feature card, so the
+       page's hierarchy matches the pitch instead of dressing every section
+       identically. -->
   <section id="fsae" class="scroll-mt-16 border-b border-line">
-    <div class="container-hud py-12 md:py-16">
+    <div class="container-hud py-16 md:py-24">
       <div class="flex items-start gap-4 md:gap-5">
         <ChapterNum n="02" />
         <div>
           <p class="hud-label text-accent">FSAE</p>
-          <h2 class="mt-2 font-display text-2xl text-ink md:text-3xl">FSAE Electric</h2>
+          <h2 class="mt-2 font-display text-3xl text-ink md:text-4xl">FSAE Electric</h2>
         </div>
       </div>
 
@@ -285,44 +312,152 @@ const thumbFrame = 'border border-faint/50 transition-colors group-hover:border-
         }
       </ol>
 
-      <!-- build log: one thumbnail card per entry; the grid absorbs any count -->
-      <p class="hud-label mt-10 border-b border-line pb-3">Build log · {fsaePosts.length} entries</p>
-      <ul class="mt-6 grid gap-x-6 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
-        {
-          fsaePosts.map((p, i) => (
-            <li>
-              <a href={withBase(`/fsae/${p.id}`)} class="group block">
-                {p.data.cover ? (
+      <!-- build log: one filterable feed of FSAE entries and personal projects.
+           The newest entry leads as a wide feature card, the rest follow as
+           thumbnail cards. Desktop filters via the sticky two-tier index rail;
+           mobile collapses to notched chips. #projects lands here with the
+           Projects filter preselected and #buildlog with the FSAE grouping
+           (see the script at the bottom of this page). -->
+      <p id="projects" class="hud-label mt-10 scroll-mt-16 border-b border-line pb-3">
+        Build log · {feed.length} entries
+      </p>
+
+      <div id="buildlog" class="mt-6 scroll-mt-16 md:grid md:grid-cols-[200px_minmax(0,1fr)] md:items-start md:gap-8">
+        <nav class="hidden md:sticky md:top-20 md:block" aria-label="Filter the build log">
+          <ul class="border-l border-line">
+            {
+              logFilters.map((f) => (
+                <li>
+                  <button
+                    type="button"
+                    data-log-filter={f.id}
+                    aria-pressed={f.id === 'all' ? 'true' : 'false'}
+                    style={`--fc:${f.fc}`}
+                    class:list={[
+                      '-ml-px flex w-full items-center justify-between gap-4 border-l-2 border-transparent py-2.5 pr-3.5 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted transition-colors hover:text-ink aria-pressed:border-(--fc) aria-pressed:bg-raised aria-pressed:text-ink',
+                      f.level === 1 ? 'pl-8' : 'pl-3.5',
+                    ]}
+                  >
+                    <span>{f.label}</span>
+                    <span class="tabular text-faint">{f.count}</span>
+                  </button>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+
+        <div>
+          <div class="mb-6 flex flex-wrap gap-2 md:hidden" role="group" aria-label="Filter the build log">
+            {
+              logFilters.map((f) => (
+                <button
+                  type="button"
+                  data-log-filter={f.id}
+                  aria-pressed={f.id === 'all' ? 'true' : 'false'}
+                  style={`--fc:${f.fc};--ftc:${f.ftc}`}
+                  class="bg-raised px-3.5 py-2 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted transition-colors [clip-path:polygon(0_0,calc(100%-8px)_0,100%_8px,100%_100%,0_100%)] aria-pressed:bg-(--fc) aria-pressed:text-(--ftc)"
+                >
+                  {f.label} <span class="tabular opacity-70">{f.count}</span>
+                </button>
+              ))
+            }
+          </div>
+
+          {
+            feed.length > 0 && (
+              <a
+                href={feed[0].href}
+                data-log-entry
+                data-cat={feed[0].cat}
+                class="group grid gap-6 md:grid-cols-[3fr_2fr] md:items-center"
+              >
+                {feed[0].cover ? (
                   <div class={thumbFrame}>
                     <Image
-                      src={p.data.cover}
-                      alt={p.data.title}
-                      widths={[480, 960]}
-                      sizes="(min-width: 1024px) 430px, (min-width: 640px) 50vw, 100vw"
+                      src={feed[0].cover}
+                      alt={feed[0].title}
+                      widths={[720, 1440]}
+                      sizes="(min-width: 768px) 60vw, 100vw"
                       class="aspect-video w-full object-cover"
                     />
                   </div>
                 ) : (
                   <Placeholder
                     ratio="16/9"
-                    label={`${subsystems[p.data.subsystem].code} · FIG.0${i + 1}`}
-                    seed={i}
+                    label={`${feed[0].code} · FIG.LEAD`}
+                    seed={0}
                     class="!border-faint/50 transition-colors group-hover:!border-faint"
                   />
                 )}
-                <div class="mt-3 flex flex-wrap items-center gap-3">
-                  <SubsystemBadge subsystem={p.data.subsystem} />
-                  <span class="hud-label tabular">{fmtDate(p.data.date)}</span>
+                <div>
+                  <div class="flex flex-wrap items-center gap-3">
+                    {feed[0].subsystem ? (
+                      <SubsystemBadge subsystem={feed[0].subsystem} />
+                    ) : (
+                      <span class="inline-flex items-center gap-1.5 border border-ink/45 px-2 py-1 font-mono text-[0.65rem] uppercase tracking-wider text-ink">
+                        <span class="h-1.5 w-1.5 bg-ink" />
+                        Project
+                      </span>
+                    )}
+                    <span class="hud-label tabular">{fmtDate(feed[0].date)}</span>
+                  </div>
+                  <h3 class="mt-3 font-display text-xl text-ink transition-colors group-hover:text-cyan md:text-2xl">
+                    {feed[0].title}
+                  </h3>
+                  <p class="mt-2 text-sm leading-relaxed text-muted">{feed[0].summary}</p>
+                  <span class="hud-label mt-4 inline-flex transition-colors group-hover:text-cyan">
+                    Read the entry →
+                  </span>
                 </div>
-                <h3 class="mt-2 font-display text-base text-ink transition-colors group-hover:text-cyan">
-                  {p.data.title}
-                </h3>
-                <p class="mt-1 line-clamp-2 text-sm text-muted">{p.data.summary}</p>
               </a>
-            </li>
-          ))
-        }
-      </ul>
+            )
+          }
+          <ul class="mt-10 grid gap-x-6 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
+            {
+              feed.slice(1).map((e, i) => (
+                <li data-log-entry data-cat={e.cat}>
+                  <a href={e.href} class="group block">
+                    {e.cover ? (
+                      <div class={thumbFrame}>
+                        <Image
+                          src={e.cover}
+                          alt={e.title}
+                          widths={[480, 960]}
+                          sizes="(min-width: 1024px) 430px, (min-width: 640px) 50vw, 100vw"
+                          class="aspect-video w-full object-cover"
+                        />
+                      </div>
+                    ) : (
+                      <Placeholder
+                        ratio="16/9"
+                        label={`${e.code} · FIG.0${i + 2}`}
+                        seed={i + 1}
+                        class="!border-faint/50 transition-colors group-hover:!border-faint"
+                      />
+                    )}
+                    <div class="mt-3 flex flex-wrap items-center gap-3">
+                      {e.subsystem ? (
+                        <SubsystemBadge subsystem={e.subsystem} />
+                      ) : (
+                        <span class="inline-flex items-center gap-1.5 border border-ink/45 px-2 py-1 font-mono text-[0.65rem] uppercase tracking-wider text-ink">
+                          <span class="h-1.5 w-1.5 bg-ink" />
+                          Project
+                        </span>
+                      )}
+                      <span class="hud-label tabular">{fmtDate(e.date)}</span>
+                    </div>
+                    <h3 class="mt-2 font-display text-base text-ink transition-colors group-hover:text-cyan">
+                      {e.title}
+                    </h3>
+                    <p class="mt-1 line-clamp-2 text-sm text-muted">{e.summary}</p>
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -390,22 +525,6 @@ const thumbFrame = 'border border-faint/50 transition-colors group-hover:border-
           href={withBase('/timeline')}
           class="card-hud group relative flex h-full flex-col justify-between gap-6 overflow-hidden border border-line bg-surface p-6"
         >
-          <!-- static spine motif: the /timeline channel on its side -->
-          <svg
-            viewBox="0 0 600 60"
-            preserveAspectRatio="xMidYMid slice"
-            class="pointer-events-none absolute inset-x-0 bottom-14 h-10 w-full opacity-40 transition-opacity group-hover:opacity-70"
-            fill="none"
-            aria-hidden="true"
-          >
-            <path d="M20 30 H580" stroke="var(--color-cyan)" stroke-opacity="0.35" stroke-width="1" />
-            <g stroke="var(--color-cyan)" stroke-opacity="0.25" stroke-width="1">
-              {[110, 220, 330, 440].map((x, i) => <path d={`M${x} 30 V${i % 2 === 0 ? 14 : 46}`} />)}
-            </g>
-            <g fill="var(--color-cyan)" fill-opacity="0.7">
-              {[20, 110, 220, 330, 440, 550].map((x) => <circle cx={x} cy="30" r="2.5" />)}
-            </g>
-          </svg>
           <div>
             <div class="flex items-start gap-4">
               <ChapterNum n="04" />
@@ -418,6 +537,21 @@ const thumbFrame = 'border border-faint/50 transition-colors group-hover:border-
               {eventCount} milestones since 2022 on one line, year by year.
             </p>
           </div>
+          <!-- mini spine: three real stars off the /timeline data -->
+          <ol class="ml-1 space-y-4 border-l border-line pl-5">
+            {
+              timelineTeaser.map((e) => (
+                <li class="relative">
+                  <span
+                    class="absolute -left-[24px] top-1.5 h-2 w-2 rounded-full bg-cyan/80"
+                    aria-hidden="true"
+                  />
+                  <p class="hud-label tabular text-accent">{e.year}</p>
+                  <p class="mt-0.5 text-sm text-ink">{e.title}</p>
+                </li>
+              ))
+            }
+          </ol>
           <span class="hud-label transition-colors group-hover:text-cyan">Open the timeline →</span>
         </a>
       </section>
@@ -429,6 +563,73 @@ const thumbFrame = 'border border-faint/50 transition-colors group-hover:border-
        buttons. Same component the /photography gallery uses. -->
   <MomentLightbox client:load moments={moments} />
 </Base>
+
+<script>
+  /* Build-log filter: rail (desktop) and chips (mobile) share [data-log-filter]
+     buttons and toggle [data-log-entry] cards by data-cat. The `fsae` filter is
+     a parent that matches all three subsystems (fw/mfg/av). Clicking the active
+     filter again clears back to all.
+
+     Deep-links preselect a filter: #projects -> Projects (Nav breadcrumb, 404,
+     project pages, hero button), #buildlog -> the FSAE grouping (hero button).
+     Two arrival paths, handled separately: cross-page nav fires astro:page-load
+     (initLogFilter re-runs and reads location.hash); a same-page hero click is
+     intercepted by ClientRouter, which updates the hash via history.pushState
+     with NO hashchange event and NO swap, so we also bind the filter straight
+     onto those anchors' click. Nodes are fresh after every swap, so everything
+     re-initializes on astro:page-load. */
+  const HASH_FILTER: Record<string, string> = { '#projects': 'prj', '#buildlog': 'fsae' };
+  const FSAE_CATS = new Set(['fw', 'mfg', 'av']);
+  const showsEntry = (id: string, cat: string) =>
+    id === 'all' || cat === id || (id === 'fsae' && FSAE_CATS.has(cat));
+  let hashHandler: (() => void) | undefined;
+
+  function initLogFilter() {
+    const root = document.getElementById('buildlog');
+    if (hashHandler) {
+      window.removeEventListener('hashchange', hashHandler);
+      hashHandler = undefined;
+    }
+    if (!root) return;
+
+    const btns = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-log-filter]'));
+    const items = Array.from(root.querySelectorAll<HTMLElement>('[data-log-entry]'));
+    let active = 'all';
+
+    const set = (id: string) => {
+      active = id;
+      for (const b of btns) b.setAttribute('aria-pressed', String(b.dataset.logFilter === id));
+      for (const el of items) {
+        el.style.display = showsEntry(id, el.dataset.cat ?? '') ? '' : 'none';
+      }
+    };
+
+    for (const b of btns) {
+      b.addEventListener('click', () => {
+        const id = b.dataset.logFilter ?? 'all';
+        set(id === active && id !== 'all' ? 'all' : id);
+      });
+    }
+
+    // Hero deep-link anchors: set the filter on click (the default scroll to the
+    // target still runs). Covers the same-page case that hashchange misses.
+    for (const a of document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]')) {
+      const id = HASH_FILTER[a.getAttribute('href') ?? ''];
+      if (id) a.addEventListener('click', () => set(id));
+    }
+
+    hashHandler = () => {
+      const id = HASH_FILTER[location.hash];
+      if (id) set(id);
+    };
+    window.addEventListener('hashchange', hashHandler);
+
+    set('all');
+    hashHandler();
+  }
+
+  document.addEventListener('astro:page-load', initLogFilter);
+</script>
 
 <!-- keyframes the lightbox references for its fade-in and info-panel slide
      (defined in moments.css for /photography; scoped copy for this page) -->
