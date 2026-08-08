@@ -1,6 +1,6 @@
 ---
 title: Adding content
-description: Step-by-step recipes for a new build log, project, photo, video moment, timeline event, and position.
+description: Step-by-step recipes for a new build log, project, photo, video moment, and position.
 ---
 
 Every recipe below is a git-tracked file edit. Run `npm run dev` while you work
@@ -18,7 +18,6 @@ editing: no layout files, no page files, no counts.
 | FSAE build-log post | `src/content/fsae/<slug>.mdx` | Card in the home **Build log** feed (its subsystem filter count bumps too) + its own page at `/fsae/<slug>` |
 | Project | `src/content/projects/<slug>.mdx` | Card in the home **Build log** feed (the Projects filter count bumps too) + its own page at `/projects/<slug>` |
 | Photo or film moment | `src/content/photography/<NN-slug>.md` | Auto-packed into the `/photography` archive grid; the home photography card's count updates |
-| Timeline event | one object in `src/config/timeline.ts` | A card on the `/timeline` spine, branch side and year handled automatically |
 | Position / affiliation | one object in `positions[]` in `src/config/site.ts` | The lines under your name in the home hero |
 
 The Build log is one merged feed of FSAE posts and projects, newest first, with
@@ -27,8 +26,8 @@ out correctly. **You never touch the filter to add an entry** - the filter reads
 its categories and counts from the feed at build time, so a new post or project
 joins the right filter automatically. (Adding a whole new *filter* is a separate,
 rare task: see [Adding or changing a build-log filter](#adding-or-changing-a-build-log-filter).)
-Sorting is automatic: the feed by `date` (newest first), photography by `order`,
-timeline by year and date.
+Sorting is automatic: the feed by `date` (newest first) and photography by
+`order`.
 
 ## A new FSAE build-log post
 
@@ -230,28 +229,6 @@ Practical notes:
   index tile hides itself.
 - To reorder the archive, change `order` values (and ideally the `NN-` filename
   prefix to match); the packer re-lays everything out at build time.
-
-## A new timeline event
-
-The `/timeline` page renders entirely from `src/config/timeline.ts`. Add an
-object to the `events` array of the right year (or add a whole new year block
-with a `theme` word) and the spine lays it out: branch side, node color by
-`kind`, and the ghost year numeral all derive from the data.
-
-```ts
-{
-  id: 'first-track-day',            // unique, kebab-case
-  date: '2026-08-15',               // ISO date, shown on the card
-  title: 'First track day with the DSO stack',
-  kind: 'fsae',                     // 'milestone' | 'fsae' | 'project' | 'photo'
-  weight: 2,                        // optional: 2 = major event, bigger glowing node
-  why: 'A few honest lines on why this moment mattered.',
-  media: { type: 'photo', alt: 'The car lined up at the first cone gate.' },
-},
-```
-
-`media.src` is optional: leave it off and the card shows a "photo pending"
-frame with the alt text; point it at a file under `public/` when you have one.
 
 ## A new position or affiliation
 

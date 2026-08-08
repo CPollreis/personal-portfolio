@@ -1,8 +1,8 @@
 /* =========================================================================
-   MOMENTS - page-scoped styles for /photography.
-   The creative counterpart to the site's HUD language: near-pure black,
-   white neo-grotesque display type (Archivo), hairline dividers, film-toned
-   frames. Cyan survives only as a whisper (tiny indices, focus, hovers).
+   GALLERY - page-scoped styles for /photography.
+   Near-pure black ground, hairline dividers, film-toned frames, and Archivo
+   for the captions. The page header itself uses the site's own HUD language;
+   nothing here styles display type.
    ========================================================================= */
 
 /* Archivo Variable with the width axis, this page only */
@@ -14,80 +14,8 @@
   --m-bg: #000;
   --m-line: rgba(255, 255, 255, 0.1);
   --m-dim: #8a8a8a;
-  --m-ghost: #262626;
   font-family: var(--grotesk);
   background: var(--m-bg);
-}
-
-/* ---- typography ------------------------------------------------------- */
-
-/* The wordmark ("Moments"). Elegant script/cursive, centered, sized in vw so
-   the word spans roughly two-thirds of the viewport across screen sizes. Uses
-   a system script stack that degrades to an italic serif, so no web font is
-   fetched. */
-.m-display {
-  font-family: "Snell Roundhand", "Apple Chancery", "Segoe Script",
-    "Brush Script MT", "Palatino Linotype", "Book Antiqua", Georgia, cursive;
-  font-style: italic;
-  font-weight: 500;
-  font-size: clamp(3.5rem, 17vw, 17rem);
-  line-height: 0.9;
-  letter-spacing: normal;
-  white-space: nowrap;
-  color: #f5f5f4;
-  user-select: none;
-  /* Optical centering: the italic script's slant and the M's left swash push
-     the ink right of the text box, so text-align alone reads off-center. The
-     nudge is in em, so it stays proportional at every viewport/font size. */
-  transform: translateX(-0.14em);
-}
-
-/* Small crosshead label: "✳ THE ARCHIVE" */
-.m-label {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6em;
-  font-family: var(--grotesk);
-  font-size: 0.72rem;
-  font-weight: 500;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--m-dim);
-}
-
-/* Mid-size editorial statement */
-.m-statement {
-  font-family: var(--grotesk);
-  font-weight: 530;
-  font-stretch: 108%;
-  font-size: clamp(2.5rem, 5.6vw, 5.25rem);
-  line-height: 1;
-  letter-spacing: -0.03em;
-  color: #f5f5f4;
-}
-
-/* Ghost list lines behind the marquee (the dim "services" column) */
-.m-ghost {
-  font-family: var(--grotesk);
-  font-style: italic;
-  font-weight: 480;
-  font-size: clamp(2.2rem, 5vw, 4.5rem);
-  line-height: 1.18;
-  letter-spacing: -0.02em;
-  color: var(--m-ghost);
-  white-space: nowrap;
-  user-select: none;
-}
-
-/* Bright italic marquee line that crosses the ghost list */
-.m-marquee-text {
-  font-family: var(--grotesk);
-  font-style: italic;
-  font-weight: 500;
-  font-size: clamp(2.4rem, 5.4vw, 4.75rem);
-  letter-spacing: -0.02em;
-  color: #f5f5f4;
-  white-space: nowrap;
 }
 
 /* ---- frames (gallery tiles) ------------------------------------------- */
@@ -175,95 +103,9 @@
   color: var(--m-dim);
 }
 
-/* ---- chrome ------------------------------------------------------------ */
+/* ---- lightbox ---------------------------------------------------------- */
 
-/* "scroll down" pill with the circled arrow */
-.m-scroll {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.75rem;
-  font-family: var(--grotesk);
-  font-weight: 500;
-  font-size: 1.35rem;
-  letter-spacing: -0.01em;
-  color: #f5f5f4;
-}
-.m-scroll .m-scroll-ring {
-  display: grid;
-  place-items: center;
-  width: 2rem;
-  height: 2rem;
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  border-radius: 999px;
-}
-.m-scroll svg {
-  animation: m-bob 2.2s ease-in-out infinite;
-}
-@keyframes m-bob {
-  0%, 100% { transform: translateY(-1px); }
-  50% { transform: translateY(2px); }
-}
-
-/* Hairline utilities that match the reference's grid strokes */
-.m-hairline-y {
-  width: 1px;
-  background: var(--m-line);
-}
-
-/* ---- hero filmstrip -----------------------------------------------------
-   Ambient auto-scrolling slideshow behind the wordmark. Purely decorative:
-   no pointer events, dimmed + scrimmed so the type stays crisp. */
-.m-strip {
-  overflow: hidden;
-  pointer-events: none;
-  opacity: 0.8;
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
-  mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
-}
-.m-strip-track {
-  display: flex;
-  width: max-content;
-  height: 100%;
-  align-items: center;
-  filter: brightness(0.95) saturate(0.95);
-  animation: m-strip-scroll 80s linear infinite;
-}
-.m-strip-cell {
-  height: 68%;
-}
-/* As the track scrolls, its linear translateX lands on fractional-pixel
-   positions and the compositor can round the object-cover video's edge a hair
-   short of the overflow-hidden cell, exposing a ~1px sliver of the cell
-   background (worst in Firefox). Two defenses: video cells use a dark ground
-   instead of the bright stripArt scenes (set inline in index.astro), so any
-   seam reads black on black; and the video overscans 1px past every edge so
-   there is usually no seam at all. No translateZ layer promotion here: it made
-   Firefox snap the promoted layer's edges to whole pixels, which swallowed the
-   overscan on one side and re-exposed the seam. The specificity here (0,1,1)
-   overrides the Tailwind inset-0/h-full/w-full utilities. */
-.m-strip-cell video {
-  inset: -1px;
-  width: calc(100% + 2px);
-  height: calc(100% + 2px);
-}
-.m-strip::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgba(5, 5, 5, 0.22), rgba(5, 5, 5, 0.42));
-}
-@keyframes m-strip-scroll {
-  to {
-    transform: translateX(-50%);
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .m-strip-track {
-    animation: none;
-  }
-}
-
-/* Lightbox entrance keyframes (referenced by inline styles in the island) */
+/* Entrance keyframes (referenced by inline styles in the island) */
 @keyframes m-fade {
   from { opacity: 0; }
   to { opacity: 1; }

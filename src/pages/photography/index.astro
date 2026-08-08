@@ -1,10 +1,9 @@
 ---
 /**
- * /photography - "Moments". The creative counterpart to the rest of the site:
- * pure black, huge cropped Archivo display type with frames overlapping it,
- * hairline dividers, and a "Feature Lead" archive grid (archiveGrid.ts) that
- * grows as new entries are added to the collection. Clicking any frame opens
- * the shared-element lightbox.
+ * /photography - the gallery. A plain page header in the site's own language
+ * (no display wordmark, no ambient filmstrip) over the "Feature Lead" archive
+ * grid (archiveGrid.ts), which grows as new entries are added to the
+ * collection. Clicking any frame opens the shared-element lightbox.
  */
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
@@ -12,15 +11,7 @@ import MomentFrame from '../../components/photography/MomentFrame.astro';
 import MomentLightbox, { type Moment } from '../../components/photography/MomentLightbox.tsx';
 import { momentBackdrop } from '../../components/photography/backdrop';
 import { archiveShape, packArchive } from '../../components/photography/archiveGrid';
-import { stripArt } from '../../components/photography/stripArt';
-import HeaderMedia from '../../components/layout/HeaderMedia.astro';
-import { withBase } from '../../config/paths';
 import '../../styles/moments.css';
-
-/* Optional footage behind the whole hero, home-hero style: set a video
-   (public/ path, e.g. '/videos/hero-loop-web.mp4') or an image path to switch
-   it on. It renders beneath the auto-scrolling filmstrip. */
-const headerMedia: { video?: string; image?: string } = {};
 
 const frames = (await getCollection('photography')).sort(
   (a, b) => a.data.order - b.data.order || b.data.date.getTime() - a.data.date.getTime(),
@@ -71,66 +62,22 @@ const archive = packArchive(
 ---
 
 <Base
-  title="Moments"
+  title="Photography"
   description="A running archive of photos and film by Caleb Pollreis: roads, nights, water, light, and the people along the way."
 >
   <div class="moments">
-    <!-- ===== HERO: giant cropped wordmark with a frame overlapping it ===== -->
-    <header class="relative overflow-hidden border-b border-white/10">
-      <HeaderMedia {...headerMedia} />
-
-      <div class="relative mt-4 pb-10 md:mt-2 md:pb-14">
-        <!-- ambient filmstrip: an auto-scrolling, non-interactive slideshow of
-             the archive drifting behind the wordmark -->
-        <div class="m-strip absolute inset-0 z-0" aria-hidden="true">
-          <div class="m-strip-track">
-            {
-              [0, 1].map(() => (
-                <div class="flex h-full shrink-0 items-center gap-6 pr-6">
-                  {moments.map((m, i) => (
-                    <div
-                      class="m-strip-cell relative shrink-0 overflow-hidden"
-                      style={
-                        /* Video cells get a dark ground instead of stripArt:
-                           any subpixel seam at the video's edge during the
-                           scroll animation must read black, not orange. */
-                        m.kind === 'video'
-                          ? `aspect-ratio:${m.ratio}; background:#0a0a0a`
-                          : `aspect-ratio:${m.ratio}; background-image:${stripArt(i)}; background-size:cover; background-position:center`
-                      }
-                    >
-                      {m.kind === 'video' && (
-                        <video
-                          data-header-video
-                          class="absolute inset-0 h-full w-full object-cover"
-                          autoplay
-                          muted
-                          loop
-                          playsinline
-                          preload="metadata"
-                          tabindex="-1"
-                        >
-                          <source src={withBase('/videos/hero-loop-web.webm')} type="video/webm" />
-                          <source src={withBase('/videos/hero-loop-web.mp4')} type="video/mp4" />
-                        </video>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              ))
-            }
-          </div>
-        </div>
-        <div data-reveal="clip">
-          <h1 class="m-display relative z-[1] text-center">Moments</h1>
-        </div>
-      </div>
-
+    <!-- ===== HEADER: plain, same title treatment as the home sections ===== -->
+    <header class="container-hud pt-12 md:pt-16">
+      <h1 class="hud-title border-b border-line pb-3">Photography</h1>
+      <p class="mt-4 max-w-xl text-sm leading-relaxed text-muted">
+        A running archive of photos and film: race cars, prairie storms, and Winnipeg at
+        minus 30. Click any frame to open it.
+      </p>
     </header>
 
     <!-- ===== ARCHIVE: the "Feature Lead" grid ===== -->
     <section id="archive" class="relative scroll-mt-16">
-      <div class="container-hud py-12 md:py-16">
+      <div class="container-hud pt-8 pb-16 md:pt-10 md:pb-24">
         <div class="m-archive">
           <div class="m-archive-grid">
             {

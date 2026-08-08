@@ -41,12 +41,12 @@ npm run preview    # serve the production build
 
 The site is a **one-pager with satellite pages**: `/` scrolls through the bio
 hero, an About strip, a filterable **Build log** (FSAE posts + personal projects
-in one feed), and teaser cards for Photography and Timeline; entry writeups, the
-gallery, and the timeline live on their own pages linked from those sections.
+in one feed), and a Photography teaser; entry writeups and the gallery live on
+their own pages linked from those sections.
 
 ```
 src/
-  pages/          # routes: index (the one-page site), timeline, colophon, 404,
+  pages/          # routes: index (the one-page site), colophon, 404,
                   #   fsae/[...slug], projects/[...slug], photography/
   layouts/        # Base.astro wraps every portfolio page
   components/     # UI + content components (Gallery, VideoEmbed, motion, ...)
@@ -54,7 +54,7 @@ src/
   content.config.ts  # typed frontmatter schemas (source of truth)
   scripts/        # shared client scripts: motion.ts, chrome.ts, footage.ts
   styles/         # global.css (design tokens via @theme), moments.css
-  config/         # site.ts (positions/socials), paths.ts, fsae.ts, timeline.ts
+  config/         # site.ts (positions/socials), paths.ts, fsae.ts
 public/           # served as-is: videos/, resume.pdf, favicon.svg, og-default.png, CNAME
 ```
 
@@ -70,7 +70,6 @@ in the [Starlight docs](https://calebpollreis.com/docs/adding-content).
 | FSAE build-log post | `src/content/fsae/<slug>.mdx` | Home Build log feed (subsystem filter count bumps) + `/fsae/<slug>` |
 | Project | `src/content/projects/<slug>.mdx` | Home Build log feed (Projects filter count bumps) + `/projects/<slug>` |
 | Photo / film moment | `src/content/photography/<NN-slug>.md` | Auto-packed `/photography` archive |
-| Timeline event | one object in `src/config/timeline.ts` | A card on the `/timeline` spine |
 | Position / affiliation | one row in `positions[]` in `src/config/site.ts` | Under your name in the hero |
 
 The `cover` image in an FSAE/project entry doubles as its Build log card
@@ -224,10 +223,6 @@ the lead figure. Wide, darker shots work best.
 - `public/resume.pdf` - replace the placeholder with your real resume.
 - `public/og-default.png` - regenerate if branding changes.
 - `astro.config.mjs` - set `site` to your real production domain.
-- `src/config/timeline.ts` - **every moment on /timeline is a realistic
-  placeholder.** Edit titles, dates, and `why` blurbs to your real history, and
-  point each `media.src` at real photos/videos under `public/` (e.g.
-  `/timeline/first-drive.jpg`). The spine layout adapts automatically.
 
 ## Deploy
 

@@ -22,21 +22,21 @@ The site is a one-pager with satellite pages. Routes come from files in
 - `index.astro` (`/`): the whole site in one scroll. A compact bio hero
   (positions and links from `src/config/site.ts`) over the stabilized car
   footage, then anchor sections `#about`, `#fsae` (the **Build log**: FSAE
-  posts and personal projects merged into one filterable feed), and two
-  link-out teaser cards for `#photography` and `#timeline`. The feed renders
+  posts and personal projects merged into one filterable feed), and a
+  `#photography` teaser that links out to the gallery. The feed renders
   straight from the content collections, so it grows automatically as entries
   are added. See [The build log and its filter](#the-build-log-and-its-filter)
-  below for how the feed and its filter rail work. (The FSAE role trajectory
-  that used to head this section now lives on the `/timeline` spine.)
+  below for how the feed and its filter rail work.
 - `fsae/[...slug].astro` and `projects/[...slug].astro`: one dynamic route per
   build-log entry / project writeup.
 - `photography/index.astro`: the gallery (a single page that mounts the lightbox
   island). Its archive section is laid out by the "Feature Lead" packer in
   `src/components/photography/archiveGrid.ts`, computed from the photography
   collection at build time.
-- `timeline.astro`, `colophon.astro`, `404.astro`: one file per route.
+- `colophon.astro`, `404.astro`: one file per route.
 - The old tab URLs redirect: `/fsae` → `/#fsae`, `/projects` → `/#projects`,
-  `/about` → `/` (see `redirects` in `astro.config.mjs`).
+  `/about` → `/`, and the retired `/timeline` → `/` (see `redirects` in
+  `astro.config.mjs`).
 
 The dynamic `[...slug]` pages read their collection with `getStaticPaths()` and
 render each entry, so adding a Markdown file is all it takes to publish a new

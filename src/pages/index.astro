@@ -4,9 +4,9 @@
  *
  * Structure (anchors match the nav): compact bio hero with the car footage
  * kept small behind a blurred text panel, then #about, #fsae (which hosts the
- * unified work log), #photography, #timeline. Everything a visitor needs is
- * reachable without guessing; deep pages (post writeups, the gallery, the
- * timeline) hang off their sections.
+ * unified work log), #photography. Everything a visitor needs is reachable
+ * without guessing; deep pages (post writeups, the gallery) hang off their
+ * sections.
  *
  * The build log is one filterable feed: FSAE entries and personal projects
  * together, filtered by a two-tier index rail on desktop (top-level Projects
@@ -18,8 +18,7 @@
  * Content sources: src/config/site.ts (positions, links, availability),
  * src/config/fsae.ts (subsystem metadata), and the fsae/projects/photography
  * content collections. To append a project or post, add a file to the
- * collection; to change a position, edit site.ts. (The FSAE role trajectory
- * now lives on the /timeline spine, not here.)
+ * collection; to change a position, edit site.ts.
  */
 import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
@@ -28,11 +27,9 @@ import SubsystemBadge from '../components/fsae/SubsystemBadge.astro';
 import SocialIcon from '../components/ui/SocialIcon.astro';
 import Button from '../components/ui/Button.astro';
 import Placeholder from '../components/media/Placeholder.astro';
-import MomentLightbox, { type Moment } from '../components/photography/MomentLightbox.tsx';
 import { momentBackdrop } from '../components/photography/backdrop';
 import { subsystems, type Subsystem } from '../config/fsae';
 import { site, positions, socials } from '../config/site';
-import { timeline } from '../config/timeline';
 import { withBase } from '../config/paths';
 
 const fsaePosts = (await getCollection('fsae', ({ data }) => !data.draft)).sort(
@@ -104,45 +101,6 @@ const photoHighlights = [
   .filter((x) => (seenPhoto.has(x.i) ? false : seenPhoto.add(x.i)))
   .slice(0, 3);
 
-/* Full serialized payload for the in-page lightbox, indexed to match photoFrames
-   so a highlight's data-moment-index lines up. Clicking a highlight opens the
-   viewer; arrow keys / the prev-next buttons then step through every moment. */
-const fmtMomentDate = (d: Date) =>
-  d
-    .toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' })
-    .toUpperCase();
-const moments: Moment[] = photoFrames.map((f, i) => ({
-  title: f.data.title,
-  kind: f.data.kind,
-  dateDisplay: fmtMomentDate(f.data.date),
-  story: f.data.story,
-  location: f.data.location,
-  camera: f.data.camera,
-  lens: f.data.lens,
-  iso: f.data.iso,
-  aperture: f.data.aperture,
-  focal: f.data.focal,
-  fps: f.data.fps,
-  quality: f.data.quality,
-  ratio: f.data.ratio,
-  src: f.data.image?.src,
-  video: f.data.video,
-  backdrop: momentBackdrop(i),
-}));
-const eventCount = timeline.reduce((n, y) => n + y.events.length, 0);
-/* Latest year on the spine: drives the ghost numeral on the timeline teaser
-   card, echoing the stroke-outlined year that rides the right edge of the
-   /timeline page. */
-const latestYear = timeline[timeline.length - 1].year;
-
-/* Three real stars for the timeline teaser: the earliest, a middle, and the
-   latest weight-2 event, so the card previews the actual spine instead of a
-   decorative motif. */
-const stars = timeline.flatMap((y) =>
-  y.events.filter((e) => e.weight === 2).map((e) => ({ year: y.year, title: e.title })),
-);
-const timelineTeaser = [stars[0], stars[Math.floor(stars.length / 2)], stars[stars.length - 1]];
-
 const fmtDate = (d: Date) =>
   d
     .toLocaleDateString('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' })
@@ -150,34 +108,6 @@ const fmtDate = (d: Date) =>
 
 /* Shared thumbnail frame classes: light grey outline, YouTube-card style. */
 const thumbFrame = 'border border-faint/50 transition-colors group-hover:border-faint';
-
-/* About data modules that fill the space beside the portrait: a stat rail and
-   the toolchain (board options 01 + 02). Real numbers off the FSAE work. */
-const aboutStats = [
-  { n: '2022', l: 'Building since' },
-  { n: '10+', l: 'Team led' },
-  { n: '400 V', l: 'Accumulator' },
-  { n: '2028', l: 'Driverless target' },
-];
-/* Toolchain: the autonomy + firmware skills off the resume (public/resume.pdf).
-   Flagship two (C++, ROS 2) highlighted; the rest split firmware/embedded
-   (STM32, FreeRTOS, CAN, C) and autonomy/perception (Jetson Orin, CUDA,
-   TensorRT, PyTorch, OpenCV, Eigen). */
-const toolchain = [
-  { name: 'C++', hot: true },
-  { name: 'ROS 2', hot: true },
-  { name: 'C', hot: false },
-  { name: 'Python', hot: false },
-  { name: 'STM32', hot: false },
-  { name: 'FreeRTOS', hot: false },
-  { name: 'CAN', hot: false },
-  { name: 'Jetson Orin', hot: false },
-  { name: 'CUDA', hot: false },
-  { name: 'TensorRT', hot: false },
-  { name: 'PyTorch', hot: false },
-  { name: 'OpenCV', hot: false },
-  { name: 'Eigen', hot: false },
-];
 ---
 
 <Base padTop={false}>
@@ -284,11 +214,11 @@ const toolchain = [
   <!-- ============ About ============ -->
   <section id="about" class="scroll-mt-16">
     <div class="container-hud pt-12 md:pt-16">
-      <!-- about strip, photo-led: the portrait takes half the section and the
-           intro leads with an oversized statement line above the description.
-           Swap the Placeholder for an <Image> once the portrait exists. -->
+      <!-- about strip, photo-led: the portrait leads and the intro sits beside
+           it, centered against it so the two columns balance. Swap the
+           Placeholder for an <Image> once the portrait exists. -->
       <p class="hud-title">About</p>
-      <div class="mt-8 grid gap-6 md:grid-cols-[1fr_2fr] md:items-start md:gap-10">
+      <div class="mt-8 grid gap-6 md:grid-cols-[minmax(0,20rem)_1fr] md:items-center md:gap-12">
         <div>
           <Placeholder
             ratio="3/4"
@@ -307,41 +237,6 @@ const toolchain = [
             no one assigns it.
           </p>
           <p class="mt-5 font-mono text-xs tracking-wide text-cyan">/ Caleb Pollreis</p>
-
-          <!-- data modules filling the space beside the portrait: the stat rail
-               and the toolchain (board options 01 + 02). -->
-          <div class="mt-10 border-t border-line pt-10">
-            <div class="grid grid-cols-2 gap-px border border-line bg-line sm:grid-cols-4">
-              {
-                aboutStats.map((s) => (
-                  <div class="bg-surface px-4 py-5">
-                    <div class="tabular font-display text-2xl font-semibold tracking-tight text-ink">
-                      {s.n}
-                    </div>
-                    <p class="hud-label mt-1.5">{s.l}</p>
-                  </div>
-                ))
-              }
-            </div>
-
-            <div class="mt-8">
-              <p class="hud-label">Toolchain</p>
-              <ul class="mt-3 flex flex-wrap gap-2">
-                {
-                  toolchain.map((t) => (
-                    <li
-                      class:list={[
-                        'border px-2.5 py-1 font-mono text-xs tracking-wide',
-                        t.hot ? 'border-cyan/45 text-cyan' : 'border-line text-muted',
-                      ]}
-                    >
-                      {t.name}
-                    </li>
-                  ))
-                }
-              </ul>
-            </div>
-          </div>
         </div>
       </div>
     </div>
@@ -353,10 +248,9 @@ const toolchain = [
        Desktop filters via the sticky two-tier index rail; mobile collapses to
        notched chips. #projects lands here with the Projects filter preselected
        and #buildlog with the FSAE grouping (see the script at the bottom of
-       this page). The FSAE role trajectory that used to head this section now
-       lives on the /timeline spine. -->
-  <section id="fsae" class="scroll-mt-16 border-b border-line">
-    <div class="container-hud py-16 md:py-24">
+       this page). -->
+  <section id="fsae" class="scroll-mt-16">
+    <div class="container-hud pt-16 pb-12 md:pt-24 md:pb-16">
       <p id="projects" class="hud-title scroll-mt-16 border-b border-line pb-3">
         Build log · {feed.length} entries
       </p>
@@ -520,100 +414,42 @@ const toolchain = [
     </div>
   </section>
 
-  <!-- ============ Photography / Timeline ============ -->
-  <div class="border-b border-line">
-    <div class="container-hud grid gap-px py-12 md:grid-cols-2 md:gap-6 md:py-16">
-      <section id="photography" class="scroll-mt-16">
-        <div class="card-hud relative flex h-full flex-col gap-6 border border-line bg-surface p-6">
-          <a href={withBase('/photography')} class="group/head block">
-            <p class="hud-title transition-colors group-hover/head:text-cyan">Photography</p>
-            <p class="mt-2 max-w-md text-sm text-muted">
-              {momentCount} moments from the field: race cars, prairie storms, and Winnipeg at
-              minus 30.
-            </p>
-          </a>
+  <!-- ============ Photography ============ -->
+  <!-- Teaser only: the copy and the highlight strip sit side by side and the
+       one way in is the gallery link. The frames themselves are deliberately
+       not interactive (an in-page viewer here duplicated /photography). -->
+  <section id="photography" class="scroll-mt-16 border-b border-line">
+    <div class="container-hud pt-12 pb-16 md:pt-16 md:pb-24">
+      <p class="hud-title border-b border-line pb-3">Photography</p>
 
-          <!-- highlighted frames: click any to open the viewer in place, then
-               arrow / click through every moment. Drawn with the same generated
-               art the gallery uses so indices (and the flight) line up; real
-               photos flow through once added. -->
-          <div class="grid grid-cols-3 gap-2">
-            {
-              photoHighlights.map(({ f, i }) => (
-                <button
-                  type="button"
-                  data-moment-index={i}
-                  class="group/frame relative aspect-square overflow-hidden border border-line/60 transition-colors hover:border-cyan"
-                  aria-haspopup="dialog"
-                  aria-label={`Open ${f.data.kind === 'video' ? 'film' : 'photo'}: ${f.data.title}`}
-                >
-                  <span data-media class="absolute inset-0 overflow-hidden">
-                    <span
-                      class="absolute inset-0 transition-transform duration-500 group-hover/frame:scale-105"
-                      style={`background:${momentBackdrop(i)}`}
-                      aria-hidden="true"
-                    />
-                  </span>
-                  <span class="absolute bottom-1.5 left-2 font-mono text-[0.55rem] tracking-[0.14em] text-white/70">
-                    {String(i + 1).padStart(2, '0')}
-                  </span>
-                </button>
-              ))
-            }
-          </div>
-
-          <a
-            href={withBase('/photography')}
-            class="hud-label mt-auto inline-flex w-fit transition-colors hover:text-cyan"
-          >
-            Open the gallery →
-          </a>
+      <div class="mt-8 md:grid md:grid-cols-[1fr_2fr] md:items-start md:gap-10">
+        <div>
+          <p class="max-w-md text-sm leading-relaxed text-muted">
+            {momentCount} photos and films from the field: race cars, prairie storms, and
+            Winnipeg at minus 30.
+          </p>
+          <Button href="/photography" variant="ghost" size="sm" class="mt-6">
+            Open the gallery
+          </Button>
         </div>
-      </section>
 
-      <section id="timeline" class="mt-6 scroll-mt-16 md:mt-0">
-        <a
-          href={withBase('/timeline')}
-          class="card-hud group relative flex h-full flex-col justify-between gap-6 overflow-hidden border border-line bg-surface p-6"
-        >
-          <!-- ghost year numeral: stroke-outlined, bleeding off the bottom-right
-               to fill the void beside the mini spine. Same motif that rides the
-               right edge of the /timeline page. -->
-          <span
-            class="tls-teaser-ghost pointer-events-none absolute -bottom-8 -right-3 select-none font-display font-bold leading-none tracking-tight text-transparent"
-            aria-hidden="true"
-          >{latestYear}</span>
-          <div class="relative">
-            <p class="hud-title">Timeline</p>
-            <p class="mt-2 max-w-md text-sm text-muted">
-              {eventCount} milestones since 2022 on one line, year by year.
-            </p>
-          </div>
-          <!-- mini spine: three real stars off the /timeline data -->
-          <ol class="ml-1 space-y-4 border-l border-line pl-5">
-            {
-              timelineTeaser.map((e) => (
-                <li class="relative">
-                  <span
-                    class="absolute -left-[24px] top-1.5 h-2 w-2 rounded-full bg-cyan/80"
-                    aria-hidden="true"
-                  />
-                  <p class="hud-label tabular text-accent">{e.year}</p>
-                  <p class="mt-0.5 text-sm text-ink">{e.title}</p>
-                </li>
-              ))
-            }
-          </ol>
-          <span class="hud-label transition-colors group-hover:text-cyan">Open the timeline →</span>
-        </a>
-      </section>
+        <!-- highlight strip: drawn with the same generated art the gallery uses
+             so the indices line up; real photos flow through once added. -->
+        <div class="mt-8 grid grid-cols-3 gap-3 md:mt-0" aria-hidden="true">
+          {
+            photoHighlights.map(({ i }) => (
+              <div class="relative aspect-square overflow-hidden border border-line/60">
+                <span class="absolute inset-0" style={`background:${momentBackdrop(i)}`} />
+                <span class="absolute bottom-1.5 left-2 font-mono text-[0.55rem] tracking-[0.14em] text-white/70">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+              </div>
+            ))
+          }
+        </div>
+      </div>
     </div>
-  </div>
-
-  <!-- In-page viewer for the photography highlights: opens on a highlight click
-       and steps through every moment with the arrow keys or the prev/next
-       buttons. Same component the /photography gallery uses. -->
-  <MomentLightbox client:load moments={moments} />
+  </section>
 </Base>
 
 <script>
@@ -685,22 +521,3 @@ const toolchain = [
 
   document.addEventListener('astro:page-load', initLogFilter);
 </script>
-
-<!-- keyframes the lightbox references for its fade-in and info-panel slide
-     (defined in moments.css for /photography; scoped copy for this page) -->
-<style is:global>
-  /* Timeline teaser ghost year: stroke-outlined transparent numeral, sized to
-     fill the card's right side. Matches the .tls-ghost-num motif on /timeline. */
-  .tls-teaser-ghost {
-    font-size: clamp(5rem, 13vw, 8.5rem);
-    -webkit-text-stroke: 1.5px color-mix(in srgb, var(--color-line) 88%, var(--color-accent));
-  }
-  @keyframes m-fade {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-  @keyframes m-slide {
-    from { opacity: 0; transform: translateX(28px); }
-    to { opacity: 1; transform: none; }
-  }
-</style>
