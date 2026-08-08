@@ -16,7 +16,7 @@ import { ensureServer } from './lib/server.mjs';
 
 // One-page site: /fsae and /projects are redirect stubs now; a detail page
 // stands in for them.
-const CORE_PAGES = ['/', '/fsae/bms-can-integration', '/photography', '/timeline'];
+const CORE_PAGES = ['/', '/fsae/bms-can-integration', '/photography', '/colophon'];
 const failures = [];
 
 async function videoPlaying(page) {
