@@ -8,12 +8,18 @@ tags: [Accumulator, HV safety, Tab testing, Harnessing]
 draft: false
 ---
 
-import Gallery from '../../components/content/Gallery.astro';
+import Step from '../../components/content/Step.astro';
+
+{/* Each section below is a Step. To give one a held frame, import the photo and
+    pass it: <Step figure={tabRig} caption="Tab test rig under load">
+    The picture then stays put while these words scroll past it. */}
 
 The accumulator is the densest concentration of energy, cost, and risk on the
 car, and building one is as much about process as it is about parts. This entry
 covers how we manufacture the pack: qualifying cells, assembling segments, and
 the high-voltage safety habits that make it routine instead of scary.
+
+<Step>
 
 ## Qualifying every cell
 
@@ -27,10 +33,9 @@ measurements from the high current supply through an ADC**, logging every test
 so a marginal tab is a number in a spreadsheet, not a judgment call at the
 bench.
 
-<Gallery
-  labels={['BENCH · TAB TEST RIG', 'DATA · CURRENT LOG', 'SEGMENT · CELL STACK', 'PACK · FINAL ASSEMBLY']}
-  cols={2}
-/>
+</Step>
+
+<Step>
 
 ## Segment assembly
 
@@ -40,6 +45,10 @@ from power paths so the BMS wiring stays short and serviceable. Torque values
 get written down and checked, because a loose busbar connection is a hot spot
 waiting for competition.
 
+</Step>
+
+<Step>
+
 ## HV and LV harnessing
 
 Wiring the pack is two disciplines in one box. The **HV side** is busbars,
@@ -48,6 +57,10 @@ mind. The **LV side** is the BMS sense and isoSPI network, kept physically
 separated from HV runs so a chafed wire can never bridge the two. Everything is
 labeled and strain-relieved before the lid goes on, since the inside of a sealed
 accumulator is the last place you want a mystery.
+
+</Step>
+
+<Step>
 
 ## Working at 400 volts
 
@@ -67,3 +80,5 @@ The payoff of all this discipline is trust. A pack whose every cell has a test
 record and whose every connection has a checklist behind it is a pack the whole
 team can work on without fear, and that trust is what lets an electric car
 program move fast.
+
+</Step>

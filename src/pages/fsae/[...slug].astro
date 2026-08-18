@@ -1,10 +1,8 @@
 ---
 import { getCollection, render } from 'astro:content';
-import { Image } from 'astro:assets';
 import Base from '../../layouts/Base.astro';
 import SubsystemBadge from '../../components/fsae/SubsystemBadge.astro';
 import VideoEmbed from '../../components/content/VideoEmbed.astro';
-import Placeholder from '../../components/media/Placeholder.astro';
 import CoordinateAxis from '../../components/hud/CoordinateAxis.astro';
 import HeaderMedia from '../../components/layout/HeaderMedia.astro';
 import { subsystems } from '../../config/fsae';
@@ -31,19 +29,19 @@ const hasHeroMedia = Boolean(post.data.heroVideo || heroImg);
 
 <Base title={post.data.title} description={post.data.summary}>
   <article class="pb-24">
-    <!-- header (title in focus over the entry's hero image, home-hero style) -->
+    <!-- hero: the entry's own photograph full bleed, title set into the foot of
+         it. The nav breadcrumb is the way back, so no link sits here too. -->
     <header
       class:list={[
-        'relative overflow-hidden border-b border-line py-10',
-        hasHeroMedia ? 'md:py-16' : 'md:py-12',
+        'relative flex flex-col justify-end overflow-hidden border-b border-line',
+        hasHeroMedia
+          ? 'min-h-[clamp(22rem,52vh,34rem)] pt-24 pb-10 md:pb-14'
+          : 'pt-28 pb-10 md:pb-14',
       ]}
       style={`--sc:${meta.color}`}
     >
-      <HeaderMedia video={post.data.heroVideo} image={heroImg} />
+      <HeaderMedia video={post.data.heroVideo} image={heroImg} focus="bottom" />
       <div class="container-hud relative max-w-3xl">
-        <a href={withBase('/#fsae')} class="link-hud mb-8 inline-block font-mono text-xs uppercase tracking-widest text-muted hover:text-ink">
-          ← Build log
-        </a>
         <div class="mb-5 flex flex-wrap items-center gap-3">
           <SubsystemBadge subsystem={post.data.subsystem} />
           <span class="hud-label tabular">{dateStr}</span>
@@ -65,33 +63,24 @@ const hasHeroMedia = Boolean(post.data.heroVideo || heroImg);
       </div>
     </header>
 
+    <!-- lead clip, when the entry has one. The cover is never repeated here:
+         the hero above is the cover, and an entry with no picture opens on its
+         words rather than on an empty frame. -->
+    {
+      post.data.video && (
+        <div class="container-hud mt-10 max-w-3xl">
+          <VideoEmbed url={post.data.video} title={post.data.title} />
+        </div>
+      )
+    }
+
+    <!-- MDX body. Full width: <Step> blocks span it and hold their figure
+         while the words beside them scroll; loose prose stays in a column. -->
+    <div class="prose-hud entry-body mt-12">
+      <Content />
+    </div>
+
     <div class="container-hud max-w-3xl">
-      <!-- lead media: video > cover (unless the header already used it) > placeholder -->
-      {
-        (post.data.video || (post.data.hero && post.data.cover) || !hasHeroMedia) && (
-          <div class="mt-10">
-            {post.data.video ? (
-              <VideoEmbed url={post.data.video} title={post.data.title} />
-            ) : post.data.hero && post.data.cover ? (
-              <Image
-                src={post.data.cover}
-                alt={post.data.title}
-                widths={[600, 1000, 1600]}
-                sizes="(min-width: 768px) 768px, 100vw"
-                class="w-full border border-line object-cover"
-              />
-            ) : (
-              <Placeholder ratio="16/9" label={`${meta.code} · FIG.LEAD`} seed={0} />
-            )}
-          </div>
-        )
-      }
-
-      <!-- MDX body -->
-      <div class="prose-hud mt-12">
-        <Content />
-      </div>
-
       <div class="mt-16">
         <CoordinateAxis startLabel="EOF" endLabel="↑ TOP" />
 

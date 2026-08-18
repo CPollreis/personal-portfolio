@@ -4,11 +4,19 @@ date: 2024-11-02
 subsystem: firmware
 season: 2025 Season
 summary: "Developing CAN 2.0 communication between our custom PCBs, the battery-management system, and the PM100DX motor controller, on STM32, where a dropped frame is a safety problem."
+cover: ../../assets/buildlog/IMG_1878.jpg
+hero: ../../assets/buildlog/IMG_1878.jpg
 tags: [Embedded C, CAN 2.0, STM32, BMS, PM100DX]
 draft: false
 ---
 
-import Gallery from '../../components/content/Gallery.astro';
+import Step from '../../components/content/Step.astro';
+import topology from '../../assets/buildlog/IMG_1878.jpg';
+import bareBoard from '../../assets/buildlog/IMG_4620.jpg';
+import builtBoard from '../../assets/buildlog/IMG_6022.jpg';
+import stateMachine from '../../assets/buildlog/IMG_4608.jpg';
+import benchRig from '../../assets/buildlog/IMG_5641.jpg';
+import harness from '../../assets/buildlog/IMG_5084.jpg';
 
 An electric FSAE car is a distributed system: custom PCBs, a battery-management
 system watching every cell, and a 3-phase motor controller that turns pack
@@ -16,36 +24,92 @@ energy into lap time. As Software System Lead I developed the **CAN 2.0
 communication** that lets all of them share one picture of the car, running on
 **STM32 microcontrollers** across our custom boards.
 
-## One bus, three dialects
+<Step
+  figure={topology}
+  caption="First topology sketch. Sensor CAN above the firewall line, CAN 2 below, with the nodes that bridge them"
+>
 
 The interesting part of vehicle networking isn't sending frames, it's agreeing
-on what they mean. The work spanned three interfaces:
+on what they mean. Before any of it was code, it was a drawing: every node that
+needed to talk, which bus it sat on, and where the two buses had to meet.
 
-- **Custom PCBs to each other:** defining the message set for our own boards so
-  pedal position, vehicle state, and fault flags arrive predictably.
-- **The BMS:** decoding pack state (voltages, temperatures, fault status) so the
-  rest of the car can react to the accumulator's health.
-- **The PM100DX motor controller:** command and telemetry framing for the
-  3-phase inverter, where a misunderstood message doesn't just log an error, it
-  moves the car.
+Splitting the network was the first real decision. A sensor bus can tolerate a
+dropped frame; a control bus carrying pedal position and vehicle state cannot,
+because those messages have deadlines. Keeping everything on one bus would have
+put the BMS broadcast in the same arbitration queue as the pedal signal.
 
-<Gallery
-  labels={['BENCH · STM32 NODES', 'CANDB · MESSAGE SET', 'TRACE · BUS CAPTURE']}
-  cols={3}
-/>
+The cost of splitting is a transceiver on every node that has to see both, plus
+a firewall crossing that becomes the single most important connector on the car.
 
-## Why this is safety work
+</Step>
+
+<Step
+  figure={bareBoard}
+  caption="Controller board before assembly. Termination sits at the physical ends of the bus, not wherever there was room"
+>
+
+The work spanned three interfaces, and each one is a contract with someone
+else's hardware:
+
+- **Our own PCBs**, where the message set defines how pedal position, vehicle
+  state, and fault flags arrive predictably.
+- **The BMS**, where pack voltages, temperatures, and fault status get decoded
+  so the rest of the car can react to the accumulator's health.
+- **The PM100DX motor controller**, where command and telemetry framing drives a
+  3-phase inverter and a misunderstood message doesn't log an error, it moves
+  the car.
+
+</Step>
+
+<Step
+  figure={stateMachine}
+  caption="The arming sequence. Every transition writes to the dash and to the log, so the car can always say which state it thinks it is in"
+>
+
+The state machine is the part that has to be boring. `goTSA()` arms the tractive
+system, `goRTD()` puts the car in ready-to-drive, and nothing between them is
+allowed to be implicit.
+
+When a car doesn't move at competition, the first question is always which state
+it thinks it's in. A car that can't answer that costs you a session, so every
+transition is written to the dash and to the log before anything else happens.
+
+</Step>
+
+<Step
+  figure={benchRig}
+  caption="Bench rig with the pack simulated, so the whole arming sequence could fail somewhere cheap first"
+>
 
 The BMS exists to keep a high-voltage pack inside its safe envelope, and the
-vehicle's response to a BMS fault travels over this bus. That framing shaped
-the engineering: predictable IDs and priorities, defined behavior when a node
-goes quiet, and bench testing with bus captures before anything touched the
-car. Tools like CANdb++ and PCAN-View lived permanently on my second monitor.
+car's response to a BMS fault travels over this bus. That framing shaped the
+engineering: predictable IDs and priorities, defined behavior when a node goes
+quiet, and bench testing with bus captures before anything touched the car.
 
-## What it taught the team
+Nothing gets plugged into 400 volts to find out whether the firmware is right.
+CANdb++ and PCAN-View lived permanently on my second monitor.
 
-This network is also where I learned to lead: 10+ software members build
+</Step>
+
+<Step
+  figure={harness}
+  caption="Harness build. Every node the topology added is a branch someone has to route, label, and be able to unplug in a paddock"
+>
+
+A schematic finds out whether it was honest when the harness gets built. Node
+count on paper is cheap; node count in a loom is length, weight, connectors, and
+one more thing that can be unplugged wrong at three in the morning.
+
+</Step>
+
+<Step figure={builtBoard} caption="Rev B, populated and ready for the car">
+
+This network is also where I learned to lead. Ten-plus software members build
 against these interfaces, so the message set became documentation, code review
-became teaching, and CI pipelines in GitHub Actions became the way we keep five
-codebases honest. The bus is the contract between every subsystem on the car,
-and contracts are only useful when everyone can read them.
+became teaching, and CI pipelines in GitHub Actions became how we keep five
+codebases honest.
+
+The bus is the contract between every subsystem on the car, and contracts are
+only useful when everyone can read them.
+
+</Step>

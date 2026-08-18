@@ -16,9 +16,16 @@ import { withBase } from '../../config/paths';
 interface Props {
   video?: string;
   image?: ImageMetadata | string;
+  /**
+   * Where the dimming is weighted. 'left' keeps a title block legible against
+   * the left edge (the default, used by 404 and colophon); 'bottom' weights it
+   * under the frame so a title can sit at the foot of a full-bleed entry hero
+   * without the top of the picture being washed out.
+   */
+  focus?: 'left' | 'bottom';
 }
 
-const { video: videoProp, image } = Astro.props;
+const { video: videoProp, image, focus = 'left' } = Astro.props;
 const imgAsset = typeof image === 'string' ? undefined : image;
 /* public/ paths need the base prefix; astro:assets imports are rewritten for us. */
 const video = videoProp ? withBase(videoProp) : undefined;
@@ -57,10 +64,21 @@ const videoWebm = video?.endsWith('.mp4') ? video.replace(/\.mp4$/, '.webm') : u
       ) : (
         <img src={imgUrl} alt="" class="h-full w-full object-cover" loading="eager" />
       )}
-      {/* dimming + focus gradient so the title stays legible over footage */}
-      <div class="absolute inset-0 bg-bg/60" />
-      <div class="absolute inset-0 bg-gradient-to-r from-bg/85 via-bg/45 to-bg/25" />
-      <div class="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-bg to-transparent" />
+      {/* dimming + focus gradient so the title stays legible over the media.
+          A bright daylight frame needs a heavy wash under the title, so the
+          'bottom' variant stacks its stops low rather than spreading them. */}
+      {focus === 'bottom' ? (
+        <>
+          <div class="absolute inset-0 bg-bg/50" />
+          <div class="absolute inset-0 bg-gradient-to-t from-bg via-bg/92 via-32% to-bg/55" />
+        </>
+      ) : (
+        <>
+          <div class="absolute inset-0 bg-bg/60" />
+          <div class="absolute inset-0 bg-gradient-to-r from-bg/85 via-bg/45 to-bg/25" />
+          <div class="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-bg to-transparent" />
+        </>
+      )}
     </div>
   )
 }

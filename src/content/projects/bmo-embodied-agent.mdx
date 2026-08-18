@@ -11,12 +11,18 @@ links:
 draft: false
 ---
 
-import Gallery from '../../components/content/Gallery.astro';
+import Step from '../../components/content/Step.astro';
+
+{/* Each section below is a Step. To give one a held frame, import the photo and
+    pass it: <Step figure={shot} caption="What the picture shows">
+    The picture then stays put while these words scroll past it. */}
 
 BMO is my attempt to build the friendly computer from Adventure Time for real:
 a **local, multimodal AI agent** that lives on my shelf, sees the room, talks
 back, and, because every good roommate should, also plays video games. No
 cloud. Everything runs at home.
+
+<Step>
 
 ## The brain
 
@@ -24,6 +30,10 @@ The core is a **quantized Qwen 3 LLM running on a Raspberry Pi 5**. Getting a
 modern language model to be useful on a Pi is a project in constraints:
 quantization, context budgeting, and deciding what the model actually needs to
 see versus what can be summarized before it ever reaches the prompt.
+
+</Step>
+
+<Step>
 
 ## Ears, voice, and eyes
 
@@ -33,7 +43,9 @@ see versus what can be summarized before it ever reaches the prompt.
 - A **live camera feed** provides real-world context cues, so responses can be
   grounded in what's actually happening in the room.
 
-<Gallery labels={['SHELL · BMO FACE', 'PIPELINE · VOICE LOOP', 'CAM · CONTEXT FEED']} cols={3} />
+</Step>
+
+<Step>
 
 ## The console party trick
 
@@ -42,9 +54,15 @@ little box into a couch gaming console. It's the feature that makes people
 smile, and the reason the project earns its shelf space even between
 experiments.
 
+</Step>
+
+<Step>
+
 ## Status
 
 WIP. The voice loop and local inference run today; ongoing work is tightening
 latency and making the camera context genuinely useful rather than decorative.
 It's also my personal testbed for the same question my FSAE work asks:
 how much intelligence can you run on a small computer at the edge?
+
+</Step>

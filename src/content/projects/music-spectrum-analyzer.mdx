@@ -11,13 +11,19 @@ links:
 draft: false
 ---
 
-import Gallery from '../../components/content/Gallery.astro';
+import Step from '../../components/content/Step.astro';
+
+{/* Each section below is a Step. To give one a held frame, import the photo and
+    pass it: <Step figure={shot} caption="What the picture shows">
+    The picture then stays put while these words scroll past it. */}
 
 I wanted to actually *see* music, physically, on the wall, so I'm building a
 **28-band spectrum analyzer**: an acrylic panel of LED columns that turns live
 audio into a real-time frequency display, designed to integrate with my sound
 system. It's a work in progress, and it's as much a hardware project as a DSP
 one.
+
+<Step>
 
 ## Signal path
 
@@ -27,7 +33,9 @@ acrylic columns. The display itself is **WS2812B addressable LED strips**,
 driven over **DMA** so the microcontroller can push frames continuously
 without the CPU babysitting every bit.
 
-<Gallery labels={['PCB · ALTIUM LAYOUT', 'BENCH · LED BRING-UP', 'CAD · ACRYLIC ENCLOSURE']} cols={3} />
+</Step>
+
+<Step>
 
 ## The hardware is the project
 
@@ -37,8 +45,14 @@ loop, schematic, layout, firmware, and mechanical design, is the point: it's
 the same discipline as the FSAE work, scaled to something that hangs in my
 room.
 
+</Step>
+
+<Step>
+
 ## Status
 
 WIP. The DSP pipeline and LED driving are the current focus; the enclosure
 design is modeled and waiting on the electronics to settle. Real photos and
 captures will land here as the build progresses.
+
+</Step>
