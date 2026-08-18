@@ -309,6 +309,131 @@
     width: 100%;
   }
 
+  /* =======================================================================
+     ENTRY BODY - the held-frame rhythm used by build log entries.
+     A <Step> photograph holds its half of the screen while that step's words
+     scroll past it, then the next step's photograph takes over on the other
+     side. Loose prose between steps stays in a normal measured column, so an
+     entry can mix full-width bands and ordinary paragraphs.
+     ======================================================================= */
+  .entry-body {
+    max-width: none;
+  }
+  /* Everything that isn't a Step reads as a normal article column. */
+  .entry-body > :not(.entry-step) {
+    max-width: 68ch;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+  @media (min-width: 768px) {
+    .entry-body > :not(.entry-step) { padding-inline: 2rem; }
+  }
+  /* Steps set their own rhythm; kill the generic prose stack margin on them. */
+  .entry-body > .entry-step {
+    margin-top: 0;
+  }
+
+  .entry-step {
+    display: grid;
+    max-width: 1440px;
+    margin-inline: auto;
+    padding-block: 1.5rem;
+  }
+  @media (min-width: 1024px) {
+    .entry-step {
+      grid-template-columns: 1fr 1fr;
+      padding-block: 2.5rem;
+    }
+    /* Both children claim the same cell, then the odd/even rules place them,
+       so the figure alternates sides without the author choosing. */
+    .entry-step > .entry-step-fig { grid-area: 1 / 1; }
+    .entry-step > .entry-step-body { grid-area: 1 / 2; }
+    .entry-step:nth-of-type(even) > .entry-step-fig { grid-area: 1 / 2; }
+    .entry-step:nth-of-type(even) > .entry-step-body { grid-area: 1 / 1; }
+  }
+
+  /* The breathing room around every photograph: a percentage, so the frame
+     is always the same fraction of its half rather than a fixed inset. */
+  .entry-step-fig {
+    padding: 6% 1.25rem;
+  }
+  @media (min-width: 1024px) {
+    .entry-step-fig { padding: 10%; }
+  }
+
+  /* The held frame itself. `top` clears the fixed header. */
+  .entry-frame {
+    position: sticky;
+    top: 5rem;
+    margin: 0;
+  }
+  .entry-frame img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--color-line);
+  }
+  /* Set by <Step> when the source is taller than it is wide. */
+  @media (min-width: 1024px) {
+    .entry-frame--portrait {
+      max-width: 74%;
+      margin-inline: auto;
+    }
+  }
+  .entry-frame figcaption {
+    margin-top: 0.75rem;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    line-height: 1.7;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-faint);
+    text-wrap: pretty;
+  }
+
+  .entry-step-body {
+    align-self: center;
+    padding-inline: 1.25rem;
+  }
+  @media (min-width: 768px) {
+    .entry-step-body { padding-inline: 2rem; }
+  }
+  @media (min-width: 1024px) {
+    .entry-step-body { padding-inline: clamp(2rem, 5%, 4rem); }
+  }
+  .entry-step-body > * + * {
+    margin-top: 1.25em;
+  }
+  /* A step with no photograph is a single measured band of text. It has to
+     drop out of the two-column grid explicitly, or the placement rules above
+     would strand its only child in whichever half the alternation is on. */
+  .entry-step--solo {
+    grid-template-columns: 1fr;
+  }
+  .entry-step--solo > .entry-step-body {
+    grid-area: auto;
+    max-width: 68ch;
+    margin-inline: auto;
+  }
+
+  /* A photograph with nothing written beside it: centred plate, caption under.
+     Same <Step>, so adding prose later promotes it to a held frame. */
+  .entry-plate {
+    max-width: 62rem;
+    margin-inline: auto;
+    padding: 1.5rem 1.25rem;
+  }
+  @media (min-width: 768px) {
+    .entry-plate { padding: 2rem; }
+  }
+  /* Centred plates are not sticky: there is nothing beside them to scroll past. */
+  .entry-plate .entry-frame {
+    position: static;
+  }
+  .entry-plate .entry-frame--portrait {
+    max-width: 62%;
+  }
+
   /* Huge outlined section numeral, printed behind section headers */
   .ghost-index {
     position: absolute;

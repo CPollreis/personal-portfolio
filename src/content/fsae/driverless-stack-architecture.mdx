@@ -8,12 +8,18 @@ tags: [ROS 2, C++, Jetson Orin, architecture]
 draft: false
 ---
 
-import Gallery from '../../components/content/Gallery.astro';
+import Step from '../../components/content/Step.astro';
+
+{/* Each section below is a Step. To give one a held frame, import the photo and
+    pass it: <Step figure={repoLayout} caption="Package layout in the monorepo">
+    The picture then stays put while these words scroll past it. */}
 
 Our car does not drive itself yet. That's the honest headline, and it's also the
 point: **the team's goal is a driverless car by 2028**, and this season my job
 as Autonomous Systems Lead (DSO) has been to make sure the foundation we lay
 now doesn't have to be torn up later.
+
+<Step>
 
 ## Rules first, architecture second
 
@@ -24,6 +30,10 @@ system master switch has to do, and what the car must prove before it's allowed
 to move without a driver. Designing around those constraints from day one is
 much cheaper than retrofitting them.
 
+</Step>
+
+<Step>
+
 ## The monorepo
 
 The software home for all of it is a **C++/ROS 2 monorepo targeting the NVIDIA
@@ -31,10 +41,9 @@ Jetson Orin**. I architected the repository and build infrastructure: package
 layout, build tooling, and the project structure that lets 10+ software members
 work in parallel without stepping on each other.
 
-<Gallery
-  labels={['REPO · PACKAGE LAYOUT', 'RULESET · COMPLIANCE MAP', 'SENSORS · MOUNT STUDY', 'DASH · TEAM DOCS']}
-  cols={2}
-/>
+</Step>
+
+<Step>
 
 ## Hardware we don't have to buy
 
@@ -42,6 +51,10 @@ Driverless perception is expensive, so I ran targeted sponsorship outreach and
 secured about **$30k in sponsored hardware**: LiDARs, cameras, and auxiliary
 sensors. That's the difference between designing the perception stack around
 the sensors we want versus the sensors we could afford.
+
+</Step>
+
+<Step>
 
 ## Keeping ten people rowing together
 
@@ -53,3 +66,5 @@ new members ramp up in weeks instead of months.
 Next milestones: perception prototyping on the Orin with the sponsored sensor
 suite, and simulation infrastructure so the stack can fail safely long before
 the car does. The build log will follow it, honestly, all the way to 2028.
+
+</Step>

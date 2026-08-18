@@ -11,12 +11,18 @@ links:
 draft: false
 ---
 
-import Gallery from '../../components/content/Gallery.astro';
+import Step from '../../components/content/Step.astro';
+
+{/* Each section below is a Step. To give one a held frame, import the photo and
+    pass it: <Step figure={shot} caption="What the picture shows">
+    The picture then stays put while these words scroll past it. */}
 
 Reinforcement learning only really clicks when you watch an agent learn
 something you didn't explicitly teach it. So I'm training an offline Rocket
 League bot with **RLGym** and **PyTorch**, and doing it the hard way: my own
 reward shaping and my own training loop.
+
+<Step>
 
 ## The setup
 
@@ -28,7 +34,9 @@ reward shaping and my own training loop.
 - **Learning:** a custom training loop in PyTorch, built to make experimenting
   with reward functions fast.
 
-<Gallery labels={['TRAIN · REWARD CURVE', 'ENV · MOCKED SIM', 'EVAL · IN GAME']} cols={3} />
+</Step>
+
+<Step>
 
 ## Reward shaping is the whole game
 
@@ -38,6 +46,10 @@ moving toward the ball and making contact, shaped so they can be annealed away
 as the policy improves. Getting that curriculum right is the core of the
 project.
 
+</Step>
+
+<Step>
+
 ## Status
 
 WIP. The environment and training loop are running; the current phase is
@@ -45,3 +57,5 @@ iterating on reward design and watching what the agent discovers. It's already
 been the best hands-on lesson in how sensitive RL is to reward and
 hyperparameter choices, lessons that map directly onto controls work on the
 car.
+
+</Step>

@@ -1,0 +1,85 @@
+---
+/**
+ * Step - one block of an entry body: a photograph that holds its half of the
+ * screen while the words beside it scroll past, then hands over to the next
+ * step's photograph on the opposite side.
+ *
+ * Sides alternate on their own. You never pass left or right: the CSS flips
+ * every second `.entry-step` via `:nth-of-type(even)`, which works because a
+ * Step is the only <section> an entry body renders. If you ever add another
+ * <section> to an entry, the alternation will skip.
+ *
+ * Drop `figure` and the step becomes a full-width band of text, which is what
+ * a step with nothing worth photographing (a decision, a trade) should be.
+ * Drop the words instead and it becomes a plain centred plate: a photograph and
+ * its caption, no empty half beside it. Writing into that step later turns it
+ * into a held frame on its own, which is how a raw photo entry grows into a
+ * written one without touching the layout.
+ *
+ *   <Step figure={sketch} caption="First topology sketch, two buses">
+ *   Prose here, as long as you like. The image stays put while it scrolls.
+ *   </Step>
+ *
+ * `alt` falls back to the caption; pass it explicitly when the caption is
+ * commentary rather than a description of the picture.
+ */
+import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
+
+interface Props {
+  /** An `import img from '../../assets/buildlog/x.jpg'` asset. Omit for a text-only step. */
+  figure?: ImageMetadata;
+  /** Small line under the photograph explaining what it is. */
+  caption?: string;
+  /** Overrides the caption as the image's alt text. */
+  alt?: string;
+}
+
+const { figure, caption, alt } = Astro.props;
+/* A portrait frame at the full half-column runs far taller than a landscape one
+   and swamps the step beside it, so it gets narrowed rather than cropped: the
+   picture is never cut, the column just holds less of it. */
+const portrait = figure ? figure.height > figure.width : false;
+/* A figure with nothing written beside it would leave half the row blank, so it
+   drops out of the two-column rhythm and centres instead. */
+const hasWords = Astro.slots.has('default');
+---
+
+{
+  figure && !hasWords ? (
+    <section class="entry-plate">
+      <figure class:list={['entry-frame', portrait && 'entry-frame--portrait']}>
+        <Image
+          src={figure}
+          alt={alt ?? caption ?? ''}
+          widths={[640, 960, 1280, 1600]}
+          sizes="(min-width: 1024px) 62vw, 92vw"
+        />
+        {caption && <figcaption>{caption}</figcaption>}
+      </figure>
+    </section>
+  ) : figure ? (
+    <section class="entry-step">
+      <div class="entry-step-fig">
+        <figure class:list={['entry-frame', portrait && 'entry-frame--portrait']}>
+          <Image
+            src={figure}
+            alt={alt ?? caption ?? ''}
+            widths={[420, 640, 960, 1280]}
+            sizes="(min-width: 1024px) 40vw, 84vw"
+          />
+          {caption && <figcaption>{caption}</figcaption>}
+        </figure>
+      </div>
+      <div class="entry-step-body">
+        <slot />
+      </div>
+    </section>
+  ) : (
+    <section class="entry-step entry-step--solo">
+      <div class="entry-step-body">
+        <slot />
+      </div>
+    </section>
+  )
+}
