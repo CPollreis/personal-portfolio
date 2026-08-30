@@ -8,14 +8,18 @@ import { withBase } from './paths';
 
 export const site = {
   name: 'Caleb Pollreis',
-  role: 'Autonomous Systems Lead · FSAE Electric',
+  /** Title suffix on the home page. LinkedIn's Featured slot clips the title
+     near 42 characters, so keep `name · role` under that. */
+  role: 'Autonomous Systems Lead',
   tagline: 'Building the systems to make a race car drive itself.',
   /** Plain-English one-liner for people who don't know what FSAE is. */
   intro:
     'Computer engineering student at the University of Manitoba, leading a 10-person team building the driverless system for our Formula SAE electric race car. Target: autonomous by 2028.',
   availability: 'Open to internships · Jan to Aug 2027',
+  /** Link-preview blurb. Front-loaded, because Featured and Discord both cut
+     it off around 160 characters. */
   description:
-    'Caleb Pollreis, computer engineering student at the University of Manitoba and FSAE Electric autonomous systems lead. Firmware, HV accumulator work, driverless autonomy, personal projects, and photography.',
+    'Autonomous systems lead on a Formula SAE electric race car, perception intern at PTx Trimble. Firmware, driverless autonomy, and the photos from the paddock.',
   url: 'https://calebpollreis.com',
   locale: 'en',
   email: 'calebpollreis@gmail.com',
