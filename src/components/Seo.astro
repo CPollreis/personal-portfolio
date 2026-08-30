@@ -11,6 +11,8 @@ interface Props {
   description?: string;
   /** Absolute or root-relative OG image path. */
   image?: string;
+  /** Describes the OG image for crawlers that render text only. */
+  imageAlt?: string;
   /** Mark noindex for utility pages. */
   noindex?: boolean;
 }
@@ -19,6 +21,7 @@ const {
   title,
   description = site.description,
   image = '/og-default.png',
+  imageAlt = 'The UMSAE Formula Electric race car at victory lane, captioned Caleb Pollreis, autonomous systems lead.',
   noindex = false,
 } = Astro.props;
 
@@ -43,9 +46,14 @@ const ogImage = new URL(withBase(image), origin).href;
 <meta property="og:description" content={description} />
 <meta property="og:url" content={canonical} />
 <meta property="og:image" content={ogImage} />
+<!-- Declared so LinkedIn lays the card out large instead of guessing. -->
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content={imageAlt} />
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content={fullTitle} />
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image" content={ogImage} />
+<meta name="twitter:image:alt" content={imageAlt} />
