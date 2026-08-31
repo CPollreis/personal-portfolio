@@ -63,7 +63,7 @@ hero clip exists the home background is simply black.
 These live at the root of `public/` and are replaced by overwriting the file
 (keep the same filename so references keep resolving):
 
-- **Resume**: `public/resume.pdf`. Replace the placeholder with the real PDF.
+- **Resume**: `public/resume.pdf`. Drop a new PDF at that exact path to swap it; the link is `site.resume` in `src/config/site.ts`.
 - **Favicon**: `public/favicon.svg`, linked from `src/layouts/Base.astro`
   (`<link rel="icon" type="image/svg+xml" ...>`). Keep it an SVG or update the
   link tag if you change formats.

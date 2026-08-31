@@ -40,9 +40,9 @@ npm run preview    # serve the production build
 ## Project structure
 
 The site is a **one-pager with satellite pages**: `/` scrolls through the bio
-hero, an About strip, a filterable **Build log** (FSAE posts + personal projects
-in one feed), and a Photography teaser; entry writeups and the gallery live on
-their own pages linked from those sections.
+hero, a filterable **Build log** (FSAE posts + personal projects in one feed),
+and a Photography teaser; entry writeups and the gallery live on their own pages
+linked from those sections.
 
 ```
 src/
@@ -220,7 +220,7 @@ the lead figure. Wide, darker shots work best.
 ## Things to personalize
 
 - `src/config/site.ts` - name, tagline, **positions**, social links, email.
-- `public/resume.pdf` - replace the placeholder with your real resume.
+- `public/resume.pdf` - the live resume; overwrite this file to publish a new one.
 - `public/og-default.png` - regenerate if branding changes.
 - `astro.config.mjs` - set `site` to your real production domain.
 

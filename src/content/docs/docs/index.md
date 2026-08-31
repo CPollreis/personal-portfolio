@@ -11,7 +11,7 @@ edit instead of an archaeology session.
 ## What the site is
 
 - A statically generated Astro site (no server at runtime, just files in `dist/`).
-- A one-pager: `/` scrolls through a bio hero, an About strip, a filterable
+- A one-pager: `/` scrolls through a bio hero, a filterable
   **Build log** (FSAE posts and personal projects in one feed), and a
   Photography teaser; the post writeups and the gallery are satellite pages
   linked from their sections.

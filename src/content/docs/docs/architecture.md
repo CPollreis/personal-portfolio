@@ -21,8 +21,8 @@ The site is a one-pager with satellite pages. Routes come from files in
 
 - `index.astro` (`/`): the whole site in one scroll. A compact bio hero
   (positions and links from `src/config/site.ts`) over the stabilized car
-  footage, then anchor sections `#about`, `#fsae` (the **Build log**: FSAE
-  posts and personal projects merged into one filterable feed), and a
+  footage, then anchor sections `#fsae` (the **Build log**: FSAE posts and
+  personal projects merged into one filterable feed) and a
   `#photography` teaser that links out to the gallery. The feed renders
   straight from the content collections, so it grows automatically as entries
   are added. See [The build log and its filter](#the-build-log-and-its-filter)
