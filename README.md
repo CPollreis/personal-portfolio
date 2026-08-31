@@ -1,8 +1,8 @@
 # Caleb Pollreis - Portfolio
 
-Personal portfolio built with Astro. Live at **https://calebpollreis.com**.
+Personal portfolio built with Astro: **https://calebpollreis.com**.
 
-## Run it locally
+## Dev locally
 
 ```bash
 npm install
