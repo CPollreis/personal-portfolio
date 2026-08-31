@@ -139,8 +139,7 @@ const thumbFrame = 'border border-faint/50 transition-colors group-hover:border-
     <div class="container-hud relative flex min-h-0 flex-1 flex-col justify-center py-[clamp(1rem,4vh,3rem)]">
       <div class="flex min-h-0 w-fit max-w-lg flex-col">
         <div class="shrink-0 border border-line/80 bg-bg/60 p-6 backdrop-blur-md md:p-8">
-          <p class="hud-label">Portfolio</p>
-          <h1 class="mt-3 font-display text-4xl font-semibold tracking-tight md:text-5xl">
+          <h1 class="font-display text-4xl font-semibold tracking-tight md:text-5xl">
             Caleb <span class="text-grad">Pollreis</span>
           </h1>
 
@@ -161,10 +160,10 @@ const thumbFrame = 'border border-faint/50 transition-colors group-hover:border-
           </ul>
 
           <p class="mt-5 max-w-sm text-sm leading-relaxed text-muted">
-            My student team designs and builds an electric race car from scratch. Day to
-            day, I make system design choices that bring our team one step closer to a
-            driverless car by 2028. Off the team I build personal projects and shoot
-            photography.
+            I'm a computer engineering student working in autonomous systems, robotics,
+            and embedded software. I've shipped C++/ROS2 perception on NVIDIA Jetson
+            across two internships, and I lead the 10-person team building the driverless
+            system for our FSAE electric car, targeting autonomy by 2028.
           </p>
 
           <p class="mt-6 flex items-center gap-2.5">
@@ -172,13 +171,13 @@ const thumbFrame = 'border border-faint/50 transition-colors group-hover:border-
             <span class="hud-label text-ink">{site.availability}</span>
           </p>
 
-          <div class="mt-7 flex flex-wrap items-center gap-x-6 gap-y-4">
+          <div class="mt-8 flex flex-wrap items-center justify-between gap-x-6 gap-y-4">
             <div class="flex flex-wrap gap-3">
-              <Button href="#buildlog" size="sm">Work</Button>
-              <Button href={site.resume} variant="ghost" size="sm" external>Resume</Button>
+              <Button href="#posts">My work</Button>
+              <Button href={site.resume} external>Resume</Button>
             </div>
 
-            <ul class="flex items-center gap-x-5">
+            <ul class="flex translate-y-[2px] items-center gap-x-6">
               {
                 socials.map((s) => (
                   <li>
@@ -191,7 +190,13 @@ const thumbFrame = 'border border-faint/50 transition-colors group-hover:border-
                     >
                       <SocialIcon
                         label={s.label}
-                        class={s.label === 'Email' ? 'h-5 w-5' : 'h-[18px] w-[18px]'}
+                        class={
+                          s.label === 'Email'
+                            ? 'h-10 w-10'
+                            : s.label === 'GitHub'
+                              ? 'h-9 w-9'
+                              : 'h-8 w-8'
+                        }
                       />
                     </a>
                   </li>
@@ -211,11 +216,11 @@ const thumbFrame = 'border border-faint/50 transition-colors group-hover:border-
   <section id="fsae" class="scroll-mt-16">
     <div class="container-hud pt-16 pb-12 md:pt-24 md:pb-16">
       <p id="projects" class="hud-title scroll-mt-16 border-b border-line pb-3">
-        Build log · {feed.length} entries
+        Posts · {feed.length} entries
       </p>
 
-      <div id="buildlog" class="mt-6 scroll-mt-16 md:grid md:grid-cols-[200px_minmax(0,1fr)] md:items-start md:gap-8">
-        <nav class="hidden md:sticky md:top-20 md:block" aria-label="Filter the build log">
+      <div id="posts" class="mt-6 scroll-mt-16 md:grid md:grid-cols-[200px_minmax(0,1fr)] md:items-start md:gap-8">
+        <nav class="hidden md:sticky md:top-20 md:block" aria-label="Filter the posts">
           <div class="mb-1 flex items-center gap-2 border-b border-line px-3.5 pb-2.5">
             <svg class="h-3 w-3 shrink-0 text-cyan" viewBox="0 0 12 12" fill="none" aria-hidden="true">
               <path
@@ -258,7 +263,7 @@ const thumbFrame = 'border border-faint/50 transition-colors group-hover:border-
         </nav>
 
         <div>
-          <div class="mb-6 flex flex-wrap gap-2 md:hidden" role="group" aria-label="Filter the build log">
+          <div class="mb-6 flex flex-wrap gap-2 md:hidden" role="group" aria-label="Filter the posts">
             {
               logFilters.map((f) => (
                 <button
@@ -393,27 +398,27 @@ const thumbFrame = 'border border-faint/50 transition-colors group-hover:border-
 </Base>
 
 <script>
-  /* Build-log filter: rail (desktop) and chips (mobile) share [data-log-filter]
+  /* Posts filter: rail (desktop) and chips (mobile) share [data-log-filter]
      buttons and toggle [data-log-entry] cards by data-cat. The `fsae` filter is
      a parent that matches all three subsystems (fw/mfg/av). Clicking the active
      filter again clears back to all.
 
      Deep-links preselect a filter: #projects -> Projects (Nav breadcrumb, 404,
-     project pages), #buildlog -> All entries (hero My work button).
+     project pages), #posts -> All entries (hero Work button).
      Two arrival paths, handled separately: cross-page nav fires astro:page-load
      (initLogFilter re-runs and reads location.hash); a same-page hero click is
      intercepted by ClientRouter, which updates the hash via history.pushState
      with NO hashchange event and NO swap, so we also bind the filter straight
      onto those anchors' click. Nodes are fresh after every swap, so everything
      re-initializes on astro:page-load. */
-  const HASH_FILTER: Record<string, string> = { '#projects': 'prj', '#buildlog': 'all' };
+  const HASH_FILTER: Record<string, string> = { '#projects': 'prj', '#posts': 'all' };
   const FSAE_CATS = new Set(['fw', 'mfg', 'av']);
   const showsEntry = (id: string, cat: string) =>
     id === 'all' || cat === id || (id === 'fsae' && FSAE_CATS.has(cat));
   let hashHandler: (() => void) | undefined;
 
   function initLogFilter() {
-    const root = document.getElementById('buildlog');
+    const root = document.getElementById('posts');
     if (hashHandler) {
       window.removeEventListener('hashchange', hashHandler);
       hashHandler = undefined;

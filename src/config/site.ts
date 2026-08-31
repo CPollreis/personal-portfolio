@@ -33,7 +33,7 @@ export interface Position {
 export const positions: Position[] = [
   {
     role: 'Autonomous Systems Lead',
-    org: 'UMSAE Formula Electric',
+    org: 'FSAE Electric',
     href: '#fsae',
   },
   {
@@ -67,7 +67,7 @@ export interface SocialLink {
 
 export const socials: SocialLink[] = [
   { label: 'GitHub', href: 'https://github.com/CPollreis' },
-  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/caleb-pollreis-b815642a6' },
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/caleb-pollreis/' },
   { label: 'Email', href: `mailto:${site.email}` },
 ];
 
