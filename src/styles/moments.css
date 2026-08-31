@@ -1,5 +1,5 @@
 /* =========================================================================
-   GALLERY - page-scoped styles for /photography.
+   GALLERY - scoped styles for the photography archive (home page #photography).
    Near-pure black ground, hairline dividers, film-toned frames, and Archivo
    for the captions. The page header itself uses the site's own HUD language;
    nothing here styles display type.
@@ -16,6 +16,12 @@
   --m-dim: #8a8a8a;
   font-family: var(--grotesk);
   background: var(--m-bg);
+}
+
+/* Inline mode: the archive sits inside a section of the one-page home, so it
+   keeps the gallery's type and frame tokens but not its pure-black ground. */
+.moments-inline {
+  background: transparent;
 }
 
 /* ---- frames (gallery tiles) ------------------------------------------- */

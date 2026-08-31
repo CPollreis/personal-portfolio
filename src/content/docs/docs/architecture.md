@@ -23,20 +23,16 @@ The site is a one-pager with satellite pages. Routes come from files in
   (positions and links from `src/config/site.ts`) over the stabilized car
   footage, then anchor sections `#fsae` (the **Build log**: FSAE posts and
   personal projects merged into one filterable feed) and a
-  `#photography` teaser that links out to the gallery. The feed renders
-  straight from the content collections, so it grows automatically as entries
-  are added. See [The build log and its filter](#the-build-log-and-its-filter)
+  `#photography` (the full gallery: the "Feature Lead" archive grid plus the
+  lightbox island). Both the feed and the grid render straight from the content
+  collections, so they grow automatically as entries are added. See [The build log and its filter](#the-build-log-and-its-filter)
   below for how the feed and its filter rail work.
 - `fsae/[...slug].astro` and `projects/[...slug].astro`: one dynamic route per
   build-log entry / project writeup.
-- `photography/index.astro`: the gallery (a single page that mounts the lightbox
-  island). Its archive section is laid out by the "Feature Lead" packer in
-  `src/components/photography/archiveGrid.ts`, computed from the photography
-  collection at build time.
 - `colophon.astro`, `404.astro`: one file per route.
 - The old tab URLs redirect: `/fsae` → `/#fsae`, `/projects` → `/#projects`,
-  `/about` → `/`, and the retired `/timeline` → `/` (see `redirects` in
-  `astro.config.mjs`).
+  `/photography` → `/#photography`, `/about` → `/`, and the retired
+  `/timeline` → `/` (see `redirects` in `astro.config.mjs`).
 
 The dynamic `[...slug]` pages read their collection with `getStaticPaths()` and
 render each entry, so adding a Markdown file is all it takes to publish a new
@@ -63,7 +59,8 @@ full-bleed pages set it to `false` and manage their own spacing.
 ## React islands
 
 The site is almost entirely Astro-rendered HTML. The one interactive React
-component is the photography lightbox, mounted in `src/pages/photography/index.astro`:
+component is the photography lightbox, mounted in the home page's
+`#photography` section (`src/pages/index.astro`):
 
 ```astro
 <MomentLightbox client:load moments={moments} />
@@ -131,7 +128,9 @@ example:
   (JetBrains Mono): the type families, all self-hosted so there are no external
   font requests.
 
-`src/styles/moments.css` holds the extra styling for the photography gallery.
+`src/styles/moments.css` holds the extra styling for the photography archive
+(the `.moments` scope; `#photography` adds `.moments-inline` so the grid keeps
+the gallery's type without repainting the page ground pure black).
 Editing a token in `global.css` re-themes the whole site.
 
 ## The motion engine

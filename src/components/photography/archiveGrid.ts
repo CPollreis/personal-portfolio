@@ -1,5 +1,6 @@
 /**
- * archiveGrid.ts - "Feature Lead" packer for the /photography archive.
+ * archiveGrid.ts - "Feature Lead" packer for the #photography archive on the
+ * home page.
  *
  * The archive renders as a 4-column grid (2 columns on small screens) built
  * from repeating 2-row "bands". Each band leads with at most one oversized

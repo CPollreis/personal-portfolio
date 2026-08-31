@@ -38,7 +38,8 @@ const prefersReducedMotion = () =>
   typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /**
- * MomentLightbox - shared-element detail view for /photography. The clicked
+ * MomentLightbox - shared-element detail view for the #photography archive.
+ * The clicked
  * frame's [data-media] element is measured at click time, then the lightbox
  * media FLIPs from that rect to its fullscreen layout position; closing
  * reverses the flight back into the grid. The info panel (story + tech

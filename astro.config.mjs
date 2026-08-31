@@ -10,10 +10,12 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
   site: 'https://calebpollreis.com',
   // Old tab URLs from the multi-page era land on their one-page section.
-  // /timeline is retired; it lands on the home page.
+  // /timeline is retired; it lands on the home page. /photography is retired
+  // too: the archive grid itself now lives in the home page's section.
   redirects: {
     '/about': '/',
     '/fsae': '/#fsae',
+    '/photography': '/#photography',
     '/projects': '/#projects',
     '/timeline': '/',
   },
