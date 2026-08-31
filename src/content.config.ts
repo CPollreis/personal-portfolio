@@ -8,7 +8,7 @@ import { docsSchema } from '@astrojs/starlight/schema';
 const docs = defineCollection({ loader: docsLoader(), schema: docsSchema() });
 
 /**
- * FSAE build-log posts. subsystem drives color-coding across the site
+ * FSAE posts. subsystem drives color-coding across the site
  * (firmware → blue, manufacturing → cyan, autonomous → indigo).
  */
 const fsae = defineCollection({
