@@ -1,4 +1,3 @@
-/** Subsystem metadata - shared color-coding + copy across the FSAE section. */
 export type Subsystem = 'firmware' | 'manufacturing' | 'autonomous';
 
 export interface SubsystemMeta {
@@ -45,10 +44,7 @@ export const subsystems: Record<Subsystem, SubsystemMeta> = {
 
 export const subsystemOrder: Subsystem[] = ['firmware', 'manufacturing', 'autonomous'];
 
-/**
- * Role progression on the team, oldest first. Rendered on the home page
- * FSAE section; append a row when the role changes.
- */
+/** Role progression on the team, oldest first. Rendered in the home FSAE section; append a row when the role changes. */
 export interface TrajectoryStep {
   marker: string;
   title: string;

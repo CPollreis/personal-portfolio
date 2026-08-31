@@ -1,8 +1,4 @@
 ---
-/**
- * CornerBrackets - registration marks that frame a card or section like a
- * viewfinder. Purely decorative (aria-hidden). Full HUD kit expands in Phase 2.
- */
 interface Props {
   /** Bracket arm length in px. */
   size?: number;
@@ -37,13 +33,11 @@ const i = `${inset}px`;
     position: absolute;
     background: var(--c);
   }
-  /* horizontal arm */
   .corner::before {
     height: 1px;
     width: var(--s);
     top: 0;
   }
-  /* vertical arm */
   .corner::after {
     width: 1px;
     height: var(--s);

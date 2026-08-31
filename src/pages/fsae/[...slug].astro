@@ -22,15 +22,12 @@ const { post, newer, older } = Astro.props;
 const { Content } = await render(post);
 const meta = subsystems[post.data.subsystem];
 const dateStr = post.data.date.toISOString().slice(0, 10);
-/* Media behind the title: dedicated clip, else dedicated hero image, else the cover. */
 const heroImg = post.data.hero ?? post.data.cover;
 const hasHeroMedia = Boolean(post.data.heroVideo || heroImg);
 ---
 
 <Base title={post.data.title} description={post.data.summary}>
   <article class="pb-24">
-    <!-- hero: the entry's own photograph full bleed, title set into the foot of
-         it. The nav breadcrumb is the way back, so no link sits here too. -->
     <header
       class:list={[
         'relative flex flex-col justify-end overflow-hidden border-b border-line',
@@ -63,9 +60,6 @@ const hasHeroMedia = Boolean(post.data.heroVideo || heroImg);
       </div>
     </header>
 
-    <!-- lead clip, when the entry has one. The cover is never repeated here:
-         the hero above is the cover, and an entry with no picture opens on its
-         words rather than on an empty frame. -->
     {
       post.data.video && (
         <div class="container-hud mt-10 max-w-3xl">
@@ -74,8 +68,6 @@ const hasHeroMedia = Boolean(post.data.heroVideo || heroImg);
       )
     }
 
-    <!-- MDX body. Full width: <Step> blocks span it and hold their figure
-         while the words beside them scroll; loose prose stays in a column. -->
     <div class="prose-hud entry-body mt-12">
       <Content />
     </div>
@@ -84,7 +76,6 @@ const hasHeroMedia = Boolean(post.data.heroVideo || heroImg);
       <div class="mt-16">
         <CoordinateAxis startLabel="EOF" endLabel="↑ TOP" />
 
-        <!-- prev / next entry -->
         <nav class="mt-8 grid gap-3 sm:grid-cols-2" aria-label="Adjacent entries">
           {
             older ? (

@@ -1,8 +1,4 @@
 ---
-/**
- * Nav - persistent top bar. Wordmark plus the photography tab; everything
- * else lives on the one-page home. Mobile keeps the accessible drawer.
- */
 import { nav, site } from '../../config/site';
 import { withBase } from '../../config/paths';
 
@@ -73,7 +69,6 @@ const crumbHref = (i: number): string | undefined => {
     {
       nav.length > 0 && (
         <>
-          {/* Desktop nav */}
           <ul class="hidden items-center gap-1 md:flex">
             {nav.map((item) => (
               <li>
@@ -88,7 +83,6 @@ const crumbHref = (i: number): string | undefined => {
             ))}
           </ul>
 
-          {/* Mobile toggle */}
           <button
             type="button"
             id="nav-toggle"
@@ -106,7 +100,6 @@ const crumbHref = (i: number): string | undefined => {
     }
   </nav>
 
-  <!-- Mobile drawer -->
   {
     nav.length > 0 && (
       <div

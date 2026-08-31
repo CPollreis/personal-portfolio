@@ -1,25 +1,4 @@
 ---
-/**
- * Home - the whole site on one page.
- *
- * Structure (anchors match the nav): compact bio hero with the car footage
- * kept small behind a blurred text panel, then #fsae (which hosts the unified
- * work log) and #photography. Everything a visitor needs is reachable without
- * guessing; deep pages (post writeups) hang off their sections. The
- * photography archive grid and its lightbox live inline in #photography.
- *
- * The build log is one filterable feed: FSAE entries and personal projects
- * together, filtered by a two-tier index rail on desktop (top-level Projects
- * and FSAE, the latter fanning into its three subsystems) that collapses to
- * chips on mobile. The hero work buttons deep-link into it: #projects lands
- * with the Projects filter preselected, #buildlog with the FSAE grouping.
- * (Nav breadcrumbs, 404, and project pages also link to #projects.)
- *
- * Content sources: src/config/site.ts (positions, links, availability),
- * src/config/fsae.ts (subsystem metadata), and the fsae/projects/photography
- * content collections. To append a project or post, add a file to the
- * collection; to change a position, edit site.ts.
- */
 import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
@@ -43,8 +22,6 @@ const projects = (await getCollection('projects', ({ data }) => !data.draft)).so
   (a, b) => a.data.order - b.data.order || b.data.date.getTime() - a.data.date.getTime(),
 );
 
-/* Unified work log: FSAE entries and personal projects in one feed, newest
-   first. `cat` drives the client-side filter; `code` labels placeholders. */
 type LogCat = 'fw' | 'mfg' | 'av' | 'prj';
 const subsystemCat: Record<Subsystem, LogCat> = {
   firmware: 'fw',
@@ -74,12 +51,6 @@ const feed = [
   })),
 ].sort((a, b) => b.date.getTime() - a.date.getTime());
 
-/* Rail is two-tier: top-level Projects and FSAE, and FSAE fans out into its
-   three subsystems (indented one level on desktop). `level` drives that indent;
-   the `fsae` row is a parent filter that matches all three subsystems at once.
-   --fc paints the active state (border on the rail, fill on the mobile chips),
-   --ftc is the text color on that fill. All and PRJ stay neutral so the FSAE
-   family keeps owning the blue. */
 const catCount = (c: LogCat) => feed.filter((e) => e.cat === c).length;
 const fsaeCount = catCount('fw') + catCount('mfg') + catCount('av');
 const logFilters = [
@@ -90,10 +61,6 @@ const logFilters = [
   { id: 'fw', label: 'Firmware', count: catCount('fw'), fc: 'var(--color-accent)', ftc: 'var(--color-ink)', level: 1 },
   { id: 'mfg', label: 'Manufacturing', count: catCount('mfg'), fc: 'var(--color-cyan)', ftc: 'var(--color-bg)', level: 1 },
 ];
-/* Photography lives here in full: the mosaic archive grid over the whole
-   collection, with the shared-element lightbox island below it. Adding a file
-   to src/content/photography/ flows straight into the grid; its `ratio` picks
-   the cell shape and `grid-auto-flow: dense` packs it. */
 const photoFrames = (await getCollection('photography')).sort(
   (a, b) => a.data.order - b.data.order || b.data.date.getTime() - a.data.date.getTime(),
 );
@@ -142,17 +109,11 @@ const fmtDate = (d: Date) =>
     .toLocaleDateString('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' })
     .toUpperCase();
 
-/* Shared thumbnail frame classes: light grey outline, YouTube-card style. */
 const thumbFrame = 'border border-faint/50 transition-colors group-hover:border-faint';
 ---
 
 <Base padTop={false}>
-  <!-- ============ hero: full-screen footage, who / where / what ============ -->
-  <!-- Full viewport so the car footage is the hero's visual object; the text
-       sits in a compact panel on the left with the portrait frame under it, and
-       the work buttons jump to the on-page sections below. -->
   <section class="relative flex min-h-[100dvh] flex-col justify-center overflow-hidden border-b border-line pt-16 md:h-[100dvh]">
-    <!-- background footage layer -->
     <div class="absolute inset-0" aria-hidden="true">
       <video
         data-header-video
@@ -170,22 +131,13 @@ const thumbFrame = 'border border-faint/50 transition-colors group-hover:border-
         <source src={withBase('/videos/hero-loop-stab-web.webm')} type="video/webm" />
         <source src={withBase('/videos/hero-loop-stab-web.mp4')} type="video/mp4" />
       </video>
-      <!-- dimming: heavy on the text side, fading to nothing on the right so the
-           footage itself carries the right half of the frame -->
       <div class="absolute inset-0 bg-bg/40"></div>
       <div class="absolute inset-0 bg-gradient-to-r from-bg/85 via-bg/35 via-45% to-transparent"></div>
-      <!-- fade the footage into the page so the next section meets it seamlessly -->
       <div class="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-bg to-transparent"></div>
     </div>
 
     <div class="container-hud relative flex min-h-0 flex-1 flex-col justify-center py-[clamp(1rem,4vh,3rem)]">
-      <!-- Panel and portrait share one w-fit column so their left AND right
-           edges line up: the wrapper takes its width from the panel text, and
-           the frame below stretches to match it. The column is height-capped to
-           the viewport, so the frame (the only shrinkable item) trades height
-           away before anything overflows; it is 4:3 whenever there is room. -->
       <div class="flex min-h-0 w-fit max-w-lg flex-col">
-        <!-- blurred panel, sized to hug the text -->
         <div class="shrink-0 border border-line/80 bg-bg/60 p-6 backdrop-blur-md md:p-8">
           <p class="hud-label">Portfolio</p>
           <h1 class="mt-3 font-display text-4xl font-semibold tracking-tight md:text-5xl">
@@ -220,8 +172,6 @@ const thumbFrame = 'border border-faint/50 transition-colors group-hover:border-
             <span class="hud-label text-ink">{site.availability}</span>
           </p>
 
-          <!-- action row: work buttons jump to the build log (#buildlog) / open the
-               resume; social icons sit in the opposite corner, inline with them. -->
           <div class="mt-7 flex flex-wrap items-center gap-x-6 gap-y-4">
             <div class="flex flex-wrap gap-3">
               <Button href="#buildlog" size="sm">Work</Button>
@@ -251,27 +201,13 @@ const thumbFrame = 'border border-faint/50 transition-colors group-hover:border-
           </div>
         </div>
 
-        <!-- portrait slot: flush with the panel edges, over the footage. 4:3 at
-             full height, letterboxing on short viewports. Wants a landscape shot
-             (project in hand), not a headshot crop. Swap the Placeholder for an
-             <Image> with object-cover once the portrait exists. -->
         <div class="mt-6 aspect-[4/3] max-h-[16dvh] w-full min-h-0 shrink md:max-h-none [@media(max-height:700px)]:hidden [@media(max-width:374px)]:hidden">
-          <!-- ratio="auto": the WRAPPER owns the 4:3 and the height cap, so the frame
-               must fill it rather than re-deriving its own width from its height
-               (which would pull the right edge off the panel edge). -->
           <Placeholder ratio="auto" label="CP · REPLACE" seed={3} class="!h-full !w-full !border-faint/50" />
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ============ Build log ============ -->
-  <!-- One filterable feed of FSAE entries and personal projects. The newest
-       entry leads as a wide feature card, the rest follow as thumbnail cards.
-       Desktop filters via the sticky two-tier index rail; mobile collapses to
-       notched chips. #projects lands here with the Projects filter preselected
-       and #buildlog with the FSAE grouping (see the script at the bottom of
-       this page). -->
   <section id="fsae" class="scroll-mt-16">
     <div class="container-hud pt-16 pb-12 md:pt-24 md:pb-16">
       <p id="projects" class="hud-title scroll-mt-16 border-b border-line pb-3">
@@ -280,8 +216,6 @@ const thumbFrame = 'border border-faint/50 transition-colors group-hover:border-
 
       <div id="buildlog" class="mt-6 scroll-mt-16 md:grid md:grid-cols-[200px_minmax(0,1fr)] md:items-start md:gap-8">
         <nav class="hidden md:sticky md:top-20 md:block" aria-label="Filter the build log">
-          <!-- filter header: names the rail as a control (board option 01). The
-               reset button clears back to All entries. -->
           <div class="mb-1 flex items-center gap-2 border-b border-line px-3.5 pb-2.5">
             <svg class="h-3 w-3 shrink-0 text-cyan" viewBox="0 0 12 12" fill="none" aria-hidden="true">
               <path
@@ -437,13 +371,6 @@ const thumbFrame = 'border border-faint/50 transition-colors group-hover:border-
     </div>
   </section>
 
-  <!-- ============ Photography ============ -->
-  <!-- The gallery itself, not a teaser: a mosaic archive grid over the whole
-       collection, with the shared-element lightbox island below. Every frame
-       keeps its aspect ratio (portraits span two rows), and `grid-auto-flow:
-       dense` backfills holes left to right so the last row always closes flush.
-       `.moments moments-inline` borrows the gallery's type and frame styling
-       without repainting the page ground pure black. -->
   <section id="photography" class="moments moments-inline scroll-mt-16 border-b border-line">
     <div class="container-hud pt-12 pb-16 md:pt-16 md:pb-24">
       <p class="hud-title border-b border-line pb-3">Photography</p>

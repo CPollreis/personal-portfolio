@@ -37,14 +37,6 @@ const CLOSE_MS = 500;
 const prefersReducedMotion = () =>
   typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-/**
- * MomentLightbox - shared-element detail view for the #photography archive.
- * The clicked
- * frame's [data-media] element is measured at click time, then the lightbox
- * media FLIPs from that rect to its fullscreen layout position; closing
- * reverses the flight back into the grid. The info panel (story + tech
- * readout) slides in beside the media.
- */
 export default function MomentLightbox({ moments }: Props) {
   const [index, setIndex] = useState<number | null>(null);
   const [closing, setClosing] = useState(false);
@@ -198,7 +190,6 @@ export default function MomentLightbox({ moments }: Props) {
         if (e.target === e.currentTarget) close();
       }}
     >
-      {/* stage */}
       <div
         className="relative grid min-h-0 flex-1 place-items-center p-5 pt-16 md:p-12"
         onClick={(e) => {
@@ -238,7 +229,6 @@ export default function MomentLightbox({ moments }: Props) {
           </div>
         </div>
 
-        {/* prev / next */}
         <button
           onClick={() => step(-1)}
           className="absolute left-3 top-1/2 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full border border-white/20 text-white/80 transition-colors hover:border-white/70 hover:text-white md:left-6"
@@ -259,7 +249,6 @@ export default function MomentLightbox({ moments }: Props) {
         </button>
       </div>
 
-      {/* info panel */}
       <aside
         className="min-h-0 shrink-0 overflow-y-auto border-t border-white/10 bg-[#080808] px-6 py-6 md:w-[380px] md:border-l md:border-t-0 md:px-8 md:py-10"
         style={{ animation: `m-slide 680ms ${EASE} 320ms both` }}

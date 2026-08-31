@@ -1,11 +1,3 @@
-/**
- * Film-toned placeholder backdrops for moments without a real asset yet.
- * Deterministic per seed so the Astro tile and the React lightbox render the
- * identical "frame", which keeps the shared-element zoom seamless.
- * Palette leans warm (orange, crimson, gold) with a few cool and silver
- * frames mixed in, matching the reference's colour rhythm.
- */
-
 interface Variant {
   /** Primary glow colour */
   glow: string;
