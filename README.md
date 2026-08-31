@@ -55,7 +55,7 @@ src/
   scripts/        # shared client scripts: motion.ts, chrome.ts, footage.ts
   styles/         # global.css (design tokens via @theme), moments.css
   config/         # site.ts (positions/socials), paths.ts, fsae.ts
-public/           # served as-is: videos/, resume.pdf, favicon.svg, og-default.png, CNAME
+public/           # served as-is: videos/, resume.pdf, favicon.svg, og-victory.png, CNAME
 ```
 
 ## Adding content: the one-file rule
@@ -221,7 +221,7 @@ the lead figure. Wide, darker shots work best.
 
 - `src/config/site.ts` - name, tagline, **positions**, social links, email.
 - `public/resume.pdf` - the live resume; overwrite this file to publish a new one.
-- `public/og-default.png` - regenerate if branding changes.
+- `public/og-victory.png` - regenerate if branding changes.
 - `astro.config.mjs` - set `site` to your real production domain.
 
 ## Deploy
