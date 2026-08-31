@@ -12,14 +12,13 @@ npm run dev        # http://localhost:4321
 Other commands: `npm run build` (type-check + static build to `dist/`),
 `npm run preview` (serve the build).
 
-## Add content
+## Adding Content
 
-Every kind of entry is **one file** dropped into `src/content/`. The home
-Build log feed and the photography grid re-pack themselves at build time, so
-there is nothing else to wire up. Restart `npm run dev` after adding a new
-file or image (the content collections do not always hot-reload).
+Every kind of entry is **one file** inside `src/content/`. The home
+Build log feed and the photography grid rearrange themselves at build time. Restart `npm run dev` after adding a new
+file or image (the content collections do not always reload automatically).
 
-| To add a... | Create | Shows up in |
+| To add a... | Create | Appears in |
 | --- | --- | --- |
 | FSAE build-log post | `src/content/fsae/<slug>.mdx` | Home Build log feed + `/fsae/<slug>` |
 | Project | `src/content/projects/<slug>.mdx` | Home Build log feed + `/projects/<slug>` |
@@ -27,23 +26,14 @@ file or image (the content collections do not always hot-reload).
 | Position / affiliation | a row in `positions[]` in `src/config/site.ts` | Under the name in the hero |
 
 Each file's frontmatter fields (and which are required) are defined in
-`src/content.config.ts`. For real images, drop the file next to the entry and
+`src/content.config.ts`. For images, add the file next to the entry and
 reference it (`cover: ./front-wing.jpg` or `image: ./frame.jpg`); Astro
 optimizes it automatically. For videos, put a matching `clip.webm` + `clip.mp4`
 pair in `public/videos/` and reference the `.mp4` path.
 
-**Full recipes** (image prep, EXIF orientation fixes, the photography grid,
-adding a build-log filter, the deploy pipeline) live in the site's own docs:
-`npm run dev` then open http://localhost:4321/docs, or read
-https://calebpollreis.com/docs on the live site. Source is in
+## Implementation Details
+Refer to the startlight documentation here https://calebpollreis.com/docs or the source for the documentation page under
 `src/content/docs/`.
-
-## Personalize
-
-- `src/config/site.ts` - name, tagline, positions, socials, email
-- `public/resume.pdf` - overwrite to publish a new resume
-- `astro.config.mjs` - `site` must match the production domain (also set in
-  the repo's GitHub Pages settings)
 
 ## Deploy
 
