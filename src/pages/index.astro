@@ -3,10 +3,9 @@
  * Home - the whole site on one page.
  *
  * Structure (anchors match the nav): compact bio hero with the car footage
- * kept small behind a blurred text panel, then #about, #fsae (which hosts the
- * unified work log), #photography. Everything a visitor needs is reachable
- * without guessing; deep pages (post writeups, the gallery) hang off their
- * sections.
+ * kept small behind a blurred text panel, then #fsae (which hosts the unified
+ * work log) and #photography. Everything a visitor needs is reachable without
+ * guessing; deep pages (post writeups, the gallery) hang off their sections.
  *
  * The build log is one filterable feed: FSAE entries and personal projects
  * together, filtered by a two-tier index rail on desktop (top-level Projects
@@ -113,9 +112,9 @@ const thumbFrame = 'border border-faint/50 transition-colors group-hover:border-
 <Base padTop={false}>
   <!-- ============ hero: full-screen footage, who / where / what ============ -->
   <!-- Full viewport so the car footage is the hero's visual object; the text
-       sits in a compact panel on the left and the work buttons jump to the
-       on-page sections below. -->
-  <section class="relative flex min-h-[100dvh] flex-col justify-center overflow-hidden border-b border-line pt-16">
+       sits in a compact panel on the left with the portrait frame under it, and
+       the work buttons jump to the on-page sections below. -->
+  <section class="relative flex min-h-[100dvh] flex-col justify-center overflow-hidden border-b border-line pt-16 md:h-[100dvh]">
     <!-- background footage layer -->
     <div class="absolute inset-0" aria-hidden="true">
       <video
@@ -142,101 +141,88 @@ const thumbFrame = 'border border-faint/50 transition-colors group-hover:border-
       <div class="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-bg to-transparent"></div>
     </div>
 
-    <div class="container-hud relative py-20">
-      <!-- blurred panel, sized to hug the text (no empty space on the right) -->
-      <div class="w-fit max-w-lg border border-line/80 bg-bg/60 p-6 backdrop-blur-md md:p-8">
-        <p class="hud-label">Portfolio</p>
-        <h1 class="mt-3 font-display text-4xl font-semibold tracking-tight md:text-5xl">
-          Caleb <span class="text-grad">Pollreis</span>
-        </h1>
+    <div class="container-hud relative flex min-h-0 flex-1 flex-col justify-center py-[clamp(1rem,4vh,3rem)]">
+      <!-- Panel and portrait share one w-fit column so their left AND right
+           edges line up: the wrapper takes its width from the panel text, and
+           the frame below stretches to match it. The column is height-capped to
+           the viewport, so the frame (the only shrinkable item) trades height
+           away before anything overflows; it is 4:3 whenever there is room. -->
+      <div class="flex min-h-0 w-fit max-w-lg flex-col">
+        <!-- blurred panel, sized to hug the text -->
+        <div class="shrink-0 border border-line/80 bg-bg/60 p-6 backdrop-blur-md md:p-8">
+          <p class="hud-label">Portfolio</p>
+          <h1 class="mt-3 font-display text-4xl font-semibold tracking-tight md:text-5xl">
+            Caleb <span class="text-grad">Pollreis</span>
+          </h1>
 
-        <ul class="mt-5 space-y-1.5">
-          {
-            positions.map((p) => (
-              <li class="text-sm text-muted">
-                {p.href ? (
-                  <a href={p.href} class="link-hud text-ink">{p.role}</a>
-                ) : (
-                  <span class="text-ink">{p.role}</span>
-                )}
-                <span class="text-faint"> · </span>{p.org}
-                {p.note && <span class="mt-0.5 block font-medium text-cyan">{p.note}</span>}
-              </li>
-            ))
-          }
-        </ul>
-
-        <p class="mt-5 max-w-sm text-sm leading-relaxed text-muted">
-          My student team designs and builds an electric race car from scratch. Day to
-          day, I make system design choices that bring our team one step closer to a
-          driverless car by 2028. Off the team I build personal projects and shoot
-          photography.
-        </p>
-
-        <p class="mt-6 flex items-center gap-2.5">
-          <span class="h-1.5 w-1.5 rounded-full bg-cyan" aria-hidden="true"></span>
-          <span class="hud-label text-ink">{site.availability}</span>
-        </p>
-
-        <!-- action row: work buttons jump to the build log (#buildlog) / open the
-             resume; social icons sit in the opposite corner, inline with them. -->
-        <div class="mt-7 flex flex-wrap items-center gap-x-6 gap-y-4">
-          <div class="flex flex-wrap gap-3">
-            <Button href="#buildlog" size="sm">Work</Button>
-            <Button href={site.resume} variant="ghost" size="sm" external>Resume</Button>
-          </div>
-
-          <ul class="flex items-center gap-x-5">
+          <ul class="mt-5 space-y-1.5">
             {
-              socials.map((s) => (
-                <li>
-                  <a
-                    href={s.href}
-                    class="link-hud inline-flex text-muted hover:text-ink"
-                    aria-label={s.label}
-                    rel={s.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                    target={s.href.startsWith('http') ? '_blank' : undefined}
-                  >
-                    <SocialIcon
-                      label={s.label}
-                      class={s.label === 'Email' ? 'h-5 w-5' : 'h-[18px] w-[18px]'}
-                    />
-                  </a>
+              positions.map((p) => (
+                <li class="text-sm text-muted">
+                  {p.href ? (
+                    <a href={p.href} class="link-hud text-ink">{p.role}</a>
+                  ) : (
+                    <span class="text-ink">{p.role}</span>
+                  )}
+                  <span class="text-faint"> · </span>{p.org}
+                  {p.note && <span class="mt-0.5 block font-medium text-cyan">{p.note}</span>}
                 </li>
               ))
             }
           </ul>
-        </div>
-      </div>
-    </div>
-  </section>
 
-  <!-- ============ About ============ -->
-  <section id="about" class="scroll-mt-16">
-    <div class="container-hud pt-12 md:pt-16">
-      <!-- about strip, photo-led: the portrait leads and the intro sits beside
-           it, centered against it so the two columns balance. Swap the
-           Placeholder for an <Image> once the portrait exists. -->
-      <p class="hud-title">About</p>
-      <div class="mt-8 grid gap-6 md:grid-cols-[minmax(0,20rem)_1fr] md:items-center md:gap-12">
-        <div>
-          <Placeholder
-            ratio="3/4"
-            label="CP · REPLACE"
-            seed={3}
-            class="!border-faint/50"
-          />
-        </div>
-        <div>
-          <h2 class="max-w-md text-balance font-display text-2xl font-medium leading-tight tracking-tight md:text-3xl">
-            The best way to understand something is to <span class="text-grad">build it from scratch.</span>
-          </h2>
-          <p class="mt-4 max-w-xl text-sm leading-relaxed text-muted">
-            I'm a computer engineering student in Winnipeg. Off the race car I chase personal
-            projects end to end and keep a camera close. The work below is where that goes when
-            no one assigns it.
+          <p class="mt-5 max-w-sm text-sm leading-relaxed text-muted">
+            My student team designs and builds an electric race car from scratch. Day to
+            day, I make system design choices that bring our team one step closer to a
+            driverless car by 2028. Off the team I build personal projects and shoot
+            photography.
           </p>
-          <p class="mt-5 font-mono text-xs tracking-wide text-cyan">/ Caleb Pollreis</p>
+
+          <p class="mt-6 flex items-center gap-2.5">
+            <span class="h-1.5 w-1.5 rounded-full bg-cyan" aria-hidden="true"></span>
+            <span class="hud-label text-ink">{site.availability}</span>
+          </p>
+
+          <!-- action row: work buttons jump to the build log (#buildlog) / open the
+               resume; social icons sit in the opposite corner, inline with them. -->
+          <div class="mt-7 flex flex-wrap items-center gap-x-6 gap-y-4">
+            <div class="flex flex-wrap gap-3">
+              <Button href="#buildlog" size="sm">Work</Button>
+              <Button href={site.resume} variant="ghost" size="sm" external>Resume</Button>
+            </div>
+
+            <ul class="flex items-center gap-x-5">
+              {
+                socials.map((s) => (
+                  <li>
+                    <a
+                      href={s.href}
+                      class="link-hud inline-flex text-muted hover:text-ink"
+                      aria-label={s.label}
+                      rel={s.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                      target={s.href.startsWith('http') ? '_blank' : undefined}
+                    >
+                      <SocialIcon
+                        label={s.label}
+                        class={s.label === 'Email' ? 'h-5 w-5' : 'h-[18px] w-[18px]'}
+                      />
+                    </a>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+        </div>
+
+        <!-- portrait slot: flush with the panel edges, over the footage. 4:3 at
+             full height, letterboxing on short viewports. Wants a landscape shot
+             (project in hand), not a headshot crop. Swap the Placeholder for an
+             <Image> with object-cover once the portrait exists. -->
+        <div class="mt-6 aspect-[4/3] max-h-[16dvh] w-full min-h-0 shrink md:max-h-none [@media(max-height:700px)]:hidden [@media(max-width:374px)]:hidden">
+          <!-- ratio="auto": the WRAPPER owns the 4:3 and the height cap, so the frame
+               must fill it rather than re-deriving its own width from its height
+               (which would pull the right edge off the panel edge). -->
+          <Placeholder ratio="auto" label="CP · REPLACE" seed={3} class="!h-full !w-full !border-faint/50" />
         </div>
       </div>
     </div>
