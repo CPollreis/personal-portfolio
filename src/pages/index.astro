@@ -5,7 +5,8 @@
  * Structure (anchors match the nav): compact bio hero with the car footage
  * kept small behind a blurred text panel, then #fsae (which hosts the unified
  * work log) and #photography. Everything a visitor needs is reachable without
- * guessing; deep pages (post writeups, the gallery) hang off their sections.
+ * guessing; deep pages (post writeups) hang off their sections. The
+ * photography archive grid and its lightbox live inline in #photography.
  *
  * The build log is one filterable feed: FSAE entries and personal projects
  * together, filtered by a two-tier index rail on desktop (top-level Projects
@@ -26,10 +27,14 @@ import SubsystemBadge from '../components/fsae/SubsystemBadge.astro';
 import SocialIcon from '../components/ui/SocialIcon.astro';
 import Button from '../components/ui/Button.astro';
 import Placeholder from '../components/media/Placeholder.astro';
+import MomentFrame from '../components/photography/MomentFrame.astro';
+import MomentLightbox, { type Moment } from '../components/photography/MomentLightbox.tsx';
 import { momentBackdrop } from '../components/photography/backdrop';
+import { archiveShape, packArchive } from '../components/photography/archiveGrid';
 import { subsystems, type Subsystem } from '../config/fsae';
 import { site, positions, socials } from '../config/site';
 import { withBase } from '../config/paths';
+import '../styles/moments.css';
 
 const fsaePosts = (await getCollection('fsae', ({ data }) => !data.draft)).sort(
   (a, b) => b.data.date.getTime() - a.data.date.getTime(),
@@ -85,20 +90,53 @@ const logFilters = [
   { id: 'fw', label: 'Firmware', count: catCount('fw'), fc: 'var(--color-accent)', ftc: 'var(--color-ink)', level: 1 },
   { id: 'mfg', label: 'Manufacturing', count: catCount('mfg'), fc: 'var(--color-cyan)', ftc: 'var(--color-bg)', level: 1 },
 ];
-/* Photography frames in the same sorted order the gallery uses, so a highlight's
-   index lines up with its generated backdrop art on /photography. Highlighted =
-   the featured moments first, then filled by order, capped at three thumbnails. */
+/* Photography lives here in full: the "Feature Lead" archive grid from
+   archiveGrid.ts over the whole collection, with the shared-element lightbox
+   island below it. Adding a file to src/content/photography/ flows straight
+   into the next band. */
 const photoFrames = (await getCollection('photography')).sort(
   (a, b) => a.data.order - b.data.order || b.data.date.getTime() - a.data.date.getTime(),
 );
 const momentCount = photoFrames.length;
-const seenPhoto = new Set<number>();
-const photoHighlights = [
-  ...photoFrames.map((f, i) => ({ f, i })).filter((x) => x.f.data.feature),
-  ...photoFrames.map((f, i) => ({ f, i })),
-]
-  .filter((x) => (seenPhoto.has(x.i) ? false : seenPhoto.add(x.i)))
-  .slice(0, 3);
+
+const fmtMomentDate = (d: Date) =>
+  d
+    .toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' })
+    .toUpperCase();
+
+// Serializable payload for the lightbox island.
+const moments: Moment[] = photoFrames.map((f, i) => ({
+  title: f.data.title,
+  kind: f.data.kind,
+  dateDisplay: fmtMomentDate(f.data.date),
+  story: f.data.story,
+  location: f.data.location,
+  camera: f.data.camera,
+  lens: f.data.lens,
+  iso: f.data.iso,
+  aperture: f.data.aperture,
+  focal: f.data.focal,
+  fps: f.data.fps,
+  quality: f.data.quality,
+  ratio: f.data.ratio,
+  src: f.data.image?.src,
+  video: f.data.video,
+  backdrop: momentBackdrop(i),
+}));
+
+const momentFrameProps = (i: number) => ({
+  index: i,
+  title: photoFrames[i].data.title,
+  year: String(photoFrames[i].data.date.getUTCFullYear()),
+  kind: photoFrames[i].data.kind,
+  ratio: photoFrames[i].data.ratio,
+  image: photoFrames[i].data.image,
+  video: photoFrames[i].data.video,
+});
+
+const archive = packArchive(
+  photoFrames.map((f, i) => ({ index: i, shape: archiveShape(f.data.ratio, f.data.feature) })),
+);
 
 const fmtDate = (d: Date) =>
   d
@@ -401,40 +439,37 @@ const thumbFrame = 'border border-faint/50 transition-colors group-hover:border-
   </section>
 
   <!-- ============ Photography ============ -->
-  <!-- Teaser only: the copy and the highlight strip sit side by side and the
-       one way in is the gallery link. The frames themselves are deliberately
-       not interactive (an in-page viewer here duplicated /photography). -->
-  <section id="photography" class="scroll-mt-16 border-b border-line">
+  <!-- The gallery itself, not a teaser: the "Feature Lead" archive grid over
+       the whole collection, with the shared-element lightbox island below.
+       `.moments moments-inline` borrows the gallery's type and frame styling
+       without repainting the page ground pure black. -->
+  <section id="photography" class="moments moments-inline scroll-mt-16 border-b border-line">
     <div class="container-hud pt-12 pb-16 md:pt-16 md:pb-24">
       <p class="hud-title border-b border-line pb-3">Photography</p>
 
-      <div class="mt-8 md:grid md:grid-cols-[1fr_2fr] md:items-start md:gap-10">
-        <div>
-          <p class="max-w-md text-sm leading-relaxed text-muted">
-            {momentCount} photos and films from the field: race cars, prairie storms, and
-            Winnipeg at minus 30.
-          </p>
-          <Button href="/photography" variant="ghost" size="sm" class="mt-6">
-            Open the gallery
-          </Button>
-        </div>
+      <p class="mt-8 max-w-md text-sm leading-relaxed text-muted">
+        {momentCount} photos and films from the field: race cars, prairie storms, and
+        Winnipeg at minus 30. Click any frame to open it.
+      </p>
 
-        <!-- highlight strip: drawn with the same generated art the gallery uses
-             so the indices line up; real photos flow through once added. -->
-        <div class="mt-8 grid grid-cols-3 gap-3 md:mt-0" aria-hidden="true">
+      <div class="m-archive mt-8">
+        <div class="m-archive-grid">
           {
-            photoHighlights.map(({ i }) => (
-              <div class="relative aspect-square overflow-hidden border border-line/60">
-                <span class="absolute inset-0" style={`background:${momentBackdrop(i)}`} />
-                <span class="absolute bottom-1.5 left-2 font-mono text-[0.55rem] tracking-[0.14em] text-white/70">
-                  {String(i + 1).padStart(2, '0')}
-                </span>
+            archive.placements.map((p) => (
+              <div
+                class={`m-cell-${p.shape}`}
+                style={`--ga:${p.row} / ${p.col} / span ${p.rowSpan} / span ${p.colSpan}`}
+                data-reveal
+              >
+                <MomentFrame {...momentFrameProps(p.index)} fill />
               </div>
             ))
           }
         </div>
       </div>
     </div>
+
+    <MomentLightbox client:load moments={moments} />
   </section>
 </Base>
 
@@ -506,4 +541,44 @@ const thumbFrame = 'border border-faint/50 transition-colors group-hover:border-
   }
 
   document.addEventListener('astro:page-load', initLogFilter);
+</script>
+
+<script>
+  /* Archive films play only while on screen: [data-scrollplay] videos are
+     excluded from footage.ts's always-on management (that owns the hero
+     footage), so this observer owns their playback. Nodes are fresh after
+     every ClientRouter swap; the old observer is dropped wholesale and
+     rebuilt. */
+  let playIO: IntersectionObserver | undefined;
+
+  function initScrollPlay() {
+    playIO?.disconnect();
+    const vids = Array.from(
+      document.querySelectorAll<HTMLVideoElement>('video[data-scrollplay]'),
+    );
+    if (!vids.length) return;
+
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
+      vids.forEach((v) => v.pause());
+      return;
+    }
+
+    playIO = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          const v = e.target as HTMLVideoElement;
+          if (e.isIntersecting) {
+            v.muted = true; // required for programmatic autoplay
+            v.play().catch(() => {});
+          } else {
+            v.pause();
+          }
+        }
+      },
+      { threshold: 0.2 },
+    );
+    vids.forEach((v) => playIO!.observe(v));
+  }
+
+  document.addEventListener('astro:page-load', initScrollPlay);
 </script>

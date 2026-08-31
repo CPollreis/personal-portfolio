@@ -1,15 +1,15 @@
 // Screenshot site pages against a self-managed preview server.
 //
 //   node scripts/screenshot.mjs                  # default page set, Chromium
-//   node scripts/screenshot.mjs /photography /colophon  # specific paths
+//   node scripts/screenshot.mjs /colophon /fsae/bms-can-integration  # specific paths
 //   node scripts/screenshot.mjs --firefox /      # Firefox engine (matches Zen)
 //   node scripts/screenshot.mjs --full /         # full-page instead of viewport
 //   node scripts/screenshot.mjs --mobile /       # 390x844 viewport (phone layouts)
-//   node scripts/screenshot.mjs --reduced-motion /photography  # settle scroll-reveal content immediately
+//   node scripts/screenshot.mjs --reduced-motion /  # settle scroll-reveal content immediately
 //
 // --reduced-motion emulates prefers-reduced-motion, which the site's motion
 // runtime treats as "show everything now" (no [data-reveal] hide-class). Use it
-// to capture content gated behind scroll-reveal (e.g. the /photography archive)
+// to capture content gated behind scroll-reveal (e.g. the #photography archive)
 // that a static full-page shot would otherwise leave invisible.
 //
 // Output: .screenshots/<engine><path>.png, printed as absolute paths.
@@ -24,7 +24,7 @@ const fullPage = args.includes('--full');
 const mobile = args.includes('--mobile');
 const reducedMotion = args.includes('--reduced-motion');
 const paths = args.filter((a) => a.startsWith('/'));
-const pages = paths.length ? paths : ['/', '/photography', '/colophon'];
+const pages = paths.length ? paths : ['/', '/colophon'];
 
 const outDir = path.join(projectRoot, '.screenshots');
 mkdirSync(outDir, { recursive: true });

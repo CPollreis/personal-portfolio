@@ -91,7 +91,7 @@ draft: false
 ## Photography moments
 
 - Location: `src/content/photography/<NN-slug>.md` (one Markdown entry per moment).
-- Rendered in the archive grid at `/photography` (numeric filename prefixes keep
+- Rendered in the archive grid at `/#photography` (numeric filename prefixes keep
   the files ordered on disk; `order` controls display order).
 - The archive lays itself out from this collection alone (the "Feature Lead"
   packer in `src/components/photography/archiveGrid.ts`): adding a file extends

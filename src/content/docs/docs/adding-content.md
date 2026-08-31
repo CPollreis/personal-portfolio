@@ -17,7 +17,7 @@ editing: no layout files, no page files, no counts.
 | --- | --- | --- |
 | FSAE build-log post | `src/content/fsae/<slug>.mdx` | Card in the home **Build log** feed (its subsystem filter count bumps too) + its own page at `/fsae/<slug>` |
 | Project | `src/content/projects/<slug>.mdx` | Card in the home **Build log** feed (the Projects filter count bumps too) + its own page at `/projects/<slug>` |
-| Photo or film moment | `src/content/photography/<NN-slug>.md` | Auto-packed into the `/photography` archive grid; the home photography card's count updates |
+| Photo or film moment | `src/content/photography/<NN-slug>.md` | Auto-packed into the `#photography` archive grid on the home page; its count updates |
 | Position / affiliation | one object in `positions[]` in `src/config/site.ts` | The lines under your name in the home hero |
 
 The Build log is one merged feed of FSAE posts and projects, newest first, with
@@ -201,12 +201,12 @@ needed.
 
    In the archive grid, video moments autoplay muted while scrolled into view
    and pause off-screen (an IntersectionObserver in
-   `src/pages/photography/index.astro` manages them); the tile still opens the
+   the home page's `#photography` script manages them); the tile still opens the
    lightbox like any photo.
 
 ## How the archive grid places a moment
 
-The `/photography` archive is a modular "Feature Lead" grid: the packer in
+The `#photography` archive is a modular "Feature Lead" grid: the packer in
 `src/components/photography/archiveGrid.ts` reads the whole collection (sorted
 by `order`) and fills repeating 2-row bands on a 4-column grid, so there is no
 layout file to edit when the collection grows. Two frontmatter fields decide a
