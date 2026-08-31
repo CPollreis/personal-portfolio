@@ -1,9 +1,4 @@
 ---
-/**
- * Placeholder - intentional HUD "asset pending" frame used until real photos /
- * screenshots are dropped in. Reads as a targeting viewport, not a broken image.
- * Swap for astro:assets <Image> once assets exist.
- */
 import CornerBrackets from '../hud/CornerBrackets.astro';
 
 interface Props {
@@ -31,7 +26,6 @@ const hue = [
   style={`aspect-ratio:${ratio}`}
 >
   <div class={`absolute inset-0 bg-gradient-to-br ${hue} to-transparent`} aria-hidden="true"></div>
-  <!-- fine grid wash -->
   <div
     class="absolute inset-0 opacity-40"
     style="background-image:linear-gradient(var(--color-line-soft) 1px,transparent 1px),linear-gradient(90deg,var(--color-line-soft) 1px,transparent 1px);background-size:28px 28px"

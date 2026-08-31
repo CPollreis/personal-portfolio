@@ -21,15 +21,12 @@ const { project, prev, next } = Astro.props;
 const { Content } = await render(project);
 const { title, kind, stack, summary, links, cover, video, date, hero, heroVideo } = project.data;
 const dateStr = date.toISOString().slice(0, 7);
-/* Media behind the title: dedicated clip, else dedicated hero image, else the cover. */
 const heroImg = hero ?? cover;
 const hasHeroMedia = Boolean(heroVideo || heroImg);
 ---
 
 <Base title={title} description={summary}>
   <article class="pb-24">
-    <!-- hero: the project's own image full bleed, title set into the foot of it.
-         The nav breadcrumb is the way back, so no link sits here too. -->
     <header
       class:list={[
         'relative flex flex-col justify-end overflow-hidden border-b border-line',
@@ -77,9 +74,6 @@ const hasHeroMedia = Boolean(heroVideo || heroImg);
       </div>
     </header>
 
-    <!-- lead clip, when the project has one. The cover is never repeated here:
-         the hero above is the cover, and a project with no image opens on its
-         words rather than on an empty frame. -->
     {
       video && (
         <div class="container-hud mt-10 max-w-3xl">
@@ -88,8 +82,6 @@ const hasHeroMedia = Boolean(heroVideo || heroImg);
       )
     }
 
-    <!-- MDX body. Full width: <Step> blocks span it and hold their figure while
-         the words beside them scroll; loose prose stays in a column. -->
     <div class="prose-hud entry-body mt-12">
       <Content />
     </div>
@@ -98,7 +90,6 @@ const hasHeroMedia = Boolean(heroVideo || heroImg);
       <div class="mt-16">
         <CoordinateAxis startLabel="EOF" endLabel="↑ TOP" />
 
-        <!-- prev / next project -->
         <nav class="mt-8 grid gap-3 sm:grid-cols-2" aria-label="Adjacent projects">
           {
             prev ? (

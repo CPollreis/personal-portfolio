@@ -5,11 +5,9 @@
 @import "@fontsource-variable/inter";
 @import "@fontsource-variable/jetbrains-mono";
 
-/* =========================================================================
-   DESIGN TOKENS  →  Tailwind v4 theme
+/* DESIGN TOKENS  →  Tailwind v4 theme
    These become both CSS vars (var(--color-accent)) and utilities (text-accent).
-   Aesthetic: OLED-black monochrome base + blue→cyan→indigo accent triad.
-   ========================================================================= */
+   Aesthetic: OLED-black monochrome base + blue→cyan→indigo accent triad. */
 @theme {
   /* Surfaces & ink */
   --color-bg: #09090b;
@@ -57,9 +55,7 @@
   --z-modal: 80;
 }
 
-/* =========================================================================
-   BASE
-   ========================================================================= */
+/* BASE */
 @layer base {
   * {
     border-color: var(--color-line);
@@ -148,9 +144,7 @@
   }
 }
 
-/* =========================================================================
-   COMPONENT PRIMITIVES  (reused across the site)
-   ========================================================================= */
+/* COMPONENT PRIMITIVES  (reused across the site) */
 @layer components {
   /* Page gutter + max width */
   .container-hud {
@@ -309,13 +303,11 @@
     width: 100%;
   }
 
-  /* =======================================================================
-     ENTRY BODY - the held-frame rhythm used by build log entries.
+  /* ENTRY BODY - the held-frame rhythm used by build log entries.
      A <Step> photograph holds its half of the screen while that step's words
      scroll past it, then the next step's photograph takes over on the other
      side. Loose prose between steps stays in a normal measured column, so an
-     entry can mix full-width bands and ordinary paragraphs.
-     ======================================================================= */
+     entry can mix full-width bands and ordinary paragraphs. */
   .entry-body {
     max-width: none;
   }
@@ -585,12 +577,10 @@
   }
 }
 
-/* =========================================================================
-   MOTION INITIAL STATES
+/* MOTION INITIAL STATES
    Scoped to html.motion - added by the motion engine ONLY when JS is active and
    reduced-motion is off. Guarantees no-JS / reduced-motion users see content
-   immediately with zero layout shift.
-   ========================================================================= */
+   immediately with zero layout shift. */
 .motion [data-reveal],
 .motion [data-stagger] > *,
 .motion [data-stagger-item] {
@@ -605,20 +595,16 @@
   clip-path: inset(0 0 100% 0);
 }
 
-/* =========================================================================
-   VIEW TRANSITIONS
+/* VIEW TRANSITIONS
    Snappy crossfade between pages; the persistent chrome (progress bar,
-   cursor) rides across untouched.
-   ========================================================================= */
+   cursor) rides across untouched. */
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation-duration: 220ms;
   animation-timing-function: var(--ease-out-hud);
 }
 
-/* =========================================================================
-   MOTION SAFETY
-   ========================================================================= */
+/* MOTION SAFETY */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

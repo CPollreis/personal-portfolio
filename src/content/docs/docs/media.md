@@ -54,9 +54,10 @@ Practical rules:
   for web. Full-bleed background/title clips should carry the
   `data-header-video` attribute so `footage.ts` manages them.
 
-The existing home-hero clip is a good template for naming:
-`public/videos/hero-loop-web.webm` and `public/videos/hero-loop-web.mp4`. Until a
-hero clip exists the home background is simply black.
+The home hero uses the stabilized pair `public/videos/hero-loop-stab-web.webm`
+and `.mp4` (referenced directly in `index.astro`, not through frontmatter);
+`hero-loop-web.*` is the unstabilized source. Until a hero clip exists the home
+background is simply black.
 
 ## Swapping the standalone assets
 

@@ -1,9 +1,3 @@
-/**
- * Single source of truth for site-wide metadata, navigation, socials, and
- * the "current positions" list on the home page. When something about you
- * changes (new role, new availability window, new link), edit it here and
- * nowhere else.
- */
 import { withBase } from './paths';
 
 export const site = {
@@ -26,10 +20,7 @@ export const site = {
   resume: '/resume.pdf',
 } as const;
 
-/**
- * Current positions, newest first. These render verbatim at the top of the
- * home page; append or edit rows here as things change.
- */
+/** Current positions, newest first. Rendered at the top of the home page; edit rows here. */
 export interface Position {
   role: string;
   org: string;
@@ -59,8 +50,7 @@ export interface NavItem {
   index: string;
 }
 
-/** Top bar: wordmark only. Every section is reachable from the one-page home
-   (hero buttons + the on-page photography archive) and the footer index. */
+/** Top bar: wordmark only; every section is reachable from the home page and footer. */
 export const nav: NavItem[] = [];
 
 /** Full section index, used by the footer. */
@@ -81,11 +71,7 @@ export const socials: SocialLink[] = [
   { label: 'Email', href: `mailto:${site.email}` },
 ];
 
-/**
- * Returns true when `href` is the active top-level route for `pathname`.
- * Home only matches exactly; other routes match their prefix. Anchor hrefs
- * (/#section) never report active; section highlighting is not tracked.
- */
+/** True when `href` is the active top-level route for `pathname` (home matches exactly, others by prefix; anchors never match). */
 export function isActive(href: string, pathname: string): boolean {
   if (href.includes('#')) return false;
   // pathname includes the base at build time, so compare against base-prefixed hrefs.

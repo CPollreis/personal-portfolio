@@ -37,7 +37,9 @@ Sorting is automatic: the feed by `date` (newest first) and photography by
 2. Add the frontmatter. Required: `title`, `date`, `subsystem`
    (`firmware` \| `manufacturing` \| `autonomous`), `summary`. Set `subsystem`
    correctly: it color-codes the post everywhere it appears.
-3. Write the body in MDX. To use content components, import them at the top:
+3. Write the body in MDX. Import any images and components at the top, then
+   lay the article out with `<Step>` (the held-frame rhythm) and drop into
+   loose prose or a `<Gallery>` where a Step is not needed:
 
    ```mdx
    ---
@@ -50,12 +52,27 @@ Sorting is automatic: the feed by `date` (newest first) and photography by
    draft: false
    ---
 
+   import Step from '../../components/content/Step.astro';
    import Gallery from '../../components/content/Gallery.astro';
+   import topology from '../../assets/buildlog/IMG_1878.jpg';
 
    The BMS talks isoSPI internally, but the rest of the car speaks CAN...
 
+   <Step figure={topology} caption="First topology sketch, sensor bus above the firewall">
+
+   The interesting part of vehicle networking is not sending frames, it is
+   agreeing on what they mean...
+
+   </Step>
+
    <Gallery labels={['SCOPE · isoSPI', 'BUS · CAN TRACE']} cols={2} />
    ```
+
+   `<Step figure={img} caption="...">words</Step>` gives a two-column band whose
+   figure sticks while the words scroll; successive Steps auto-alternate sides.
+   `<Step figure={img} />` alone is a centered plate; `<Step>words</Step>` with
+   no figure is a full-width text band. Full rules:
+   [Entry pages: the held-frame body](/docs/architecture/#entry-pages-the-held-frame-body).
 
 4. (Optional) Add a `cover` image (co-locate the file and reference it,
    e.g. `cover: ./can-trace.jpg`). The cover doubles as the entry's **thumbnail

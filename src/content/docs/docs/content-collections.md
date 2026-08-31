@@ -16,6 +16,9 @@ are three content collections (plus the `docs` collection that powers these page
 - `subsystem` drives color-coding across the site (firmware is blue,
   manufacturing is cyan, autonomous is indigo) and picks the entry's sub-filter
   in the Build log (Firmware / Manufacturing / Autonomy).
+- The MDX body carries the writeup. Import images at the top (from
+  `src/assets/buildlog/` or a co-located file) and lay the article out with
+  `<Step>`; see [Entry pages: the held-frame body](/docs/architecture/#entry-pages-the-held-frame-body).
 
 | Field | Type | Meaning |
 | --- | --- | --- |
@@ -24,7 +27,7 @@ are three content collections (plus the `docs` collection that powers these page
 | `subsystem` | `firmware` \| `manufacturing` \| `autonomous`, required | Drives site-wide color-coding. |
 | `season` | string, optional | Free-text season label, e.g. `2024 Season`. |
 | `summary` | string, required | One or two sentence blurb for cards and the post header. |
-| `cover` | image, optional | Card/lead image. Reference a co-located file, e.g. `./front-wing.jpg`; optimized by `astro:assets`. |
+| `cover` | image, optional | Card/lead image. Reference a co-located file (`./front-wing.jpg`) or one from `src/assets/buildlog/`; optimized by `astro:assets`. |
 | `hero` | image, optional | Full-bleed image behind the entry title. Falls back to `cover`. |
 | `heroVideo` | string, optional | Full-bleed looping clip behind the title. A `public/` path like `/videos/clip.mp4`. Wins over `hero`/`cover`. |
 | `tags` | string array, default `[]` | Freeform tags. |

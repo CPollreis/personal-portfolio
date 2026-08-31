@@ -1,10 +1,4 @@
 ---
-/**
- * MomentFrame - one gallery frame (photo or video). A button that opens the
- * moment lightbox (wired by index via [data-moment-index]). Carries the
- * isometric tilt + glare hover treatment from moments.css; the inner
- * [data-media] element is the shared-element source for the lightbox FLIP.
- */
 import { Image } from 'astro:assets';
 import { momentBackdrop } from './backdrop';
 import { withBase } from '../../config/paths';
@@ -83,7 +77,6 @@ const videoWebm = video?.endsWith('.mp4') ? video.replace(/\.mp4$/, '.webm') : n
       )
     }
 
-    <!-- tiny frame index, whisper of cyan -->
     <span
       class="absolute left-3 top-3 z-[3] font-mono text-[0.6rem] tracking-[0.18em] text-cyan/70 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
       aria-hidden="true"

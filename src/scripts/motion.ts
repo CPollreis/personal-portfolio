@@ -1,27 +1,3 @@
-/**
- * Motion engine - one shared, declarative anime.js runtime for the whole site.
- *
- * Markup opts in with data-attributes; this script wires IntersectionObserver +
- * anime.js so pages ship zero per-effect JS. Everything degrades gracefully:
- *   • No JS            → content is fully visible (initial-hidden CSS is scoped
- *                        to `html.motion`, which only this script adds).
- *   • Reduced motion   → final states applied instantly, no animation.
- *
- * Supported attributes:
- *   data-reveal[="up|left|right|clip"] fade + slide (or clip-wipe) an element in
- *   data-reveal-delay="120"            ms delay
- *   data-stagger                       container: stagger its [data-stagger-item]s
- *   data-stagger-gap="60"              per-item ms (default 45)
- *   data-counter="1240"                count up to a number (tabular)
- *   data-counter-prefix="$"            prepended before the value
- *   data-counter-suffix="+"            appended after the value
- *   data-scramble                      scramble-reveal the element's text
- *   data-draw[="scroll"]               draw inline SVG strokes on enter (or synced)
- *   data-parallax="0.15"               slow scroll drift for decorative layers
- *
- * Re-initializes after ClientRouter page swaps (astro:page-load); nodes are
- * marked with data-mo-bound so repeat passes never double-bind.
- */
 import { animate, stagger, createDrawable, onScroll, utils, cubicBezier } from 'animejs';
 
 const prefersReduced =

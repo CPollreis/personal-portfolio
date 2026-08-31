@@ -1,24 +1,3 @@
-/**
- * footage.ts - keeps background/title videos rolling across ClientRouter
- * swaps. Loaded once per session from Base.astro (so the listener exists no
- * matter which page the visitor lands on); every page-load pass finds each
- * `video[data-header-video]` and (re)starts it. Failure modes covered:
- *  - ClientRouter parses the next page in an inert document; <video> elements
- *    adopted from it may never run source selection, or carry a candidate
- *    list already marked as failed
- *  - Firefox's macOS H.264 decoder can fail outright after a swap ("could not
- *    be decoded ... Expected Planar YCbCr image"), leaving NETWORK_NO_SOURCE;
- *    poking the same element with load() often re-hits the same broken path,
- *    so a dead element is instead rebuilt from scratch - a fresh element
- *    behaves like a real page parse (which always plays) and re-tries the
- *    webm source first, which Firefox decodes in software
- *  - the autoplay attribute only fires on a real page parse, so playback is
- *    restarted explicitly
- *  - browsers pause media in hidden tabs (and on back/forward-cache restores)
- *    without reliably resuming, so a resync also runs when the tab becomes
- *    visible again and on pageshow
- * Respects prefers-reduced-motion by holding still.
- */
 const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
 
 function begin(video: HTMLVideoElement) {
