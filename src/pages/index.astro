@@ -206,16 +206,18 @@ const thumbFrame = 'border border-faint/50 transition-colors group-hover:border-
           </div>
         </div>
 
-        <div class="mt-6 aspect-[4/3] max-h-[16dvh] w-full min-h-0 shrink md:max-h-none [@media(max-height:700px)]:hidden [@media(max-width:374px)]:hidden">
-          <Placeholder ratio="auto" label="CP · REPLACE" seed={3} class="!h-full !w-full !border-faint/50" />
+        <div class="mt-6 flex shrink justify-center [@media(max-height:700px)]:hidden [@media(max-width:374px)]:hidden">
+          <div class="aspect-[3/4] h-[19dvh] shrink-0 [mask-image:linear-gradient(to_bottom,#000_60%,transparent)] [-webkit-mask-image:linear-gradient(to_bottom,#000_60%,transparent)] md:h-[clamp(220px,34dvh,360px)]">
+            <Placeholder ratio="auto" label="CP · REPLACE" seed={3} class="!h-full !w-full !border-faint/50" />
+          </div>
         </div>
       </div>
     </div>
   </section>
 
   <section id="fsae" class="scroll-mt-16">
-    <div class="container-hud pt-16 pb-12 md:pt-24 md:pb-16">
-      <p id="projects" class="hud-title scroll-mt-16 border-b border-line pb-3">
+    <div class="container-hud pt-6 pb-6 md:pt-8 md:pb-8">
+      <p id="projects" class="hud-title scroll-mt-16">
         Posts · {feed.length} entries
       </p>
 
@@ -377,8 +379,8 @@ const thumbFrame = 'border border-faint/50 transition-colors group-hover:border-
   </section>
 
   <section id="photography" class="moments moments-inline scroll-mt-16 border-b border-line">
-    <div class="container-hud pt-12 pb-16 md:pt-16 md:pb-24">
-      <p class="hud-title border-b border-line pb-3">Photography</p>
+    <div class="container-hud pt-4 pb-4 md:pt-6 md:pb-6">
+      <p class="hud-title">Photography</p>
 
       <div class="m-archive mt-8">
         <div class="m-archive-grid">

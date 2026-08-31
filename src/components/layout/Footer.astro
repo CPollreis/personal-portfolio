@@ -1,54 +1,53 @@
 ---
 import { site, socials } from '../../config/site';
-import { withBase } from '../../config/paths';
+import Button from '../ui/Button.astro';
 import SocialIcon from '../ui/SocialIcon.astro';
 
 const year = new Date().getFullYear();
 ---
 
 <footer class="relative border-t border-line bg-surface/40">
-  <div class="container-hud py-8">
-    <div class="flex flex-col gap-8 sm:flex-row sm:items-start sm:justify-between">
-      <div>
-        <p class="font-display text-2xl text-ink">{site.name}</p>
-        <p class="mt-2 max-w-sm text-sm text-muted">{site.tagline}</p>
-      </div>
-
-      <div class="flex flex-col gap-5 sm:items-end">
-        <div>
-          <p class="hud-label mb-4">Connect</p>
-          <ul class="flex items-center gap-4">
-            {
-              socials.map((s) => (
-                <li>
-                  <a
-                    href={s.href}
-                    class="link-hud inline-flex text-muted hover:text-ink"
-                    aria-label={s.label}
-                    rel={s.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                    target={s.href.startsWith('http') ? '_blank' : undefined}
-                  >
-                    <SocialIcon label={s.label} />
-                  </a>
-                </li>
-              ))
-            }
-          </ul>
-        </div>
-        <a
-          href={withBase(site.resume)}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="hud-label inline-flex items-center gap-1.5 border border-line px-3 py-1.5 text-muted transition-colors hover:border-faint hover:text-ink"
-        >
-          Resume <span aria-hidden="true">↗</span>
-        </a>
-      </div>
-    </div>
-
-    <div class="mt-6 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+  <div class="container-hud">
+    <div class="flex flex-wrap items-center justify-between gap-x-8 gap-y-6 py-8">
       <p class="hud-label">© {year} {site.name}</p>
-      <a href={withBase('/colophon')} class="link-hud hud-label hover:text-ink">Built with Astro · anime.js → Colophon</a>
+
+      <div class="flex flex-wrap items-center gap-x-8 gap-y-6">
+        <ul class="flex items-center gap-x-6">
+          {
+            socials.map((s) => (
+              <li>
+                <a
+                  href={s.href}
+                  class="link-hud inline-flex text-muted hover:text-ink"
+                  aria-label={s.label}
+                  rel={s.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                  target={s.href.startsWith('http') ? '_blank' : undefined}
+                >
+                  <SocialIcon
+                    label={s.label}
+                    class={
+                      s.label === 'Email'
+                        ? 'h-10 w-10'
+                        : s.label === 'GitHub'
+                          ? 'h-9 w-9'
+                          : 'h-8 w-8'
+                    }
+                  />
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+
+        <Button
+          href={site.resume}
+          external
+          variant="ghost"
+          class="!text-muted !border-line hover:!border-faint hover:!text-ink"
+        >
+          Resume
+        </Button>
+      </div>
     </div>
   </div>
 </footer>
