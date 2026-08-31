@@ -30,7 +30,7 @@ import Placeholder from '../components/media/Placeholder.astro';
 import MomentFrame from '../components/photography/MomentFrame.astro';
 import MomentLightbox, { type Moment } from '../components/photography/MomentLightbox.tsx';
 import { momentBackdrop } from '../components/photography/backdrop';
-import { archiveShape, packArchive } from '../components/photography/archiveGrid';
+import { archiveShape } from '../components/photography/archiveGrid';
 import { subsystems, type Subsystem } from '../config/fsae';
 import { site, positions, socials } from '../config/site';
 import { withBase } from '../config/paths';
@@ -90,14 +90,13 @@ const logFilters = [
   { id: 'fw', label: 'Firmware', count: catCount('fw'), fc: 'var(--color-accent)', ftc: 'var(--color-ink)', level: 1 },
   { id: 'mfg', label: 'Manufacturing', count: catCount('mfg'), fc: 'var(--color-cyan)', ftc: 'var(--color-bg)', level: 1 },
 ];
-/* Photography lives here in full: the "Feature Lead" archive grid from
-   archiveGrid.ts over the whole collection, with the shared-element lightbox
-   island below it. Adding a file to src/content/photography/ flows straight
-   into the next band. */
+/* Photography lives here in full: the mosaic archive grid over the whole
+   collection, with the shared-element lightbox island below it. Adding a file
+   to src/content/photography/ flows straight into the grid; its `ratio` picks
+   the cell shape and `grid-auto-flow: dense` packs it. */
 const photoFrames = (await getCollection('photography')).sort(
   (a, b) => a.data.order - b.data.order || b.data.date.getTime() - a.data.date.getTime(),
 );
-const momentCount = photoFrames.length;
 
 const fmtMomentDate = (d: Date) =>
   d
@@ -134,9 +133,9 @@ const momentFrameProps = (i: number) => ({
   video: photoFrames[i].data.video,
 });
 
-const archive = packArchive(
-  photoFrames.map((f, i) => ({ index: i, shape: archiveShape(f.data.ratio, f.data.feature) })),
-);
+// Mosaic cells: shape ('tall' | 'std') comes straight from the ratio; the grid
+// packs them with `grid-auto-flow: dense` so order + backfill do the layout.
+const archiveCells = photoFrames.map((f, i) => ({ index: i, shape: archiveShape(f.data.ratio) }));
 
 const fmtDate = (d: Date) =>
   d
@@ -439,29 +438,22 @@ const thumbFrame = 'border border-faint/50 transition-colors group-hover:border-
   </section>
 
   <!-- ============ Photography ============ -->
-  <!-- The gallery itself, not a teaser: the "Feature Lead" archive grid over
-       the whole collection, with the shared-element lightbox island below.
+  <!-- The gallery itself, not a teaser: a mosaic archive grid over the whole
+       collection, with the shared-element lightbox island below. Every frame
+       keeps its aspect ratio (portraits span two rows), and `grid-auto-flow:
+       dense` backfills holes left to right so the last row always closes flush.
        `.moments moments-inline` borrows the gallery's type and frame styling
        without repainting the page ground pure black. -->
   <section id="photography" class="moments moments-inline scroll-mt-16 border-b border-line">
     <div class="container-hud pt-12 pb-16 md:pt-16 md:pb-24">
       <p class="hud-title border-b border-line pb-3">Photography</p>
 
-      <p class="mt-8 max-w-md text-sm leading-relaxed text-muted">
-        {momentCount} photos and films from the field: race cars, prairie storms, and
-        Winnipeg at minus 30. Click any frame to open it.
-      </p>
-
       <div class="m-archive mt-8">
         <div class="m-archive-grid">
           {
-            archive.placements.map((p) => (
-              <div
-                class={`m-cell-${p.shape}`}
-                style={`--ga:${p.row} / ${p.col} / span ${p.rowSpan} / span ${p.colSpan}`}
-                data-reveal
-              >
-                <MomentFrame {...momentFrameProps(p.index)} fill />
+            archiveCells.map((c) => (
+              <div class={`m-cell-${c.shape}`} data-reveal>
+                <MomentFrame {...momentFrameProps(c.index)} fill />
               </div>
             ))
           }

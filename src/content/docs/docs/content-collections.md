@@ -93,9 +93,10 @@ draft: false
 - Location: `src/content/photography/<NN-slug>.md` (one Markdown entry per moment).
 - Rendered in the archive grid at `/#photography` (numeric filename prefixes keep
   the files ordered on disk; `order` controls display order).
-- The archive lays itself out from this collection alone (the "Feature Lead"
-  packer in `src/components/photography/archiveGrid.ts`): adding a file extends
-  the grid, and `ratio` + `feature` decide the tile's shape. See
+- The archive lays itself out from this collection alone (the mosaic grid, with
+  the cell shape from `src/components/photography/archiveGrid.ts`): adding a file
+  extends the grid, and `ratio` decides whether the tile is a standard cell or a
+  full-height tall. See
   [the archive grid](/docs/adding-content/#how-the-archive-grid-places-a-moment)
   for the placement rules.
 - The Markdown body is unused: `story` carries the caption shown in the lightbox.
@@ -118,8 +119,7 @@ draft: false
 | `quality` | string, optional | Quality readout (videos), e.g. `4K UHD`. |
 | `image` | image, optional | Co-located still, e.g. `./frame.jpg`; optimized by `astro:assets`. Used as the poster for video moments too. |
 | `video` | string, optional | Looping clip for `kind: video` moments. A `public/` path like `/videos/clip.mp4`. A co-hosted `.webm` sibling is tried first for Firefox. |
-| `ratio` | one of `1/1`, `4/3`, `3/4`, `3/2`, `2/3`, `16/9`, `9/16`; default `3/2` | Aspect ratio of the tile. Also drives grid shape: vertical ratios (`3/4`, `2/3`, `9/16`) render as full-band talls, twice the height of a still. |
-| `feature` | boolean, default `false` | Renders as an oversized 2x2 lead in the archive grid. Leads alternate sides band to band. Ignored on vertical ratios (a 2x2 cell is a landscape crop). |
+| `ratio` | one of `1/1`, `4/3`, `3/4`, `3/2`, `2/3`, `16/9`, `9/16`; default `3/2` | Aspect ratio of the tile. Also drives grid shape: vertical ratios (`3/4`, `2/3`, `9/16`) render as talls, twice the height of a still. |
 | `order` | number, default `99` | Display order in the gallery (lower shows first). |
 
 ### Example frontmatter: a photo
