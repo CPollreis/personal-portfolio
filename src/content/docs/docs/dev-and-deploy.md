@@ -39,11 +39,12 @@ repository's Actions tab if you want to confirm it succeeded.
 
 The site is served from `calebpollreis.com`:
 
-- `public/CNAME` carries the custom domain so GitHub Pages keeps it configured on
-  each deploy. Do not delete it.
+- The custom domain is set in the repository's **Settings -> Pages -> Custom
+  domain**. There is no `CNAME` file in the repo; GitHub keeps the domain
+  attached to each deploy. If the domain ever changes, update it there.
 - `site: 'https://calebpollreis.com'` in `astro.config.mjs` makes the generated
-  sitemap and the canonical/OG URLs use the real domain. Keep the two in sync if
-  the domain ever changes.
+  sitemap and the canonical/OG URLs use the real domain. Keep it in sync with
+  the Pages setting.
 - There is no configured `base`, so the site serves from the domain root. In-site
   links still pass through `withBase()` (`src/config/paths.ts`), so the site would
   keep working if it were ever moved to a subpath.

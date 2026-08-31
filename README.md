@@ -42,8 +42,8 @@ https://calebpollreis.com/docs on the live site. Source is in
 
 - `src/config/site.ts` - name, tagline, positions, socials, email
 - `public/resume.pdf` - overwrite to publish a new resume
-- `astro.config.mjs` - `site` must match the production domain
-- `public/CNAME` - the custom domain for GitHub Pages
+- `astro.config.mjs` - `site` must match the production domain (also set in
+  the repo's GitHub Pages settings)
 
 ## Deploy
 

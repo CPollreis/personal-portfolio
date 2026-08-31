@@ -22,13 +22,15 @@ The site is a one-pager with satellite pages. Routes come from files in
 - `index.astro` (`/`): the whole site in one scroll. A compact bio hero
   (positions and links from `src/config/site.ts`) over the stabilized car
   footage, then anchor sections `#fsae` (the **Build log**: FSAE posts and
-  personal projects merged into one filterable feed) and a
-  `#photography` (the full gallery: the "Feature Lead" archive grid plus the
-  lightbox island). Both the feed and the grid render straight from the content
-  collections, so they grow automatically as entries are added. See [The build log and its filter](#the-build-log-and-its-filter)
-  below for how the feed and its filter rail work.
+  personal projects merged into one filterable feed) and `#photography` (the
+  full photography gallery: a dense mosaic archive grid plus the lightbox
+  island). Both the feed and the grid render straight from the content
+  collections, so they grow automatically as entries are added. See
+  [The build log and its filter](#the-build-log-and-its-filter) and
+  [The photography archive grid](#the-photography-archive-grid) below.
 - `fsae/[...slug].astro` and `projects/[...slug].astro`: one dynamic route per
-  build-log entry / project writeup.
+  build-log entry / project writeup. See
+  [Entry pages: the held-frame body](#entry-pages-the-held-frame-body).
 - `colophon.astro`, `404.astro`: one file per route.
 - The old tab URLs redirect: `/fsae` → `/#fsae`, `/projects` → `/#projects`,
   `/photography` → `/#photography`, `/about` → `/`, and the retired
@@ -110,6 +112,84 @@ listening for `hashchange`. Everything re-initializes on `astro:page-load`, so
 the filter survives client-side navigation. Adding a filter or a subsystem is a
 content/config task, covered in
 [Adding or changing a build-log filter](/docs/adding-content/#adding-or-changing-a-build-log-filter).
+
+## The photography archive grid
+
+The `#photography` section is the full gallery, not a teaser. `index.astro`
+reads the `photography` collection, sorts it by `order` then `date`, and lays
+every moment out in one CSS grid: four columns on desktop, two below `md`, with
+`grid-auto-flow: dense`. There is no layout file and no per-row markup to
+maintain, so the grid grows with the collection.
+
+`src/components/photography/archiveGrid.ts` is the only placement logic. Its
+`archiveShape(ratio)` maps a moment's `ratio` to one of two cell shapes:
+
+- a **vertical** ratio (`3/4`, `2/3`, `9/16`) becomes a `tall` cell: one column
+  wide, two row-heights, so portraits keep their shape.
+- everything else becomes a `std` cell: a single row-height holding a `3/2`
+  face; other landscape/square ratios cover-crop to fit.
+
+Dense flow then backfills every gap left to right, so the last row always
+closes flush no matter how many moments exist. Aspect ratio is the only lever
+on a tile's footprint: there is no oversized or "feature" cell.
+
+Each tile is a `MomentFrame.astro` button carrying `data-moment-index`. The
+`MomentLightbox` island (see [React islands](#react-islands)) delegates clicks
+from those buttons and runs the shared-element zoom into the detail view.
+`kind: video` tiles autoplay muted while scrolled into view and pause
+off-screen: a second inline `<script>` in `index.astro` (`initScrollPlay()`)
+owns those `[data-scrollplay]` videos with its own IntersectionObserver, so
+they stay out of `footage.ts`'s always-on management (which owns the hero
+footage).
+
+## Entry pages: the held-frame body
+
+`fsae/[...slug].astro` and `projects/[...slug].astro` are near-identical. Each
+calls `getStaticPaths()` over its collection (drafts excluded, newest first),
+and renders one page per entry:
+
+1. A full-bleed **header**: `HeaderMedia.astro` paints the `heroVideo`, else
+   `hero`, else `cover` behind the title, with a subsystem badge (FSAE) or a
+   "Project" tag, the date, and `tags` / `stack`. With no media it falls back
+   to a plain padded header.
+2. An optional lead **`<VideoEmbed>`** when the entry sets a `video` URL.
+3. The **MDX body**, rendered by `<Content />` inside
+   `<div class="prose-hud entry-body">`.
+4. **Prev / next** links to the adjacent entries and a "Back to all entries"
+   link to `/#fsae` (or `/#projects`).
+
+Inside the body, loose Markdown prose renders as a normal measured column
+(`68ch`, centered). The rhythm comes from **`<Step>`**
+(`src/components/content/Step.astro`), which has three modes:
+
+| Usage | Renders as |
+| --- | --- |
+| `<Step figure={img} caption="...">` with body text | A two-column band. The figure is `position: sticky` and holds its half of the screen while the words beside it scroll past, then the next Step's figure takes over on the **opposite** side. |
+| `<Step figure={img} />` with no body | A centered plate (`entry-plate`), caption beneath. Not sticky. |
+| `<Step>` with body text and no `figure` | A full-width measured band of text (`entry-step--solo`), for a decision or trade-off with nothing to photograph. |
+
+Sides alternate on their own: the CSS flips every second `.entry-step` with
+`:nth-of-type(even)`, which works only because `<Step>` is the sole `<section>`
+an entry body emits. You never pass `left` or `right`. Portrait figures
+(`height > width`) are narrowed rather than cropped. Images are `import`ed at
+the top of the `.mdx` file (from `src/assets/buildlog/` or a co-located file)
+and passed to `figure={...}`.
+
+## Content components
+
+`src/components/content/` holds the three components an MDX body can import:
+
+- **`Step.astro`** - the held-frame body rhythm above.
+- **`Gallery.astro`** - a 2- or 3-column grid of optimized images
+  (`images={[{ src, alt }]}`) or on-brand placeholder frames
+  (`labels={[...]}`) for shots you have not taken yet.
+- **`VideoEmbed.astro`** - a lazy, responsive YouTube/Vimeo embed framed in HUD
+  brackets. Also used directly by the entry pages for the `video` field.
+
+Everything else under `src/components/` is layout and decoration: `hud/`
+(registration marks, reticles, spec labels), `layout/` (`Nav`, `Footer`,
+`Section`, `HeaderMedia`), `motion/` (`Reveal`, `Stagger` wrappers over the
+motion engine), `media/Placeholder.astro`, and `ui/` (`Button`, `SocialIcon`).
 
 ## Design tokens and Tailwind v4
 

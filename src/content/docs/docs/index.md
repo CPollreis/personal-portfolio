@@ -12,9 +12,10 @@ edit instead of an archaeology session.
 
 - A statically generated Astro site (no server at runtime, just files in `dist/`).
 - A one-pager: `/` scrolls through a bio hero, a filterable
-  **Build log** (FSAE posts and personal projects in one feed), and a
-  Photography teaser; the post writeups and the gallery are satellite pages
-  linked from their sections.
+  **Build log** (FSAE posts and personal projects in one feed), and the full
+  **Photography** gallery (archive grid + lightbox, inline). The per-entry
+  writeups at `/fsae/<slug>` and `/projects/<slug>` are the only satellite
+  pages, linked from the Build log.
 - Content lives in Markdown and MDX under `src/content/`, validated by typed
   schemas in `src/content.config.ts`.
 - The visual language is an engineering-HUD look: OLED-black base, a
