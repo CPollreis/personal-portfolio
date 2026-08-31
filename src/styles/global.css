@@ -65,13 +65,6 @@
     -webkit-text-size-adjust: 100%;
     scroll-behavior: smooth;
     background-color: var(--color-bg);
-    /* Fluid upscale: at or below 1440px the root stays 16px, so phones,
-       tablets and laptops render exactly as before. Past 1440px the root
-       grows with the viewport (~0.54px per 100px of extra width) and every
-       rem-based size, spacing and the .container-hud cap zoom with it, so a
-       4K panel reads as a scaled-up version of the 1440px layout instead of
-       stranding the content in the middle. Ceiling of 22px (1.375x) hits
-       around 2560px and holds there. */
     font-size: clamp(16px, calc(16px + (100vw - 1440px) * 0.00536), 22px);
   }
 
