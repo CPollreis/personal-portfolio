@@ -67,9 +67,11 @@ These live at the root of `public/` and are replaced by overwriting the file
 - **Favicon**: `public/favicon.svg`, linked from `src/layouts/Base.astro`
   (`<link rel="icon" type="image/svg+xml" ...>`). Keep it an SVG or update the
   link tag if you change formats.
-- **Open Graph image**: `public/og-default.png`, the default social-share image
+- **Open Graph image**: `public/og-victory.png`, the default social-share image
   used by `src/components/Seo.astro`. Regenerate it if the branding changes; keep
-  it around 1200x630.
+  it around 1200x630. If you replace it, give the file a new name and update the
+  `image` default in `Seo.astro` so caches on Discord, Slack, and iMessage are
+  forced to refetch.
 - **robots.txt**: `public/robots.txt` if crawl rules need to change.
 
 ## Site copy and config
