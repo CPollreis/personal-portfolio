@@ -138,12 +138,13 @@
 }
 
 
-/* ---- archive: "Feature Lead" grid ---------------------------------------
-   Band-based collage grid computed in archiveGrid.ts. Desktop (md+) runs 4
-   columns with explicit placements passed per cell via --ga; small screens
-   fall back to a 2-column dense flow driven by the same shape classes. The
-   base row equals one 3:2 still at current column width, so talls (2 rows)
-   run exactly twice a still's height and leads (2x2) hold a 3:2 face. */
+/* ---- archive: mosaic grid ---------------------------------------------
+   Fixed-column CSS grid (4 cols desktop, 2 mobile) with `grid-auto-flow:
+   dense`: frames flow in content order and dense backfills every hole left to
+   right, so the last row always closes flush. Shape comes from archiveGrid.ts
+   -- the base row equals one 3:2 still at the current column width, so a 'std'
+   cell holds a 3:2 face and a 'tall' (2 rows) holds a 3:4 portrait. Other
+   ratios cover-crop to the nearest of the two. */
 .m-archive {
   container-type: inline-size;
 }
@@ -159,43 +160,12 @@
 .m-cell-tall {
   grid-row: span 2;
 }
-.m-cell-lead {
-  grid-row: span 2;
-  grid-column: span 2;
-}
-
-/* The index tile only exists to square off the desktop placement's final
-   band; the mobile dense flow doesn't need it. */
-.m-index-tile {
-  display: none;
-}
 
 @media (min-width: 768px) {
   .m-archive-grid {
     grid-template-columns: repeat(4, 1fr);
     gap: 12px;
     grid-auto-rows: calc((100cqw - 36px) / 4 * 2 / 3);
-  }
-  .m-archive-grid > * {
-    grid-area: var(--ga);
-  }
-  .m-index-tile {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    gap: 0.2rem;
-    padding: 0.9rem;
-    border: 1px solid var(--m-line);
-    font-family: var(--font-mono);
-    font-size: 0.62rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--m-dim);
-  }
-  .m-index-tile b {
-    font-weight: 500;
-    font-size: 0.72rem;
-    color: #e5e5e4;
   }
 }
 

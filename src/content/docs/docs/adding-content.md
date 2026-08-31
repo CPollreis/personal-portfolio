@@ -206,29 +206,25 @@ needed.
 
 ## How the archive grid places a moment
 
-The `#photography` archive is a modular "Feature Lead" grid: the packer in
-`src/components/photography/archiveGrid.ts` reads the whole collection (sorted
-by `order`) and fills repeating 2-row bands on a 4-column grid, so there is no
-layout file to edit when the collection grows. Two frontmatter fields decide a
-moment's shape:
+The `#photography` archive is a mosaic grid: a fixed-column CSS grid (4 columns
+on desktop, 2 on mobile) with `grid-auto-flow: dense`, so there is no layout
+file to edit when the collection grows. Frames flow in `order` sequence and
+dense flow backfills every gap left to right, so the last row always closes
+flush. `src/components/photography/archiveGrid.ts` maps each `ratio` to a cell
+shape:
 
 | Frontmatter | Shape in the grid |
 | --- | --- |
-| vertical `ratio` (`3/4`, `2/3`, `9/16`) | **Tall**: one column wide, the full band height - exactly twice the height of a `3/2` still. |
-| `feature: true` (non-vertical ratios) | **Lead**: an oversized 2x2 cell. At most one per band, and leads alternate left/right from band to band. |
-| anything else | **Still**: a standard cell; stills stack two per column. |
+| vertical `ratio` (`3/4`, `2/3`, `9/16`) | **Tall**: one column wide, two row-heights - exactly twice the height of a `3/2` still, so portraits keep their shape. |
+| anything else | **Still**: a standard cell holding a `3/2` face. Other landscape/square ratios cover-crop to fit. |
 
 Practical notes:
 
-- Give each band at most one `feature: true` moment if you care exactly where
-  leads land; extra features simply lead later bands.
-- The typographic index tile ("12 moments · 2021 - 2026 · ...") is generated
-  automatically from whatever cells the final band leaves open. Its counts
-  update on their own; never edit it by hand.
-- On small screens the same tiles reflow into a 2-column dense grid and the
-  index tile hides itself.
+- Aspect ratio is the only lever on a tile's footprint; there is no oversized
+  or feature cell.
+- On small screens the same tiles reflow into a 2-column dense grid.
 - To reorder the archive, change `order` values (and ideally the `NN-` filename
-  prefix to match); the packer re-lays everything out at build time.
+  prefix to match); the grid re-lays everything out at build time.
 
 ## A new position or affiliation
 
