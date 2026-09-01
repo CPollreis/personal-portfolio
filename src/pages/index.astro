@@ -25,44 +25,29 @@ const projects = (await getCollection('projects', ({ data }) => !data.draft)).so
   (a, b) => a.data.order - b.data.order || b.data.date.getTime() - a.data.date.getTime(),
 );
 
-type LogCat = 'fw' | 'mfg' | 'av' | 'prj';
-const subsystemCat: Record<Subsystem, LogCat> = {
-  firmware: 'fw',
-  manufacturing: 'mfg',
-  autonomous: 'av',
-};
-const feed = [
-  ...fsaePosts.map((p) => ({
-    href: withBase(`/fsae/${p.id}`),
-    cat: subsystemCat[p.data.subsystem],
-    subsystem: p.data.subsystem as Subsystem | null,
-    code: subsystems[p.data.subsystem].code,
-    title: p.data.title,
-    summary: p.data.summary,
-    date: p.data.date,
-    cover: p.data.cover,
-  })),
-  ...projects.map((p) => ({
-    href: withBase(`/projects/${p.id}`),
-    cat: 'prj' as LogCat,
-    subsystem: null as Subsystem | null,
-    code: 'PRJ',
-    title: p.data.title,
-    summary: p.data.summary,
-    date: p.data.date,
-    cover: p.data.cover,
-  })),
-].sort((a, b) => b.date.getTime() - a.date.getTime());
+const projectEntries = projects.map((p) => ({
+  href: withBase(`/projects/${p.id}`),
+  subsystem: null as Subsystem | null,
+  code: 'PRJ',
+  title: p.data.title,
+  summary: p.data.summary,
+  date: p.data.date,
+  cover: p.data.cover,
+}));
 
-const catCount = (c: LogCat) => feed.filter((e) => e.cat === c).length;
-const fsaeCount = catCount('fw') + catCount('mfg') + catCount('av');
-const logFilters = [
-  { id: 'all', label: 'All entries', count: feed.length, fc: 'var(--color-ink)', ftc: 'var(--color-bg)', level: 0 },
-  { id: 'prj', label: 'Projects', count: catCount('prj'), fc: 'var(--color-ink)', ftc: 'var(--color-bg)', level: 0 },
-  { id: 'fsae', label: 'FSAE', count: fsaeCount, fc: 'var(--color-accent)', ftc: 'var(--color-ink)', level: 0 },
-  { id: 'av', label: 'Autonomy', count: catCount('av'), fc: 'var(--color-indigo)', ftc: 'var(--color-ink)', level: 1 },
-  { id: 'fw', label: 'Firmware', count: catCount('fw'), fc: 'var(--color-accent)', ftc: 'var(--color-ink)', level: 1 },
-  { id: 'mfg', label: 'Manufacturing', count: catCount('mfg'), fc: 'var(--color-cyan)', ftc: 'var(--color-bg)', level: 1 },
+const fsaeEntries = fsaePosts.map((p) => ({
+  href: withBase(`/fsae/${p.id}`),
+  subsystem: p.data.subsystem as Subsystem | null,
+  code: subsystems[p.data.subsystem].code,
+  title: p.data.title,
+  summary: p.data.summary,
+  date: p.data.date,
+  cover: p.data.cover,
+}));
+
+const feedSections = [
+  { id: 'projects', title: 'Projects', entries: projectEntries },
+  { id: 'fsae', title: 'FSAE', entries: fsaeEntries },
 ];
 const photoFrames = (await getCollection('photography')).sort(
   (a, b) =>
@@ -223,7 +208,7 @@ const thumbFrame = 'border border-faint/50 transition-colors group-hover:border-
 
             <div class="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:gap-8">
               <div class="flex w-52 gap-3 md:w-60">
-                <Button href="#posts" size="sm" class="flex-1 justify-center">My work</Button>
+                <Button href="#projects" size="sm" class="flex-1 justify-center">My work</Button>
                 <Button href={site.resume} external size="sm" class="flex-1 justify-center">Resume</Button>
               </div>
 
@@ -260,85 +245,23 @@ const thumbFrame = 'border border-faint/50 transition-colors group-hover:border-
     </div>
   </section>
 
-  <section id="fsae" class="scroll-mt-16">
-    <div class="container-hud pt-6 pb-6 md:pt-8 md:pb-8">
-      <p id="projects" class="hud-title scroll-mt-16">
-        Posts · {feed.length} entries
-      </p>
+  {
+    feedSections.map((sec, si) => (
+      <section id={sec.id} class:list={['scroll-mt-16', si > 0 && 'border-t border-line']}>
+        <div class="container-hud pt-6 pb-6 md:pt-8 md:pb-8">
+          <p class="hud-title">{sec.title} · {sec.entries.length} entries</p>
 
-      <div id="posts" class="mt-6 scroll-mt-16 md:grid md:grid-cols-[200px_minmax(0,1fr)] md:items-start md:gap-8">
-        <nav class="hidden md:sticky md:top-20 md:block" aria-label="Filter the posts">
-          <div class="mb-1 flex items-center gap-2 border-b border-line px-3.5 pb-2.5">
-            <svg class="h-3 w-3 shrink-0 text-cyan" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-              <path
-                d="M1 2h10l-4 4.5V11L5 9.5V6.5L1 2Z"
-                stroke="currentColor"
-                stroke-width="1"
-                stroke-linejoin="round"
-              />
-            </svg>
-            <span class="font-mono text-[0.625rem] uppercase tracking-[0.18em] text-ink">Filter</span>
-            <button
-              type="button"
-              data-log-reset
-              class="ml-auto font-mono text-[0.5625rem] uppercase tracking-[0.14em] text-faint transition-colors hover:text-ink"
-            >
-              Reset
-            </button>
-          </div>
-          <ul class="border-l border-line">
-            {
-              logFilters.map((f) => (
-                <li>
-                  <button
-                    type="button"
-                    data-log-filter={f.id}
-                    aria-pressed={f.id === 'all' ? 'true' : 'false'}
-                    style={`--fc:${f.fc}`}
-                    class:list={[
-                      '-ml-px flex w-full items-center justify-between gap-4 border-l-2 border-transparent py-2.5 pr-3.5 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted transition-colors hover:text-ink aria-pressed:border-(--fc) aria-pressed:bg-raised aria-pressed:text-ink',
-                      f.level === 1 ? 'pl-8' : 'pl-3.5',
-                    ]}
-                  >
-                    <span>{f.label}</span>
-                    <span class="tabular text-faint">{f.count}</span>
-                  </button>
-                </li>
-              ))
-            }
-          </ul>
-        </nav>
-
-        <div>
-          <div class="mb-6 flex flex-wrap gap-2 md:hidden" role="group" aria-label="Filter the posts">
-            {
-              logFilters.map((f) => (
-                <button
-                  type="button"
-                  data-log-filter={f.id}
-                  aria-pressed={f.id === 'all' ? 'true' : 'false'}
-                  style={`--fc:${f.fc};--ftc:${f.ftc}`}
-                  class="bg-raised px-3.5 py-2 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted transition-colors [clip-path:polygon(0_0,calc(100%-8px)_0,100%_8px,100%_100%,0_100%)] aria-pressed:bg-(--fc) aria-pressed:text-(--ftc)"
-                >
-                  {f.label} <span class="tabular opacity-70">{f.count}</span>
-                </button>
-              ))
-            }
-          </div>
-
-          {
-            feed.length > 0 && (
+          <div class="mt-6">
+            {sec.entries.length > 0 && (
               <a
-                href={feed[0].href}
-                data-log-entry
-                data-cat={feed[0].cat}
+                href={sec.entries[0].href}
                 class="group grid gap-6 md:grid-cols-[3fr_2fr] md:items-center"
               >
-                {feed[0].cover ? (
+                {sec.entries[0].cover ? (
                   <div class={thumbFrame}>
                     <Image
-                      src={feed[0].cover}
-                      alt={feed[0].title}
+                      src={sec.entries[0].cover}
+                      alt={sec.entries[0].title}
                       widths={[720, 1440]}
                       sizes="(min-width: 768px) 60vw, 100vw"
                       class="aspect-video w-full object-cover"
@@ -347,81 +270,82 @@ const thumbFrame = 'border border-faint/50 transition-colors group-hover:border-
                 ) : (
                   <Placeholder
                     ratio="16/9"
-                    label={`${feed[0].code} · FIG.LEAD`}
+                    label={`${sec.entries[0].code} · FIG.LEAD`}
                     seed={0}
                     class="!border-faint/50 transition-colors group-hover:!border-faint"
                   />
                 )}
                 <div>
                   <div class="flex flex-wrap items-center gap-3">
-                    {feed[0].subsystem ? (
-                      <SubsystemBadge subsystem={feed[0].subsystem} />
+                    {sec.entries[0].subsystem ? (
+                      <SubsystemBadge subsystem={sec.entries[0].subsystem} />
                     ) : (
                       <span class="inline-flex items-center gap-1.5 border border-ink/45 px-2 py-1 font-mono text-[0.65rem] uppercase tracking-wider text-ink">
                         <span class="h-1.5 w-1.5 bg-ink" />
                         Project
                       </span>
                     )}
-                    <span class="hud-label tabular">{fmtDate(feed[0].date)}</span>
+                    <span class="hud-label tabular">{fmtDate(sec.entries[0].date)}</span>
                   </div>
                   <h3 class="mt-3 font-display text-xl text-ink transition-colors group-hover:text-cyan md:text-2xl">
-                    {feed[0].title}
+                    {sec.entries[0].title}
                   </h3>
-                  <p class="mt-2 text-sm leading-relaxed text-muted">{feed[0].summary}</p>
+                  <p class="mt-2 text-sm leading-relaxed text-muted">{sec.entries[0].summary}</p>
                   <span class="hud-label mt-4 inline-flex transition-colors group-hover:text-cyan">
                     Read the entry →
                   </span>
                 </div>
               </a>
-            )
-          }
-          <ul class="mt-10 grid gap-x-6 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
-            {
-              feed.slice(1).map((e, i) => (
-                <li data-log-entry data-cat={e.cat}>
-                  <a href={e.href} class="group block">
-                    {e.cover ? (
-                      <div class={thumbFrame}>
-                        <Image
-                          src={e.cover}
-                          alt={e.title}
-                          widths={[480, 960]}
-                          sizes="(min-width: 1024px) 430px, (min-width: 640px) 50vw, 100vw"
-                          class="aspect-video w-full object-cover"
-                        />
-                      </div>
-                    ) : (
-                      <Placeholder
-                        ratio="16/9"
-                        label={`${e.code} · FIG.0${i + 2}`}
-                        seed={i + 1}
-                        class="!border-faint/50 transition-colors group-hover:!border-faint"
-                      />
-                    )}
-                    <div class="mt-3 flex flex-wrap items-center gap-3">
-                      {e.subsystem ? (
-                        <SubsystemBadge subsystem={e.subsystem} />
+            )}
+
+            {sec.entries.length > 1 && (
+              <ul class="mt-10 grid gap-x-6 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
+                {sec.entries.slice(1).map((e, i) => (
+                  <li>
+                    <a href={e.href} class="group block">
+                      {e.cover ? (
+                        <div class={thumbFrame}>
+                          <Image
+                            src={e.cover}
+                            alt={e.title}
+                            widths={[480, 960]}
+                            sizes="(min-width: 1024px) 430px, (min-width: 640px) 50vw, 100vw"
+                            class="aspect-video w-full object-cover"
+                          />
+                        </div>
                       ) : (
-                        <span class="inline-flex items-center gap-1.5 border border-ink/45 px-2 py-1 font-mono text-[0.65rem] uppercase tracking-wider text-ink">
-                          <span class="h-1.5 w-1.5 bg-ink" />
-                          Project
-                        </span>
+                        <Placeholder
+                          ratio="16/9"
+                          label={`${e.code} · FIG.0${i + 2}`}
+                          seed={i + 1}
+                          class="!border-faint/50 transition-colors group-hover:!border-faint"
+                        />
                       )}
-                      <span class="hud-label tabular">{fmtDate(e.date)}</span>
-                    </div>
-                    <h3 class="mt-2 font-display text-base text-ink transition-colors group-hover:text-cyan">
-                      {e.title}
-                    </h3>
-                    <p class="mt-1 line-clamp-2 text-sm text-muted">{e.summary}</p>
-                  </a>
-                </li>
-              ))
-            }
-          </ul>
+                      <div class="mt-3 flex flex-wrap items-center gap-3">
+                        {e.subsystem ? (
+                          <SubsystemBadge subsystem={e.subsystem} />
+                        ) : (
+                          <span class="inline-flex items-center gap-1.5 border border-ink/45 px-2 py-1 font-mono text-[0.65rem] uppercase tracking-wider text-ink">
+                            <span class="h-1.5 w-1.5 bg-ink" />
+                            Project
+                          </span>
+                        )}
+                        <span class="hud-label tabular">{fmtDate(e.date)}</span>
+                      </div>
+                      <h3 class="mt-2 font-display text-base text-ink transition-colors group-hover:text-cyan">
+                        {e.title}
+                      </h3>
+                      <p class="mt-1 line-clamp-2 text-sm text-muted">{e.summary}</p>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
         </div>
-      </div>
-    </div>
-  </section>
+      </section>
+    ))
+  }
 
   <section id="photography" class="moments moments-inline scroll-mt-16 border-b border-line">
     <div class="container-hud pt-4 pb-4 md:pt-6 md:pb-6">
@@ -443,76 +367,6 @@ const thumbFrame = 'border border-faint/50 transition-colors group-hover:border-
     <MomentLightbox client:load moments={moments} />
   </section>
 </Base>
-
-<script>
-  /* Posts filter: rail (desktop) and chips (mobile) share [data-log-filter]
-     buttons and toggle [data-log-entry] cards by data-cat. The `fsae` filter is
-     a parent that matches all three subsystems (fw/mfg/av). Clicking the active
-     filter again clears back to all.
-
-     Deep-links preselect a filter: #projects -> Projects (Nav breadcrumb, 404,
-     project pages), #posts -> All entries (hero Work button).
-     Two arrival paths, handled separately: cross-page nav fires astro:page-load
-     (initLogFilter re-runs and reads location.hash); a same-page hero click is
-     intercepted by ClientRouter, which updates the hash via history.pushState
-     with NO hashchange event and NO swap, so we also bind the filter straight
-     onto those anchors' click. Nodes are fresh after every swap, so everything
-     re-initializes on astro:page-load. */
-  const HASH_FILTER: Record<string, string> = { '#projects': 'prj', '#posts': 'all' };
-  const FSAE_CATS = new Set(['fw', 'mfg', 'av']);
-  const showsEntry = (id: string, cat: string) =>
-    id === 'all' || cat === id || (id === 'fsae' && FSAE_CATS.has(cat));
-  let hashHandler: (() => void) | undefined;
-
-  function initLogFilter() {
-    const root = document.getElementById('posts');
-    if (hashHandler) {
-      window.removeEventListener('hashchange', hashHandler);
-      hashHandler = undefined;
-    }
-    if (!root) return;
-
-    const btns = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-log-filter]'));
-    const items = Array.from(root.querySelectorAll<HTMLElement>('[data-log-entry]'));
-    let active = 'all';
-
-    const set = (id: string) => {
-      active = id;
-      for (const b of btns) b.setAttribute('aria-pressed', String(b.dataset.logFilter === id));
-      for (const el of items) {
-        el.style.display = showsEntry(id, el.dataset.cat ?? '') ? '' : 'none';
-      }
-    };
-
-    for (const b of btns) {
-      b.addEventListener('click', () => {
-        const id = b.dataset.logFilter ?? 'all';
-        set(id === active && id !== 'all' ? 'all' : id);
-      });
-    }
-
-    // Filter header reset: clears back to All entries.
-    root.querySelector<HTMLButtonElement>('[data-log-reset]')?.addEventListener('click', () => set('all'));
-
-    // Hero deep-link anchors: set the filter on click (the default scroll to the
-    // target still runs). Covers the same-page case that hashchange misses.
-    for (const a of document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]')) {
-      const id = HASH_FILTER[a.getAttribute('href') ?? ''];
-      if (id) a.addEventListener('click', () => set(id));
-    }
-
-    hashHandler = () => {
-      const id = HASH_FILTER[location.hash];
-      if (id) set(id);
-    };
-    window.addEventListener('hashchange', hashHandler);
-
-    set('all');
-    hashHandler();
-  }
-
-  document.addEventListener('astro:page-load', initLogFilter);
-</script>
 
 <script>
   /* Archive films play only while on screen: [data-scrollplay] videos are
