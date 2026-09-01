@@ -137,78 +137,85 @@ const thumbFrame = 'border border-faint/50 transition-colors group-hover:border-
     </div>
 
     <div class="container-hud relative flex min-h-0 flex-1 flex-col justify-center py-[clamp(1rem,4vh,3rem)]">
-      <div class="flex min-h-0 w-fit max-w-lg flex-col">
+      <div class="flex min-h-0 w-fit max-w-2xl flex-col">
         <div class="shrink-0 border border-line/80 bg-bg/60 p-6 backdrop-blur-md md:p-8">
           <h1 class="font-display text-4xl font-semibold tracking-tight md:text-5xl">
             Caleb <span class="text-grad">Pollreis</span>
           </h1>
 
-          <ul class="mt-5 space-y-1.5">
-            {
-              positions.map((p) => (
-                <li class="text-sm text-muted">
-                  {p.href ? (
-                    <a href={p.href} class="link-hud text-ink">{p.role}</a>
-                  ) : (
-                    <span class="text-ink">{p.role}</span>
-                  )}
-                  <span class="text-faint"> · </span>{p.org}
-                  {p.note && <span class="mt-0.5 block font-medium text-cyan">{p.note}</span>}
-                </li>
-              ))
-            }
-          </ul>
+          <div class="mt-5 flex flex-col">
+            <div class="flex flex-col gap-x-4 gap-y-5 sm:flex-row sm:items-start">
+              <div class="aspect-[3/4] w-52 shrink-0 self-start md:w-60">
+                <Placeholder
+                  ratio="auto"
+                  label="CP · REPLACE"
+                  seed={3}
+                  class="!h-full !w-full !border-faint/50"
+                />
+              </div>
 
-          <p class="mt-5 max-w-sm text-sm leading-relaxed text-muted">
-            I'm a computer engineering student working in autonomous systems, robotics,
-            and embedded software. I've shipped C++/ROS2 perception on NVIDIA Jetson
-            across two internships, and I lead the 10-person team building the driverless
-            system for our FSAE electric car, targeting autonomy by 2028.
-          </p>
+              <div class="w-64 min-w-0 max-w-full">
+                <ul class="space-y-2">
+                  {
+                    positions.map((p) => (
+                      <li class="text-sm text-muted">
+                        {p.href ? (
+                          <a href={p.href} class="link-hud text-ink">{p.role.replace(/-/g, '‑')}</a>
+                        ) : (
+                          <span class="text-ink">{p.role.replace(/-/g, '‑')}</span>
+                        )}
+                        <span class="block whitespace-nowrap">{p.org}</span>
+                        {p.note && <span class="mt-0.5 block font-medium text-cyan">{p.note}</span>}
+                      </li>
+                    ))
+                  }
+                </ul>
 
-          <p class="mt-6 flex items-center gap-2.5">
-            <span class="h-1.5 w-1.5 rounded-full bg-cyan" aria-hidden="true"></span>
-            <span class="hud-label text-ink">{site.availability}</span>
-          </p>
-
-          <div class="mt-8 flex flex-wrap items-center justify-between gap-x-6 gap-y-4">
-            <div class="flex flex-wrap gap-3">
-              <Button href="#posts">My work</Button>
-              <Button href={site.resume} external>Resume</Button>
+                <p class="mt-5 text-sm leading-relaxed text-muted">
+                  I'm a computer engineering student working in autonomous systems, robotics,
+                  and embedded software. I&nbsp;lead the 10-person team building the driverless
+                  system for our FSAE electric car, targeting autonomy by 2028.
+                </p>
+              </div>
             </div>
 
-            <ul class="flex translate-y-[2px] items-center gap-x-6">
-              {
-                socials.map((s) => (
-                  <li>
-                    <a
-                      href={s.href}
-                      class="link-hud inline-flex text-muted hover:text-ink"
-                      aria-label={s.label}
-                      rel={s.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                      target={s.href.startsWith('http') ? '_blank' : undefined}
-                    >
-                      <SocialIcon
-                        label={s.label}
-                        class={
-                          s.label === 'Email'
-                            ? 'h-10 w-10'
-                            : s.label === 'GitHub'
-                              ? 'h-9 w-9'
-                              : 'h-8 w-8'
-                        }
-                      />
-                    </a>
-                  </li>
-                ))
-              }
-            </ul>
-          </div>
-        </div>
+            <p class="hud-label my-10 text-center text-ink">
+              {site.availability}
+            </p>
 
-        <div class="mt-6 flex shrink justify-center [@media(max-height:700px)]:hidden [@media(max-width:374px)]:hidden">
-          <div class="aspect-[3/4] h-[19dvh] shrink-0 [mask-image:linear-gradient(to_bottom,#000_60%,transparent)] [-webkit-mask-image:linear-gradient(to_bottom,#000_60%,transparent)] md:h-[clamp(220px,34dvh,360px)]">
-            <Placeholder ratio="auto" label="CP · REPLACE" seed={3} class="!h-full !w-full !border-faint/50" />
+            <div class="flex flex-col items-center gap-4 sm:grid sm:w-full sm:grid-cols-5 sm:items-center sm:gap-y-3">
+              <div class="flex gap-3 sm:col-span-2 sm:col-start-1 sm:row-start-1 sm:justify-self-center">
+                <Button href="#posts" size="sm">My work</Button>
+                <Button href={site.resume} external size="sm">Resume</Button>
+              </div>
+
+              <ul class="flex items-center gap-x-3.5 sm:col-span-2 sm:col-start-4 sm:row-start-1 sm:justify-self-center">
+                {
+                  socials.map((s) => (
+                    <li>
+                      <a
+                        href={s.href}
+                        class="link-hud inline-flex text-muted hover:text-ink"
+                        aria-label={s.label}
+                        rel={s.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                        target={s.href.startsWith('http') ? '_blank' : undefined}
+                      >
+                        <SocialIcon
+                          label={s.label}
+                          class={
+                            s.label === 'Email'
+                              ? 'h-9 w-9'
+                              : s.label === 'GitHub'
+                                ? 'h-8 w-8'
+                                : 'h-7 w-7'
+                          }
+                        />
+                      </a>
+                    </li>
+                  ))
+                }
+              </ul>
+            </div>
           </div>
         </div>
       </div>
