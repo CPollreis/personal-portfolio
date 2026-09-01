@@ -5,6 +5,7 @@ import SubsystemBadge from '../../components/fsae/SubsystemBadge.astro';
 import VideoEmbed from '../../components/content/VideoEmbed.astro';
 import CoordinateAxis from '../../components/hud/CoordinateAxis.astro';
 import HeaderMedia from '../../components/layout/HeaderMedia.astro';
+import EntryKeyNav from '../../components/content/EntryKeyNav.astro';
 import { subsystems } from '../../config/fsae';
 import { withBase } from '../../config/paths';
 
@@ -27,6 +28,11 @@ const hasHeroMedia = Boolean(post.data.heroVideo || heroImg);
 ---
 
 <Base title={post.data.title} description={post.data.summary}>
+  <EntryKeyNav
+    prevHref={older ? withBase(`/fsae/${older.id}`) : undefined}
+    nextHref={newer ? withBase(`/fsae/${newer.id}`) : undefined}
+    backHref={withBase('/#fsae')}
+  />
   <article class="pb-24">
     <header
       class:list={[

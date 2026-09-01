@@ -1,0 +1,10 @@
+---
+interface Props {
+  prevHref?: string;
+  nextHref?: string;
+  backHref: string;
+}
+const { prevHref, nextHref, backHref } = Astro.props;
+---
+
+<div id="entry-keynav" data-prev={prevHref} data-next={nextHref} data-back={backHref} hidden></div>

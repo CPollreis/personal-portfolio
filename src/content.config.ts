@@ -67,14 +67,18 @@ const projects = defineCollection({
  * (co-located, then referenced via `image: ./frame.jpg`) are dropped in and
  * optimized by astro:assets. The markdown body is unused; `story` carries the
  * personal caption shown in the lightbox.
+ *
+ * `date` and the exposure fields are optional: when omitted they come from the
+ * referenced image's EXIF at build time (see photography/exif.ts). Values set
+ * here win over EXIF.
  */
 const photography = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/photography' }),
   schema: ({ image }) =>
     z.object({
-      title: z.string(),
+      title: z.string().optional(),
       kind: z.enum(['photo', 'video']).default('photo'),
-      date: z.coerce.date(),
+      date: z.coerce.date().optional(),
       /** Why this moment matters. Shown in the lightbox detail panel. */
       story: z.string().optional(),
       location: z.string().optional(),
@@ -83,6 +87,7 @@ const photography = defineCollection({
       /* Photo tech readout */
       iso: z.string().optional(),
       aperture: z.string().optional(),
+      shutter: z.string().optional(),
       focal: z.string().optional(),
       /* Video tech readout */
       fps: z.string().optional(),
