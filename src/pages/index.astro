@@ -183,13 +183,13 @@ const thumbFrame = 'border border-faint/50 transition-colors group-hover:border-
               {site.availability}
             </p>
 
-            <div class="flex flex-col items-center gap-4 sm:grid sm:w-full sm:grid-cols-5 sm:items-center sm:gap-y-3">
-              <div class="flex gap-3 sm:col-span-2 sm:col-start-1 sm:row-start-1 sm:justify-self-center">
+            <div class="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:gap-8">
+              <div class="flex gap-3">
                 <Button href="#posts" size="sm">My work</Button>
                 <Button href={site.resume} external size="sm">Resume</Button>
               </div>
 
-              <ul class="flex items-center gap-x-3.5 sm:col-span-2 sm:col-start-4 sm:row-start-1 sm:justify-self-center">
+              <ul class="flex items-center gap-x-7 sm:ml-auto">
                 {
                   socials.map((s) => (
                     <li>
