@@ -69,56 +69,25 @@ async function run(engine, launcher, opts) {
       if (blocked.length) failures.push(`[${engine}] ${p}: nav links click-blocked: ${blocked.join(', ')}`);
     }
 
-    // 4. build-log filter rail (desktop viewport, so the rail is visible)
+    // 4. home feed sections render in order Projects, FSAE, Photography, each
+    //    with entry links (the filter mechanism was removed 2026-09-01)
     await page.goto(base + '/', { waitUntil: 'domcontentloaded' });
-    const counts = await page.evaluate(() => ({
-      total: document.querySelectorAll('#buildlog [data-log-entry]').length,
-      prj: document.querySelectorAll('#buildlog [data-log-entry][data-cat="prj"]').length,
-      fsae: document.querySelectorAll('#buildlog [data-log-entry]:not([data-cat="prj"])').length,
-    }));
-    const visibleEntries = () =>
-      page.evaluate(
-        () =>
-          [...document.querySelectorAll('#buildlog [data-log-entry]')].filter(
-            (el) => el.offsetParent !== null,
-          ).length,
-      );
-    // clicks retry because the filter binds on astro:page-load, which can land
-    // a beat after domcontentloaded
-    const clickUntil = async (selector, want, label) => {
-      const deadline = Date.now() + 5000;
-      let n = -1;
-      while (Date.now() < deadline) {
-        await page.click(selector);
-        await page.waitForTimeout(120);
-        n = await visibleEntries();
-        if (n === want) return;
-      }
-      failures.push(`[${engine}] build-log filter ${label}: ${n} entries visible, wanted ${want}`);
-    };
-    if (counts.total === 0 || counts.prj === 0) {
-      failures.push(`[${engine}] build-log filter: no entries found (total ${counts.total}, prj ${counts.prj})`);
-    } else {
-      await clickUntil('#buildlog nav [data-log-filter="prj"]', counts.prj, 'PRJ isolate');
-      await clickUntil('#buildlog nav [data-log-filter="prj"]', counts.total, 'second-click clear');
-      await clickUntil('#buildlog nav [data-log-filter="fsae"]', counts.fsae, 'FSAE grouping');
-      await clickUntil('#buildlog nav [data-log-filter="fsae"]', counts.total, 'FSAE second-click clear');
-      // hash preselects: #projects -> Projects filter, #buildlog -> All entries
-      // (the hero "My work" button lands on the whole feed)
-      const preselect = async (hash, want, label) => {
-        await page.goto(base + hash, { waitUntil: 'domcontentloaded' });
-        const deadline = Date.now() + 5000;
-        let n = -1;
-        while (Date.now() < deadline) {
-          n = await visibleEntries();
-          if (n === want) return;
-          await page.waitForTimeout(150);
-        }
-        failures.push(`[${engine}] ${label} preselect: ${n} entries visible, wanted ${want}`);
+    const feed = await page.evaluate(() => {
+      const ids = ['projects', 'fsae', 'photography'];
+      const order = [...document.querySelectorAll('section[id]')]
+        .map((s) => s.id)
+        .filter((id) => ids.includes(id));
+      return {
+        order,
+        projectLinks: document.querySelectorAll('#projects a[href*="/projects/"]').length,
+        fsaeLinks: document.querySelectorAll('#fsae a[href*="/fsae/"]').length,
       };
-      await preselect('/#projects', counts.prj, '/#projects');
-      await preselect('/#buildlog', counts.total, '/#buildlog');
+    });
+    if (feed.order.join(',') !== 'projects,fsae,photography') {
+      failures.push(`[${engine}] home sections out of order: ${feed.order.join(',')}`);
     }
+    if (feed.projectLinks === 0) failures.push(`[${engine}] #projects section has no entry links`);
+    if (feed.fsaeLinks === 0) failures.push(`[${engine}] #fsae section has no entry links`);
   } catch (err) {
     failures.push(`[${engine}] crashed: ${err.message}`);
   } finally {

@@ -56,8 +56,9 @@ export const nav: NavItem[] = [];
 /** Full section index, used by the footer. */
 export const sections: NavItem[] = [
   { label: 'Home', href: '/', index: '00' },
-  { label: 'FSAE', href: '/#fsae', index: '01' },
-  { label: 'Photography', href: '/#photography', index: '02' },
+  { label: 'Projects', href: '/#projects', index: '01' },
+  { label: 'FSAE', href: '/#fsae', index: '02' },
+  { label: 'Photography', href: '/#photography', index: '03' },
 ];
 
 export interface SocialLink {
