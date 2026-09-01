@@ -69,8 +69,7 @@ async function run(engine, launcher, opts) {
       if (blocked.length) failures.push(`[${engine}] ${p}: nav links click-blocked: ${blocked.join(', ')}`);
     }
 
-    // 4. home feed sections render in order Projects, FSAE, Photography, each
-    //    with entry links (the filter mechanism was removed 2026-09-01)
+    // 4. home feed sections
     await page.goto(base + '/', { waitUntil: 'domcontentloaded' });
     const feed = await page.evaluate(() => {
       const ids = ['projects', 'fsae', 'photography'];
