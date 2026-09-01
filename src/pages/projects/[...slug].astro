@@ -5,6 +5,7 @@ import Button from '../../components/ui/Button.astro';
 import VideoEmbed from '../../components/content/VideoEmbed.astro';
 import CoordinateAxis from '../../components/hud/CoordinateAxis.astro';
 import HeaderMedia from '../../components/layout/HeaderMedia.astro';
+import EntryKeyNav from '../../components/content/EntryKeyNav.astro';
 import { withBase } from '../../config/paths';
 
 export async function getStaticPaths() {
@@ -26,6 +27,11 @@ const hasHeroMedia = Boolean(heroVideo || heroImg);
 ---
 
 <Base title={title} description={summary}>
+  <EntryKeyNav
+    prevHref={prev ? withBase(`/projects/${prev.id}`) : undefined}
+    nextHref={next ? withBase(`/projects/${next.id}`) : undefined}
+    backHref={withBase('/#projects')}
+  />
   <article class="pb-24">
     <header
       class:list={[

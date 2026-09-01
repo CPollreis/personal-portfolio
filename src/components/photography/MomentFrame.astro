@@ -12,12 +12,9 @@ interface Props {
   image?: ImageMetadata;
   /** Looping clip (public/ path) for kind: video frames; autoplays inline. */
   video?: string;
-  /** Hide the caption on decorative placements (hero, marquee overlaps). */
-  caption?: boolean;
   /** Archive-grid mode: the media covers the parent cell instead of sizing
-      itself by `ratio`, the caption becomes a hover overlay, and videos are
-      scroll-managed ([data-scrollplay]: play in view, pause off-screen)
-      rather than always-on. */
+      itself by `ratio`, and videos are scroll-managed ([data-scrollplay]: play
+      in view, pause off-screen) rather than always-on. */
   fill?: boolean;
   class?: string;
 }
@@ -30,11 +27,11 @@ const {
   ratio,
   image,
   video,
-  caption = true,
   fill = false,
   class: className = '',
 } = Astro.props;
 const alt = index % 2 === 1 ? 'm-tilt-alt' : '';
+const label = title || (year ? `Photograph, ${year}` : `Photograph ${String(index + 1).padStart(2, '0')}`);
 // webm-first sibling: Firefox's macOS H.264 decoder can fail after client-side
 // navigation (see src/scripts/footage.ts), so prefer the .webm when we have an
 // .mp4 path. See src/components/home/Hero.astro for the same pattern.
@@ -46,7 +43,7 @@ const videoWebm = video?.endsWith('.mp4') ? video.replace(/\.mp4$/, '.webm') : n
   data-moment-index={index}
   class={`m-frame group ${fill ? 'm-frame-fill' : ''} ${alt} ${className}`}
   aria-haspopup="dialog"
-  aria-label={`Open ${kind}: ${title}`}
+  aria-label={`Open ${kind}: ${label}`}
 >
   <span class="m-media" data-media style={fill ? undefined : `aspect-ratio:${ratio}`}>
     {
@@ -67,7 +64,7 @@ const videoWebm = video?.endsWith('.mp4') ? video.replace(/\.mp4$/, '.webm') : n
       ) : image ? (
         <Image
           src={image}
-          alt={title}
+          alt={label}
           widths={[480, 960]}
           sizes="(min-width: 1024px) 50vw, 100vw"
           class="absolute inset-0 h-full w-full object-cover"
@@ -76,36 +73,5 @@ const videoWebm = video?.endsWith('.mp4') ? video.replace(/\.mp4$/, '.webm') : n
         <span class="absolute inset-0" style={`background:${momentBackdrop(index)}`} aria-hidden="true"></span>
       )
     }
-
-    <span
-      class="absolute left-3 top-3 z-[3] font-mono text-[0.6rem] tracking-[0.18em] text-cyan/70 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-      aria-hidden="true"
-    >
-      {String(index + 1).padStart(2, '0')}
-    </span>
-
-    {
-      fill && caption && (
-        <span class="m-cap-hover" aria-hidden="true">
-          <b>{title}</b>
-          <i>
-            ({year}
-            {kind === 'video' ? ' · film' : ''})
-          </i>
-        </span>
-      )
-    }
   </span>
-
-  {
-    !fill && caption && (
-      <>
-        <span class="m-cap">{title}</span>
-        <span class="m-cap-year">
-          ({year}
-          {kind === 'video' ? ' · film' : ''})
-        </span>
-      </>
-    )
-  }
 </button>

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react
 import { withBase } from '../../config/paths';
 
 export interface Moment {
-  title: string;
+  title?: string;
   kind: 'photo' | 'video';
   /** Pre-formatted, e.g. "AUG 30, 2024" */
   dateDisplay: string;
@@ -12,6 +12,7 @@ export interface Moment {
   lens?: string;
   iso?: string;
   aperture?: string;
+  shutter?: string;
   focal?: string;
   fps?: string;
   quality?: string;
@@ -29,7 +30,7 @@ interface Props {
   moments: Moment[];
 }
 
-// Cinematic pacing (Caleb's pick): a long soft flight, panel arrives late.
+// Cinematic pacing (Caleb's pick): a long soft flight.
 const EASE = 'cubic-bezier(0.22, 1, 0.36, 1)';
 const OPEN_MS = 720;
 const CLOSE_MS = 500;
@@ -157,30 +158,20 @@ export default function MomentLightbox({ moments }: Props) {
   // so the FLIP flight itself never double-animates.
   const browsing = index !== openedIndex.current;
 
-  const specs: [string, string | undefined][] =
-    m.kind === 'photo'
-      ? [
-          ['ISO', m.iso],
-          ['Aperture', m.aperture],
-          ['Focal length', m.focal],
-        ]
-      : [
-          ['FPS', m.fps],
-          ['Video quality', m.quality],
-        ];
-  const meta: [string, string | undefined][] = [
-    ['Camera', m.camera],
-    ['Lens', m.lens],
-    ['Location', m.location],
-  ];
+  const counter = `${String(index + 1).padStart(2, '0')} / ${String(moments.length).padStart(2, '0')}`;
+  const exposure =
+    m.kind === 'video'
+      ? [m.camera, m.fps && `${m.fps} FPS`, m.quality].filter(Boolean).join('  ·  ')
+      : [m.camera, m.iso && `ISO ${m.iso}`, m.aperture, m.shutter].filter(Boolean).join('  ·  ');
+  const label = `${m.kind === 'video' ? 'Film' : 'Photograph'} ${index + 1} of ${moments.length}${m.title ? `: ${m.title}` : ''}`;
 
   return (
     <div
       ref={rootRef}
       role="dialog"
       aria-modal="true"
-      aria-label={`${m.kind === 'video' ? 'Film' : 'Photograph'}: ${m.title}`}
-      className="fixed inset-0 z-[80] flex flex-col bg-black/95 backdrop-blur-md md:flex-row"
+      aria-label={label}
+      className="fixed inset-0 z-[80] bg-black/95 backdrop-blur-md"
       style={{
         transition: `opacity ${CLOSE_MS}ms ${EASE}`,
         opacity: closing ? 0 : 1,
@@ -190,131 +181,104 @@ export default function MomentLightbox({ moments }: Props) {
         if (e.target === e.currentTarget) close();
       }}
     >
+      <button
+        ref={closeBtnRef}
+        onClick={close}
+        aria-label="Close"
+        className="absolute right-4 top-4 z-10 grid h-11 w-11 place-items-center rounded-full border border-white/20 text-white/75 transition-colors hover:border-white/70 hover:text-white md:right-6 md:top-6"
+      >
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="M3 3l10 10M13 3L3 13" stroke="currentColor" strokeWidth="1.4" />
+        </svg>
+      </button>
+
       <div
-        className="relative grid min-h-0 flex-1 place-items-center p-5 pt-16 md:p-12"
+        className="absolute inset-0 grid place-items-center p-6 pt-16 md:p-12"
         onClick={(e) => {
           if (e.target === e.currentTarget) close();
         }}
       >
         <div
-          ref={mediaRef}
-          className="relative overflow-hidden bg-[#0b0b0b]"
-          style={{
-            aspectRatio: `${rw} / ${rh}`,
-            width: `min(100%, calc((100dvh - 14rem) * ${r}))`,
+          className="flex flex-col"
+          style={{ width: `min(100%, calc((100dvh - 14rem) * ${r}))` }}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) close();
           }}
         >
-          <div key={index} className="absolute inset-0" style={browsing ? { animation: 'm-fade 280ms both' } : undefined}>
-            {m.kind === 'video' && m.video ? (
-              <video
-                autoPlay
-                muted
-                loop
-                playsInline
-                className="absolute inset-0 h-full w-full object-cover"
-              >
-                {videoWebm && <source src={withBase(videoWebm)} type="video/webm" />}
-                <source src={withBase(m.video)} type={m.video.endsWith('.mp4') ? 'video/mp4' : 'video/webm'} />
-              </video>
-            ) : m.src ? (
-              <img src={m.src} alt={m.title} className="absolute inset-0 h-full w-full object-cover" />
-            ) : (
-              <span className="absolute inset-0" style={{ background: m.backdrop }} aria-hidden="true" />
-            )}
-            {!m.src && !m.video && (
-              <span className="absolute bottom-3 left-3 font-mono text-[0.6rem] uppercase tracking-[0.18em] text-white/35">
-                {m.kind === 'video' ? 'Reel placeholder' : 'Frame placeholder'}
+          <div
+            ref={mediaRef}
+            className="relative w-full overflow-hidden bg-[#0b0b0b]"
+            style={{ aspectRatio: `${rw} / ${rh}` }}
+          >
+            <div
+              key={index}
+              className="absolute inset-0"
+              style={browsing ? { animation: 'm-fade 280ms both' } : undefined}
+            >
+              {m.kind === 'video' && m.video ? (
+                <video
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  className="absolute inset-0 h-full w-full object-cover"
+                >
+                  {videoWebm && <source src={withBase(videoWebm)} type="video/webm" />}
+                  <source
+                    src={withBase(m.video)}
+                    type={m.video.endsWith('.mp4') ? 'video/mp4' : 'video/webm'}
+                  />
+                </video>
+              ) : m.src ? (
+                <img src={m.src} alt={m.title ?? ''} className="absolute inset-0 h-full w-full object-cover" />
+              ) : (
+                <span className="absolute inset-0" style={{ background: m.backdrop }} aria-hidden="true" />
+              )}
+              {!m.src && !m.video && (
+                <span className="absolute bottom-3 left-3 font-mono text-[0.6rem] uppercase tracking-[0.18em] text-white/35">
+                  {m.kind === 'video' ? 'Reel placeholder' : 'Frame placeholder'}
+                </span>
+              )}
+            </div>
+          </div>
+
+          <div className="mt-3 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 font-mono text-[0.7rem]">
+            <span className="flex items-baseline gap-2 tracking-[0.06em]">
+              <span className="tracking-[0.18em] text-cyan/70">{counter}</span>
+              {m.dateDisplay && (
+                <>
+                  <span className="text-white/25">·</span>
+                  <span className="text-white/60">{m.dateDisplay}</span>
+                </>
+              )}
+            </span>
+            {exposure && (
+              <span className="whitespace-nowrap text-right tracking-[0.06em] text-white/55">
+                {exposure}
               </span>
             )}
           </div>
         </div>
-
-        <button
-          onClick={() => step(-1)}
-          className="absolute left-3 top-1/2 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full border border-white/20 text-white/80 transition-colors hover:border-white/70 hover:text-white md:left-6"
-          aria-label="Previous moment"
-        >
-          <svg width="16" height="16" viewBox="0 0 18 18" fill="none" aria-hidden="true">
-            <path d="M11 3L5 9l6 6" stroke="currentColor" strokeWidth="1.4" />
-          </svg>
-        </button>
-        <button
-          onClick={() => step(1)}
-          className="absolute right-3 top-1/2 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full border border-white/20 text-white/80 transition-colors hover:border-white/70 hover:text-white md:right-6"
-          aria-label="Next moment"
-        >
-          <svg width="16" height="16" viewBox="0 0 18 18" fill="none" aria-hidden="true">
-            <path d="M7 3l6 6-6 6" stroke="currentColor" strokeWidth="1.4" />
-          </svg>
-        </button>
       </div>
 
-      <aside
-        className="min-h-0 shrink-0 overflow-y-auto border-t border-white/10 bg-[#080808] px-6 py-6 md:w-[380px] md:border-l md:border-t-0 md:px-8 md:py-10"
-        style={{ animation: `m-slide 680ms ${EASE} 320ms both` }}
+      <button
+        onClick={() => step(-1)}
+        className="absolute left-3 top-1/2 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full border border-white/20 text-white/80 transition-colors hover:border-white/70 hover:text-white md:left-6"
+        aria-label="Previous moment"
       >
-        <div className="flex items-center justify-between">
-          <span className="font-mono text-[0.65rem] tracking-[0.2em] text-cyan/80">
-            N°{String(index + 1).padStart(2, '0')} / {String(moments.length).padStart(2, '0')}
-          </span>
-          <span className="text-[0.65rem] font-medium uppercase tracking-[0.18em] text-white/40">
-            {m.kind === 'video' ? 'Film' : 'Photograph'}
-          </span>
-        </div>
-
-        <h2
-          className="mt-6 text-3xl text-[#f5f5f4]"
-          style={{ fontFamily: 'var(--grotesk)', fontWeight: 550, letterSpacing: '-0.02em', lineHeight: 1.05 }}
-        >
-          {m.title}
-        </h2>
-        <p className="mt-2 text-sm italic text-white/45" style={{ fontFamily: 'var(--grotesk)' }}>
-          {m.dateDisplay}
-        </p>
-
-        {m.story && (
-          <p className="mt-6 text-[0.95rem] leading-relaxed text-white/70" style={{ fontFamily: 'var(--grotesk)' }}>
-            {m.story}
-          </p>
-        )}
-
-        <div className="mt-8 border-t border-white/10 pt-6">
-          <span className="text-[0.62rem] font-medium uppercase tracking-[0.2em] text-white/35">
-            Technical
-          </span>
-          <dl className="mt-4 grid grid-cols-3 gap-x-4 gap-y-5">
-            {specs.map(([k, v]) =>
-              v ? (
-                <div key={k}>
-                  <dt className="font-mono text-[0.6rem] uppercase tracking-[0.16em] text-white/35">{k}</dt>
-                  <dd className="mt-1 font-mono text-sm text-[#e5e5e4]">{v}</dd>
-                </div>
-              ) : null,
-            )}
-          </dl>
-          <dl className="mt-6 flex flex-col gap-3 border-t border-white/10 pt-5">
-            {meta.map(([k, v]) =>
-              v ? (
-                <div key={k} className="flex items-baseline justify-between gap-4">
-                  <dt className="font-mono text-[0.6rem] uppercase tracking-[0.16em] text-white/35">{k}</dt>
-                  <dd className="text-right font-mono text-xs text-white/65">{v}</dd>
-                </div>
-              ) : null,
-            )}
-          </dl>
-        </div>
-
-        <button
-          ref={closeBtnRef}
-          onClick={close}
-          className="mt-10 inline-flex items-center gap-2 border border-white/20 px-4 py-2 text-[0.7rem] font-medium uppercase tracking-[0.18em] text-white/75 transition-colors hover:border-cyan/60 hover:text-white"
-        >
-          <svg width="10" height="10" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-            <path d="M3 3l10 10M13 3L3 13" stroke="currentColor" strokeWidth="1.4" />
-          </svg>
-          Close
-        </button>
-      </aside>
+        <svg width="16" height="16" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+          <path d="M11 3L5 9l6 6" stroke="currentColor" strokeWidth="1.4" />
+        </svg>
+      </button>
+      <button
+        onClick={() => step(1)}
+        className="absolute right-3 top-1/2 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full border border-white/20 text-white/80 transition-colors hover:border-white/70 hover:text-white md:right-6"
+        aria-label="Next moment"
+      >
+        <svg width="16" height="16" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+          <path d="M7 3l6 6-6 6" stroke="currentColor" strokeWidth="1.4" />
+        </svg>
+      </button>
     </div>
   );
 }

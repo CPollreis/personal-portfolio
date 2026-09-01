@@ -83,25 +83,6 @@
   }
 }
 
-/* Caption under a frame: "North Shore" / "(2024)" */
-.m-cap {
-  display: block;
-  margin-top: 0.9rem;
-  font-family: var(--grotesk);
-  font-size: 0.85rem;
-  font-weight: 500;
-  letter-spacing: 0.01em;
-  color: #e5e5e4;
-}
-.m-cap-year {
-  display: block;
-  margin-top: 0.15rem;
-  font-family: var(--grotesk);
-  font-style: italic;
-  font-size: 0.75rem;
-  color: var(--m-dim);
-}
-
 /* Lightbox */
 
 /* Entrance keyframes (referenced by inline styles in the island) */
@@ -168,42 +149,4 @@
 }
 .m-frame-fill .m-media {
   height: 100%;
-}
-
-/* Hover caption overlaying the print's lower edge in fill mode. */
-.m-cap-hover {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 3;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 0.45rem;
-  padding: 2.2rem 0.8rem 0.65rem;
-  background: linear-gradient(transparent, rgba(0, 0, 0, 0.75));
-  font-family: var(--grotesk);
-  opacity: 0;
-  transition: opacity 300ms var(--ease-out-hud);
-}
-.m-cap-hover b {
-  font-size: 0.85rem;
-  font-weight: 500;
-  letter-spacing: 0.01em;
-  color: #f5f5f4;
-}
-.m-cap-hover i {
-  font-style: italic;
-  font-size: 0.72rem;
-  color: rgba(245, 245, 244, 0.65);
-}
-.m-frame:hover .m-cap-hover,
-.m-frame:focus-visible .m-cap-hover {
-  opacity: 1;
-}
-@media (prefers-reduced-motion: reduce) {
-  .m-cap-hover {
-    transition: none;
-  }
 }
