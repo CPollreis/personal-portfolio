@@ -12,10 +12,11 @@ import MomentFrame from '../components/photography/MomentFrame.astro';
 import MomentLightbox, { type Moment } from '../components/photography/MomentLightbox.tsx';
 import { momentBackdrop } from '../components/photography/backdrop';
 import { archiveShape } from '../components/photography/archiveGrid';
-import { readPhotoExif } from '../components/photography/exif';
+import { readPhotoExif, type PhotoExif } from '../components/photography/exif';
 import { subsystems, type Subsystem } from '../config/fsae';
 import { site, positions, socials } from '../config/site';
 import { withBase } from '../config/paths';
+import { assetUrl, assetRecord, type AssetExif } from '../data/assets';
 import headshot from '../assets/headshot.jpg';
 import '../styles/moments.css';
 
@@ -71,8 +72,20 @@ const rawImageRef = (id: string): string | null => {
   }
 };
 
+const manifestExif = (e: AssetExif): PhotoExif => ({
+  takenAt: e.takenAt ? new Date(e.takenAt) : null,
+  iso: e.iso,
+  aperture: e.aperture,
+  shutter: e.shutter,
+  camera: e.camera,
+  lens: e.lens,
+  focal: e.focal,
+});
+
 const photoExif = await Promise.all(
   photoFrames.map((f) => {
+    const rec = f.data.full ? assetRecord(f.data.full) : undefined;
+    if (rec?.exif) return manifestExif(rec.exif);
     if (!f.data.image) return null;
     const ref = rawImageRef(f.id);
     return ref ? readPhotoExif(path.resolve(PHOTO_DIR, ref)) : null;
@@ -90,6 +103,8 @@ const photoMeta = photoFrames.map((f, i) => {
     aperture: f.data.aperture ?? ex?.aperture ?? undefined,
     shutter: f.data.shutter ?? ex?.shutter ?? undefined,
     camera: f.data.camera ?? ex?.camera ?? 'Sony a6400',
+    lens: f.data.lens ?? ex?.lens ?? undefined,
+    focal: f.data.focal ?? ex?.focal ?? undefined,
   };
 });
 
@@ -101,18 +116,29 @@ const moments: Moment[] = photoFrames.map((f, i) => ({
   story: f.data.story,
   location: f.data.location,
   camera: photoMeta[i].camera,
-  lens: f.data.lens,
+  lens: photoMeta[i].lens,
   iso: photoMeta[i].iso,
   aperture: photoMeta[i].aperture,
   shutter: photoMeta[i].shutter,
-  focal: f.data.focal,
+  focal: photoMeta[i].focal,
   fps: f.data.fps,
   quality: f.data.quality,
   ratio: f.data.ratio,
   src: f.data.image?.src,
+  downloadUrl: f.data.full ? assetUrl(f.data.full) : undefined,
   video: f.data.video,
   backdrop: momentBackdrop(i),
 }));
+
+const missingFull = photoFrames
+  .filter((f) => f.data.full && !assetUrl(f.data.full))
+  .map((f) => `${f.id}: full "${f.data.full}"`);
+if (missingFull.length) {
+  throw new Error(
+    `asset-manifest.json is missing keys referenced by photography frontmatter:\n  ${missingFull.join('\n  ')}\n` +
+      'Run: node scripts/publish-assets.mjs --dir <originals>',
+  );
+}
 
 const momentFrameProps = (i: number) => ({
   index: i,

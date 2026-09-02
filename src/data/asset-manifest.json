@@ -1,0 +1,1990 @@
+{
+  "release": {
+    "active": "photo-assets",
+    "rollAt": 950
+  },
+  "assets": {
+    "photography/DSC02363": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC02363.jpg",
+      "w": 1616,
+      "h": 1080,
+      "hash": "ee53b237773fc3c2ac23f0b47f56f1578c466eb7a0a5b80db70c499f9655483f",
+      "tag": "photo-assets",
+      "file": "DSC02363.jpg",
+      "exif": {
+        "takenAt": "2019-03-26T20:52:23.000Z",
+        "iso": "200",
+        "aperture": "f/22",
+        "shutter": "1/100",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "25mm"
+      }
+    },
+    "photography/DSC02367": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC02367.jpg",
+      "w": 1080,
+      "h": 1616,
+      "hash": "2235ab636d3c794a1f7a0656ec3918a11bbed10fde4b64efd6b25a08295956a4",
+      "tag": "photo-assets",
+      "file": "DSC02367.jpg",
+      "exif": {
+        "takenAt": "2019-03-26T20:52:35.000Z",
+        "iso": "200",
+        "aperture": "f/22",
+        "shutter": "1/100",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "25mm"
+      }
+    },
+    "photography/DSC02377": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC02377.jpg",
+      "w": 1616,
+      "h": 1080,
+      "hash": "600dc7cc0025717049a169dd6d68a5f5a32bd48bf0a0f0a18213186affcde8ed",
+      "tag": "photo-assets",
+      "file": "DSC02377.jpg",
+      "exif": {
+        "takenAt": "2019-03-26T20:55:10.000Z",
+        "iso": "200",
+        "aperture": "f/22",
+        "shutter": "1/60",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "16mm"
+      }
+    },
+    "photography/DSC02427": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC02427.jpg",
+      "w": 1080,
+      "h": 1616,
+      "hash": "f9b05a4233ff95559f88a9c6b6f46c7913f51e73b642d4dc73076729ccdfa799",
+      "tag": "photo-assets",
+      "file": "DSC02427.jpg",
+      "exif": {
+        "takenAt": "2019-03-26T21:21:30.000Z",
+        "iso": "200",
+        "aperture": "f/22",
+        "shutter": "1/100",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "50mm"
+      }
+    },
+    "photography/DSC02453": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC02453.jpg",
+      "w": 1616,
+      "h": 1080,
+      "hash": "3c0a1be39adba0d035f964bd120d5ea093419a758b3c73a18722f9758164fa38",
+      "tag": "photo-assets",
+      "file": "DSC02453.jpg",
+      "exif": {
+        "takenAt": "2019-03-27T02:13:36.000Z",
+        "iso": "6400",
+        "aperture": "f/3.5",
+        "shutter": "1/3",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "16mm"
+      }
+    },
+    "photography/DSC02474": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC02474.jpg",
+      "w": 1616,
+      "h": 1080,
+      "hash": "135bfd110b78125e1651a7c605a92a4f65ed8933d155245f2d3498a5eb5591e2",
+      "tag": "photo-assets",
+      "file": "DSC02474.jpg",
+      "exif": {
+        "takenAt": "2019-03-27T02:45:13.000Z",
+        "iso": "6400",
+        "aperture": "f/3.5",
+        "shutter": "1/10",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "16mm"
+      }
+    },
+    "photography/DSC02557": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC02557.jpg",
+      "w": 1616,
+      "h": 1080,
+      "hash": "53cd7a7402bb87214f672d6c8423112928e5e185cceb0471d53636dbee26a83c",
+      "tag": "photo-assets",
+      "file": "DSC02557.jpg",
+      "exif": {
+        "takenAt": "2019-03-27T14:23:19.000Z",
+        "iso": "200",
+        "aperture": "f/22",
+        "shutter": "1/125",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "31mm"
+      }
+    },
+    "photography/DSC02559": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC02559.jpg",
+      "w": 1616,
+      "h": 1080,
+      "hash": "09f2139f29cc236e0df5c4c916f45e05022ba1e88977d1e85de35bd5ee76a4ae",
+      "tag": "photo-assets",
+      "file": "DSC02559.jpg",
+      "exif": {
+        "takenAt": "2019-03-27T14:23:22.000Z",
+        "iso": "200",
+        "aperture": "f/22",
+        "shutter": "1/125",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "36mm"
+      }
+    },
+    "photography/DSC02598": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC02598.jpg",
+      "w": 1616,
+      "h": 1080,
+      "hash": "42977f2c56b9ccf87d1e39f070fdbc9a59d18894001c251f5e7a165fe1660c43",
+      "tag": "photo-assets",
+      "file": "DSC02598.jpg",
+      "exif": {
+        "takenAt": "2019-03-27T14:26:20.000Z",
+        "iso": "200",
+        "aperture": "f/22",
+        "shutter": "1/125",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "50mm"
+      }
+    },
+    "photography/DSC02760": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC02760.jpg",
+      "w": 1616,
+      "h": 1080,
+      "hash": "e3956a0618377afea5679c4a367f8ab1961c6a568ee1dac9151a6aa20c27c30a",
+      "tag": "photo-assets",
+      "file": "DSC02760.jpg",
+      "exif": {
+        "takenAt": "2019-03-27T15:02:47.000Z",
+        "iso": "200",
+        "aperture": "f/6.3",
+        "shutter": "1/1000",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "27mm"
+      }
+    },
+    "photography/DSC02786": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC02786.jpg",
+      "w": 1080,
+      "h": 1616,
+      "hash": "f0d757d752d35f051fde406391b4244f9236255044a2405df11e3c364d79e966",
+      "tag": "photo-assets",
+      "file": "DSC02786.jpg",
+      "exif": {
+        "takenAt": "2019-03-27T15:06:07.000Z",
+        "iso": "200",
+        "aperture": "f/3.5",
+        "shutter": "1/1600",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "16mm"
+      }
+    },
+    "photography/DSC02815": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC02815.jpg",
+      "w": 1616,
+      "h": 1080,
+      "hash": "9226f186d92d35930bb98166c5ecb30fa18f7b4284046930dd0439455aec7100",
+      "tag": "photo-assets",
+      "file": "DSC02815.jpg",
+      "exif": {
+        "takenAt": "2019-03-27T15:08:51.000Z",
+        "iso": "200",
+        "aperture": "f/8",
+        "shutter": "1/1000",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "50mm"
+      }
+    },
+    "photography/DSC03125": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC03125.jpg",
+      "w": 1080,
+      "h": 1616,
+      "hash": "2098060683dddace7393582a641dbdd2ada7cade582620a06db3a55e3d2d151b",
+      "tag": "photo-assets",
+      "file": "DSC03125.jpg",
+      "exif": {
+        "takenAt": "2019-03-27T16:36:27.000Z",
+        "iso": "200",
+        "aperture": "f/8",
+        "shutter": "1/1000",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "35mm"
+      }
+    },
+    "photography/DSC03155": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC03155.jpg",
+      "w": 1616,
+      "h": 1080,
+      "hash": "26d933b547fc25ab7d30aa5f93e424e569e81d866aea957a1013a29d7ca42946",
+      "tag": "photo-assets",
+      "file": "DSC03155.jpg",
+      "exif": {
+        "takenAt": "2019-03-27T16:47:42.000Z",
+        "iso": "200",
+        "aperture": "f/8",
+        "shutter": "1/500",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "16mm"
+      }
+    },
+    "photography/DSC03166": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC03166.jpg",
+      "w": 1616,
+      "h": 1080,
+      "hash": "111e7c1fabaa6fc4199d636fae7f7e30672e2d62a60fc016cb3c0571cdb47158",
+      "tag": "photo-assets",
+      "file": "DSC03166.jpg",
+      "exif": {
+        "takenAt": "2019-03-27T16:48:48.000Z",
+        "iso": "200",
+        "aperture": "f/8",
+        "shutter": "1/500",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "16mm"
+      }
+    },
+    "photography/DSC03195": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC03195.jpg",
+      "w": 1616,
+      "h": 1080,
+      "hash": "4c46b20c75988ac91bf0c90da9fe64ec45dce93cab200c6f4fbad92c1292c15d",
+      "tag": "photo-assets",
+      "file": "DSC03195.jpg",
+      "exif": {
+        "takenAt": "2019-03-27T17:38:35.000Z",
+        "iso": "200",
+        "aperture": "f/8",
+        "shutter": "1/100",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "26mm"
+      }
+    },
+    "photography/DSC03202": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC03202.jpg",
+      "w": 1080,
+      "h": 1616,
+      "hash": "6d00a2abf4170e9c683b55e24847d8003069f63e3e4a5783b7c44cae0e263c78",
+      "tag": "photo-assets",
+      "file": "DSC03202.jpg",
+      "exif": {
+        "takenAt": "2019-03-27T17:38:55.000Z",
+        "iso": "200",
+        "aperture": "f/5.6",
+        "shutter": "1/320",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "26mm"
+      }
+    },
+    "photography/DSC03270": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC03270.jpg",
+      "w": 1616,
+      "h": 1080,
+      "hash": "31c3487b70679eafe62c6e82b6f3f22fd0e68d57f82ee7062996b9b4c56b1e6d",
+      "tag": "photo-assets",
+      "file": "DSC03270.jpg",
+      "exif": {
+        "takenAt": "2019-03-27T18:14:39.000Z",
+        "iso": "200",
+        "aperture": "f/22",
+        "shutter": "1/80",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "16mm"
+      }
+    },
+    "photography/DSC03271": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC03271.jpg",
+      "w": 1616,
+      "h": 1080,
+      "hash": "3f5571176c5360cd2dabe3b2a54b43e820fae34f2569d1d3a22f59190de64caa",
+      "tag": "photo-assets",
+      "file": "DSC03271.jpg",
+      "exif": {
+        "takenAt": "2019-03-27T18:14:43.000Z",
+        "iso": "200",
+        "aperture": "f/22",
+        "shutter": "1/80",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "16mm"
+      }
+    },
+    "photography/DSC03278": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC03278.jpg",
+      "w": 1080,
+      "h": 1616,
+      "hash": "fe2a6bb7d676ed761c279efd67e89d1a3f602b2deb894cd98191e7faf347fc4b",
+      "tag": "photo-assets",
+      "file": "DSC03278.jpg",
+      "exif": {
+        "takenAt": "2019-03-27T18:15:15.000Z",
+        "iso": "200",
+        "aperture": "f/22",
+        "shutter": "1/100",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "50mm"
+      }
+    },
+    "photography/DSC03286": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC03286.jpg",
+      "w": 1616,
+      "h": 1080,
+      "hash": "c3ad977144b64e4171730143919532dcadbe88af9ee6bce1f9041722984a1869",
+      "tag": "photo-assets",
+      "file": "DSC03286.jpg",
+      "exif": {
+        "takenAt": "2019-03-27T18:18:04.000Z",
+        "iso": "200",
+        "aperture": "f/22",
+        "shutter": "1/80",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "49mm"
+      }
+    },
+    "photography/DSC03293": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC03293.jpg",
+      "w": 1080,
+      "h": 1616,
+      "hash": "369878eeaf417cd2c25b22af35d1e536a9a9d732d42a8f51028dea93e073a6b3",
+      "tag": "photo-assets",
+      "file": "DSC03293.jpg",
+      "exif": {
+        "takenAt": "2019-03-27T18:18:28.000Z",
+        "iso": "200",
+        "aperture": "f/22",
+        "shutter": "1/100",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "49mm"
+      }
+    },
+    "photography/DSC03308": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC03308.jpg",
+      "w": 1616,
+      "h": 1080,
+      "hash": "86c68e15295328374b0da38800e7869eef87fd7555d71316e79a064f38c87ce0",
+      "tag": "photo-assets",
+      "file": "DSC03308.jpg",
+      "exif": {
+        "takenAt": "2019-03-27T18:24:39.000Z",
+        "iso": "200",
+        "aperture": "f/22",
+        "shutter": "1/100",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "16mm"
+      }
+    },
+    "photography/DSC03313": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC03313.jpg",
+      "w": 1080,
+      "h": 1616,
+      "hash": "62756c7d73619b39137923f0c830f16fe49fdd79f4e2590b15a0f23a2e543177",
+      "tag": "photo-assets",
+      "file": "DSC03313.jpg",
+      "exif": {
+        "takenAt": "2019-03-27T18:24:45.000Z",
+        "iso": "200",
+        "aperture": "f/22",
+        "shutter": "1/100",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "26mm"
+      }
+    },
+    "photography/DSC03324": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC03324.jpg",
+      "w": 1616,
+      "h": 1080,
+      "hash": "6bc7025246374817aa7b6571fd5740a7b8be6f9a476465df97d00b0c31204eb1",
+      "tag": "photo-assets",
+      "file": "DSC03324.jpg",
+      "exif": {
+        "takenAt": "2019-03-27T18:25:40.000Z",
+        "iso": "200",
+        "aperture": "f/22",
+        "shutter": "1/80",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "50mm"
+      }
+    },
+    "photography/DSC03347": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC03347.jpg",
+      "w": 1616,
+      "h": 1080,
+      "hash": "0b20e800c04505e1aa3b3f875421a1c0dded5d223adbff68e5b5df9d80af3072",
+      "tag": "photo-assets",
+      "file": "DSC03347.jpg",
+      "exif": {
+        "takenAt": "2019-03-27T18:28:02.000Z",
+        "iso": "200",
+        "aperture": "f/3.5",
+        "shutter": "1/3200",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "16mm"
+      }
+    },
+    "photography/DSC03454": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC03454.jpg",
+      "w": 1616,
+      "h": 1080,
+      "hash": "813fc94546d2e563ab62f28dec79678f708731eb260a5e1f5b8a5247b5376855",
+      "tag": "photo-assets",
+      "file": "DSC03454.jpg",
+      "exif": {
+        "takenAt": "2019-03-27T19:30:48.000Z",
+        "iso": "200",
+        "aperture": "f/22",
+        "shutter": "1/125",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "27mm"
+      }
+    },
+    "photography/DSC03457": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC03457.jpg",
+      "w": 1616,
+      "h": 1080,
+      "hash": "d44ee059a87a7628b8f01dd40486d48786de3ccd7073445743aec7e0a218dd4f",
+      "tag": "photo-assets",
+      "file": "DSC03457.jpg",
+      "exif": {
+        "takenAt": "2019-03-27T19:30:55.000Z",
+        "iso": "200",
+        "aperture": "f/22",
+        "shutter": "1/125",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "27mm"
+      }
+    },
+    "photography/DSC03534": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC03534.jpg",
+      "w": 1616,
+      "h": 1080,
+      "hash": "9ed02aa104359a287c09feaeaaa539206c2a7de87b0b6cafef73464273df30e0",
+      "tag": "photo-assets",
+      "file": "DSC03534.jpg",
+      "exif": {
+        "takenAt": "2019-03-27T21:08:13.000Z",
+        "iso": "200",
+        "aperture": "f/22",
+        "shutter": "1/100",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "16mm"
+      }
+    },
+    "photography/DSC03576": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC03576.jpg",
+      "w": 1616,
+      "h": 1080,
+      "hash": "165d99055d6a403d53276d46db3bb003d6070eeab6b5aa836dddd81a694f205d",
+      "tag": "photo-assets",
+      "file": "DSC03576.jpg",
+      "exif": {
+        "takenAt": "2019-03-27T21:18:26.000Z",
+        "iso": "200",
+        "aperture": "f/22",
+        "shutter": "1/80",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "16mm"
+      }
+    },
+    "photography/DSC03590": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC03590.jpg",
+      "w": 1080,
+      "h": 1616,
+      "hash": "a598f5391dc8618c4641d1248ddcdcb7eba42f7cc1441177cbfbea2fc9eb721a",
+      "tag": "photo-assets",
+      "file": "DSC03590.jpg",
+      "exif": {
+        "takenAt": "2019-03-27T21:21:19.000Z",
+        "iso": "200",
+        "aperture": "f/22",
+        "shutter": "1/100",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "28mm"
+      }
+    },
+    "photography/DSC03591": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC03591.jpg",
+      "w": 1616,
+      "h": 1080,
+      "hash": "6ab23d9bad46e20c2785318e297a5ead6eaff60bcf98ac8f032a241c94403107",
+      "tag": "photo-assets",
+      "file": "DSC03591.jpg",
+      "exif": {
+        "takenAt": "2019-03-27T21:21:46.000Z",
+        "iso": "200",
+        "aperture": "f/22",
+        "shutter": "1/80",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "28mm"
+      }
+    },
+    "photography/DSC03695": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC03695.jpg",
+      "w": 1616,
+      "h": 1080,
+      "hash": "e2d5903d27321456cd870d0f1483997e18bc6feefd857c6cbda6969bb8187957",
+      "tag": "photo-assets",
+      "file": "DSC03695.jpg",
+      "exif": {
+        "takenAt": "2019-03-27T22:04:51.000Z",
+        "iso": "200",
+        "aperture": "f/8",
+        "shutter": "1/160",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "29mm"
+      }
+    },
+    "photography/DSC03696": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC03696.jpg",
+      "w": 1080,
+      "h": 1616,
+      "hash": "7dcd54a566b93e96ce3f609636180e37f80a88bc2e84686efb67333b7fbe2d0d",
+      "tag": "photo-assets",
+      "file": "DSC03696.jpg",
+      "exif": {
+        "takenAt": "2019-03-27T22:05:00.000Z",
+        "iso": "200",
+        "aperture": "f/8",
+        "shutter": "1/200",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "29mm"
+      }
+    },
+    "photography/DSC03702": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC03702.jpg",
+      "w": 1616,
+      "h": 1080,
+      "hash": "65834eaa7b866a30df814e23f6b670ddcd8de266bd2a8fe129319d3c2d5a946b",
+      "tag": "photo-assets",
+      "file": "DSC03702.jpg",
+      "exif": {
+        "takenAt": "2019-03-27T22:05:54.000Z",
+        "iso": "200",
+        "aperture": "f/8",
+        "shutter": "1/400",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "16mm"
+      }
+    },
+    "photography/DSC03765": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC03765.jpg",
+      "w": 1616,
+      "h": 1080,
+      "hash": "39e3459f4ee396cc4011d7bd15a31f5041f6561de24133245e8ba00769b99a21",
+      "tag": "photo-assets",
+      "file": "DSC03765.jpg",
+      "exif": {
+        "takenAt": "2019-03-27T22:16:17.000Z",
+        "iso": "200",
+        "aperture": "f/5.6",
+        "shutter": "1/200",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "16mm"
+      }
+    },
+    "photography/DSC03799": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC03799.jpg",
+      "w": 1616,
+      "h": 1080,
+      "hash": "437c9cc183fb993fbd61fcf939a144f09ce0aebac43d0416f02b253771efe70f",
+      "tag": "photo-assets",
+      "file": "DSC03799.jpg",
+      "exif": {
+        "takenAt": "2019-03-27T22:47:55.000Z",
+        "iso": "200",
+        "aperture": "f/22",
+        "shutter": "1/60",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "50mm"
+      }
+    },
+    "photography/DSC03800": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC03800.jpg",
+      "w": 1616,
+      "h": 1080,
+      "hash": "413b73faa1ae54911c4558040e20d87de3cd368dea8974cabf48192f92f616bd",
+      "tag": "photo-assets",
+      "file": "DSC03800.jpg",
+      "exif": {
+        "takenAt": "2019-03-27T22:48:45.000Z",
+        "iso": "200",
+        "aperture": "f/22",
+        "shutter": "1/4",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "50mm"
+      }
+    },
+    "photography/DSC03806": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC03806.jpg",
+      "w": 1080,
+      "h": 1616,
+      "hash": "61f7cb19c66ad7309b5a74bf6f90b3d450ebb67aa77e278c2b803e665d0d4e18",
+      "tag": "photo-assets",
+      "file": "DSC03806.jpg",
+      "exif": {
+        "takenAt": "2019-03-27T22:49:15.000Z",
+        "iso": "200",
+        "aperture": "f/5.6",
+        "shutter": "1/60",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "37mm"
+      }
+    },
+    "photography/DSC03863": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC03863.jpg",
+      "w": 1616,
+      "h": 1080,
+      "hash": "a1054974aaf487644af7f32e7cbc37c55bda3ceee64be3c9150bb139e298d758",
+      "tag": "photo-assets",
+      "file": "DSC03863.jpg",
+      "exif": {
+        "takenAt": "2019-03-28T12:27:38.000Z",
+        "iso": "200",
+        "aperture": "f/8",
+        "shutter": "1/8",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "16mm"
+      }
+    },
+    "photography/DSC03921": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC03921.jpg",
+      "w": 1616,
+      "h": 1080,
+      "hash": "dc7b716438c569735b920726ced8865865bf8e73a20af8087757ba7bc2872220",
+      "tag": "photo-assets",
+      "file": "DSC03921.jpg",
+      "exif": {
+        "takenAt": "2019-03-28T12:45:06.000Z",
+        "iso": "200",
+        "aperture": "f/5.6",
+        "shutter": "1/40",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "16mm"
+      }
+    },
+    "photography/DSC03982": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC03982.jpg",
+      "w": 1080,
+      "h": 1616,
+      "hash": "cf659b94fb5af9ec6a841605f1385d97cb49704d58067a46231a350b769edc02",
+      "tag": "photo-assets",
+      "file": "DSC03982.jpg",
+      "exif": {
+        "takenAt": "2019-03-28T13:02:22.000Z",
+        "iso": "200",
+        "aperture": "f/4.5",
+        "shutter": "1/60",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "24mm"
+      }
+    },
+    "photography/DSC04037": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC04037.jpg",
+      "w": 1616,
+      "h": 1080,
+      "hash": "2c0724a858d1d759c9efa96121bbcf55e5a14b2e04816019d6b36119b41262f9",
+      "tag": "photo-assets",
+      "file": "DSC04037.jpg",
+      "exif": {
+        "takenAt": "2019-03-28T13:08:53.000Z",
+        "iso": "100",
+        "aperture": "f/5.6",
+        "shutter": "1/25",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "39mm"
+      }
+    },
+    "photography/DSC04042": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC04042.jpg",
+      "w": 1080,
+      "h": 1616,
+      "hash": "9804d534c484f3abe1065649916a0eeb1087e2bdf56d2e44e0473208834ab88a",
+      "tag": "photo-assets",
+      "file": "DSC04042.jpg",
+      "exif": {
+        "takenAt": "2019-03-28T13:09:36.000Z",
+        "iso": "100",
+        "aperture": "f/5.6",
+        "shutter": "1/10",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "50mm"
+      }
+    },
+    "photography/DSC04103": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC04103.jpg",
+      "w": 1616,
+      "h": 1080,
+      "hash": "8f8d09cf8ea24befdf59fb5f2ed2fc057063c2b5ceae7578200ffdba49a0ee32",
+      "tag": "photo-assets",
+      "file": "DSC04103.jpg",
+      "exif": {
+        "takenAt": "2019-03-28T13:23:19.000Z",
+        "iso": "100",
+        "aperture": "f/4.5",
+        "shutter": "1/8",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "29mm"
+      }
+    },
+    "photography/DSC04113": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC04113.jpg",
+      "w": 1080,
+      "h": 1616,
+      "hash": "2f39049db36573eab913ef478b7e89eb449c40604b410cc53cb14e3f029e8ede",
+      "tag": "photo-assets",
+      "file": "DSC04113.jpg",
+      "exif": {
+        "takenAt": "2019-03-28T13:23:26.000Z",
+        "iso": "100",
+        "aperture": "f/4.5",
+        "shutter": "1/8",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "27mm"
+      }
+    },
+    "photography/DSC04142": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC04142.jpg",
+      "w": 1080,
+      "h": 1616,
+      "hash": "313afcc59c5427c879192b13d3ae10dc6c149a94544a80c34e6436c735dc6134",
+      "tag": "photo-assets",
+      "file": "DSC04142.jpg",
+      "exif": {
+        "takenAt": "2019-03-28T13:31:17.000Z",
+        "iso": "100",
+        "aperture": "f/4.5",
+        "shutter": "1/60",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "25mm"
+      }
+    },
+    "photography/DSC04143": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC04143.jpg",
+      "w": 1616,
+      "h": 1080,
+      "hash": "be96c43d2b2e9f2f9e99b6cb63e3294a48f87f58536a9b7d7c8e79bf6f2f2fd2",
+      "tag": "photo-assets",
+      "file": "DSC04143.jpg",
+      "exif": {
+        "takenAt": "2019-03-28T13:31:22.000Z",
+        "iso": "100",
+        "aperture": "f/4.5",
+        "shutter": "1/60",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "25mm"
+      }
+    },
+    "photography/DSC04150": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC04150.jpg",
+      "w": 1080,
+      "h": 1616,
+      "hash": "69004d10c186b23258a451d2bca91e5a859dceaf8a62c1c0ad87bfec81bbf145",
+      "tag": "photo-assets",
+      "file": "DSC04150.jpg",
+      "exif": {
+        "takenAt": "2019-03-28T13:32:24.000Z",
+        "iso": "100",
+        "aperture": "f/3.5",
+        "shutter": "1/60",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "16mm"
+      }
+    },
+    "photography/DSC04232": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC04232.jpg",
+      "w": 1616,
+      "h": 1080,
+      "hash": "4dea1e69c1836eae63036102da93b70ee09f6faeae52b6d76507c360763716a0",
+      "tag": "photo-assets",
+      "file": "DSC04232.jpg",
+      "exif": {
+        "takenAt": "2019-03-28T15:57:03.000Z",
+        "iso": "100",
+        "aperture": "f/22",
+        "shutter": "1/60",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "50mm"
+      }
+    },
+    "photography/DSC04234": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC04234.jpg",
+      "w": 1616,
+      "h": 1080,
+      "hash": "1b62767dec15b250819485a3b27caa340c4b8dbb75755ffd5e218788236f76d5",
+      "tag": "photo-assets",
+      "file": "DSC04234.jpg",
+      "exif": {
+        "takenAt": "2019-03-28T15:57:08.000Z",
+        "iso": "100",
+        "aperture": "f/22",
+        "shutter": "1/60",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "50mm"
+      }
+    },
+    "photography/DSC04255": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC04255.jpg",
+      "w": 1080,
+      "h": 1616,
+      "hash": "939200b22256314d5673250f2ae29182ca701142e3b18e8a784a934f9c988dab",
+      "tag": "photo-assets",
+      "file": "DSC04255.jpg",
+      "exif": {
+        "takenAt": "2019-03-28T21:00:57.000Z",
+        "iso": "100",
+        "aperture": "f/5.6",
+        "shutter": "1/8",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "50mm"
+      }
+    },
+    "photography/DSC04256": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC04256.jpg",
+      "w": 1080,
+      "h": 1616,
+      "hash": "bbee5e27f3afa535aa40392471c4eb50b647b89009cb41f932247566a5094709",
+      "tag": "photo-assets",
+      "file": "DSC04256.jpg",
+      "exif": {
+        "takenAt": "2019-03-28T21:00:58.000Z",
+        "iso": "100",
+        "aperture": "f/5.6",
+        "shutter": "1/8",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "50mm"
+      }
+    },
+    "photography/DSC04263": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC04263.jpg",
+      "w": 1080,
+      "h": 1616,
+      "hash": "b6ffc30b9d07d7fb8e2af9525b5b009fcd487cfb4a654bb340fb67d73c0bad91",
+      "tag": "photo-assets",
+      "file": "DSC04263.jpg",
+      "exif": {
+        "takenAt": "2019-03-28T21:01:33.000Z",
+        "iso": "100",
+        "aperture": "f/5.6",
+        "shutter": "1/10",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "50mm"
+      }
+    },
+    "photography/DSC04270": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC04270.jpg",
+      "w": 1080,
+      "h": 1616,
+      "hash": "42fb97c5feb1f33cc302da7382f35f62ff11e026bb68fb21608fc7c8f6773a80",
+      "tag": "photo-assets",
+      "file": "DSC04270.jpg",
+      "exif": {
+        "takenAt": "2019-03-28T21:03:35.000Z",
+        "iso": "100",
+        "aperture": "f/8",
+        "shutter": "1/500",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "50mm"
+      }
+    },
+    "photography/DSC04273": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC04273.jpg",
+      "w": 1080,
+      "h": 1616,
+      "hash": "e7aa359a109b038d77c1d4ad6ab39269479edcb5c24dacb981678488e7973d39",
+      "tag": "photo-assets",
+      "file": "DSC04273.jpg",
+      "exif": {
+        "takenAt": "2019-03-28T21:03:36.000Z",
+        "iso": "100",
+        "aperture": "f/8",
+        "shutter": "1/500",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "50mm"
+      }
+    },
+    "photography/DSC04400": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC04400.jpg",
+      "w": 1616,
+      "h": 1080,
+      "hash": "c5a677df4f3a4f8c6b36095d0e7596c1f44e804e582c61f1969871d055782df3",
+      "tag": "photo-assets",
+      "file": "DSC04400.jpg",
+      "exif": {
+        "takenAt": "2019-03-29T19:37:26.000Z",
+        "iso": "100",
+        "aperture": "f/8",
+        "shutter": "1/50",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "36mm"
+      }
+    },
+    "photography/DSC04404": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC04404.jpg",
+      "w": 1616,
+      "h": 1080,
+      "hash": "7ca22e3da386cc7ae382815f33adae65af106c52eb7902a5ebaa4f59e7e6948b",
+      "tag": "photo-assets",
+      "file": "DSC04404.jpg",
+      "exif": {
+        "takenAt": "2019-03-29T19:37:39.000Z",
+        "iso": "100",
+        "aperture": "f/32",
+        "shutter": "1/50",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "36mm"
+      }
+    },
+    "photography/DSC04422": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC04422.jpg",
+      "w": 1616,
+      "h": 1080,
+      "hash": "4f972c0c9e796bd98a60ea2356c8f393c046f41e09b9df8f33a7c6d829f4a05f",
+      "tag": "photo-assets",
+      "file": "DSC04422.jpg",
+      "exif": {
+        "takenAt": "2019-03-29T20:03:53.000Z",
+        "iso": "100",
+        "aperture": "f/36",
+        "shutter": "1/25",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "40mm"
+      }
+    },
+    "photography/DSC04426": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC04426.jpg",
+      "w": 1080,
+      "h": 1616,
+      "hash": "2e3ad52bfea1cff160a20c02a519b8bf92e32c42f6412b73670983a91a8a5816",
+      "tag": "photo-assets",
+      "file": "DSC04426.jpg",
+      "exif": {
+        "takenAt": "2019-03-29T20:25:31.000Z",
+        "iso": "100",
+        "aperture": "f/25",
+        "shutter": "1/25",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "50mm"
+      }
+    },
+    "photography/DSC04438": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC04438.jpg",
+      "w": 1080,
+      "h": 1616,
+      "hash": "038386c611ee6ccca885d6e07e033b93d57116d805fd6d23d8f8877dee7c5974",
+      "tag": "photo-assets",
+      "file": "DSC04438.jpg",
+      "exif": {
+        "takenAt": "2019-03-29T20:34:04.000Z",
+        "iso": "100",
+        "aperture": "f/22",
+        "shutter": "1/30",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "16mm"
+      }
+    },
+    "photography/DSC04488": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC04488.jpg",
+      "w": 1616,
+      "h": 1080,
+      "hash": "19e3a9203ebddcaa92cef9878620d9eca8739e34381465442f1aa646a53c5963",
+      "tag": "photo-assets",
+      "file": "DSC04488.jpg",
+      "exif": {
+        "takenAt": "2019-03-29T20:53:05.000Z",
+        "iso": "100",
+        "aperture": "f/22",
+        "shutter": "1/25",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "50mm"
+      }
+    },
+    "photography/DSC04492": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC04492.jpg",
+      "w": 1080,
+      "h": 1616,
+      "hash": "c031ea1f8c0a176f3f603392499418619a078df87322371f75a87e970e87210f",
+      "tag": "photo-assets",
+      "file": "DSC04492.jpg",
+      "exif": {
+        "takenAt": "2019-03-29T20:53:50.000Z",
+        "iso": "100",
+        "aperture": "f/22",
+        "shutter": "1/20",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "50mm"
+      }
+    },
+    "photography/DSC04493": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC04493.jpg",
+      "w": 1080,
+      "h": 1616,
+      "hash": "126b6f5729051e36b0a7176c62ae5e776b886eead89a1ca54ac1d3866039c896",
+      "tag": "photo-assets",
+      "file": "DSC04493.jpg",
+      "exif": {
+        "takenAt": "2019-03-29T20:53:56.000Z",
+        "iso": "100",
+        "aperture": "f/22",
+        "shutter": "1/30",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "50mm"
+      }
+    },
+    "photography/DSC04667": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC04667.jpg",
+      "w": 1616,
+      "h": 1080,
+      "hash": "80dea315b263a4010995d869220564a0f93104dcb77e286f7655c15740cf3b1f",
+      "tag": "photo-assets",
+      "file": "DSC04667.jpg",
+      "exif": {
+        "takenAt": "2019-09-14T19:02:19.000Z",
+        "iso": "6400",
+        "aperture": "f/3.5",
+        "shutter": "1/80",
+        "camera": "Sony ILCE-6400",
+        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
+        "focal": "16mm"
+      }
+    },
+    "photography/DSC05021": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC05021.jpg",
+      "w": 1080,
+      "h": 1616,
+      "hash": "7e193cca286044c2a1fceb1c9fb474d1ee3c9309138c4bf4e7b0f92f784873c0",
+      "tag": "photo-assets",
+      "file": "DSC05021.jpg",
+      "exif": {
+        "takenAt": "2025-12-30T16:50:33.000Z",
+        "iso": "1000",
+        "aperture": "f/4",
+        "shutter": "1/100",
+        "camera": "Sony ILCE-6400",
+        "lens": "18-50mm F2.8 DC DN | Contemporary 021",
+        "focal": "50mm"
+      }
+    },
+    "photography/DSC05158": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC05158.jpg",
+      "w": 1616,
+      "h": 1080,
+      "hash": "08600d7d11cfdf659cb4036181d4b9e1c8453673e99f85d1098c09df9a58206f",
+      "tag": "photo-assets",
+      "file": "DSC05158.jpg",
+      "exif": {
+        "takenAt": "2025-12-30T17:10:31.000Z",
+        "iso": "6400",
+        "aperture": "f/2.8",
+        "shutter": "1/100",
+        "camera": "Sony ILCE-6400",
+        "lens": "18-50mm F2.8 DC DN | Contemporary 021",
+        "focal": "19.8mm"
+      }
+    },
+    "photography/DSC05501": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC05501.jpg",
+      "w": 1616,
+      "h": 1080,
+      "hash": "68a928501f0b88e4490b06e6dd670dd0d29c52957b12b90ae241fcbff80a7153",
+      "tag": "photo-assets",
+      "file": "DSC05501.jpg",
+      "exif": {
+        "takenAt": "2026-01-10T19:40:17.000Z",
+        "iso": "6400",
+        "aperture": "f/2.8",
+        "shutter": "1/50",
+        "camera": "Sony ILCE-6400",
+        "lens": "18-50mm F2.8 DC DN | Contemporary 021",
+        "focal": "24.8mm"
+      }
+    },
+    "photography/IMG_2835": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/IMG_2835.jpg",
+      "w": 3024,
+      "h": 4032,
+      "hash": "2bf6b29294d818b5ae3918df57e515d8dbc4d1a06e5fa30472970d59bcc8cd3d",
+      "tag": "photo-assets",
+      "file": "IMG_2835.jpg",
+      "exif": {
+        "takenAt": "2022-01-06T15:16:29.000Z",
+        "iso": "500",
+        "aperture": "f/1.8",
+        "shutter": "1/30",
+        "camera": "Apple iPhone 11",
+        "lens": "iPhone 11 back dual wide camera 4.25mm f/1.8",
+        "focal": "4.25mm"
+      }
+    },
+    "photography/IMG_2966": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/IMG_2966.jpg",
+      "w": 3024,
+      "h": 4032,
+      "hash": "66a2a16c95f3872ef90ed9ca6ab3999d29c279c14ff57c896a92d5b563ebe821",
+      "tag": "photo-assets",
+      "file": "IMG_2966.jpg",
+      "exif": {
+        "takenAt": "2022-02-18T13:01:53.000Z",
+        "iso": "200",
+        "aperture": "f/1.8",
+        "shutter": "1/60",
+        "camera": "Apple iPhone 11",
+        "lens": "iPhone 11 back dual wide camera 4.25mm f/1.8",
+        "focal": "4.25mm"
+      }
+    },
+    "photography/IMG_3268": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/IMG_3268.jpg",
+      "w": 3024,
+      "h": 4032,
+      "hash": "7705de9f1f9196858b03b022959be9abc46e32e0c01697d8f8a2fc4bc87bba9b",
+      "tag": "photo-assets",
+      "file": "IMG_3268.jpg",
+      "exif": {
+        "takenAt": "2025-08-27T17:31:09.000Z",
+        "iso": "125",
+        "aperture": "f/2.4",
+        "shutter": "1/120",
+        "camera": "Apple iPhone 12 Pro",
+        "lens": "iPhone 12 Pro back triple camera 1.54mm f/2.4",
+        "focal": "1.54mm"
+      }
+    },
+    "photography/IMG_3269": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/IMG_3269.jpg",
+      "w": 4032,
+      "h": 3024,
+      "hash": "8451dbba4149a57857e020d83e9bd5a9db9a05e9bd27bf80e9f42fa757d40b15",
+      "tag": "photo-assets",
+      "file": "IMG_3269.jpg",
+      "exif": {
+        "takenAt": "2025-07-27T21:38:41.000Z",
+        "iso": "200",
+        "aperture": "f/1.78",
+        "shutter": "1/60",
+        "camera": "Apple iPhone 16 Pro",
+        "lens": "iPhone 16 Pro back triple camera 6.765mm f/1.78",
+        "focal": "6.76mm"
+      }
+    },
+    "photography/IMG_3293": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/IMG_3293.jpg",
+      "w": 3024,
+      "h": 4032,
+      "hash": "f8f8e604a9bdc5c0275344cec81358f90ece2e1fb45a681b669406ac999497b1",
+      "tag": "photo-assets",
+      "file": "IMG_3293.jpg",
+      "exif": {
+        "takenAt": "2025-07-27T21:44:36.000Z",
+        "iso": "320",
+        "aperture": "f/2.8",
+        "shutter": "1/60",
+        "camera": "Apple iPhone 16 Pro",
+        "lens": "iPhone 16 Pro back triple camera 15.66mm f/2.8",
+        "focal": "15.66mm"
+      }
+    },
+    "photography/IMG_3528": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/IMG_3528.jpg",
+      "w": 3024,
+      "h": 4032,
+      "hash": "10df4a461e5c918cefc97dc2e980837a0c233dd36018aa3897f337021d3baaad",
+      "tag": "photo-assets",
+      "file": "IMG_3528.jpg",
+      "exif": {
+        "takenAt": "2025-08-31T23:03:30.000Z",
+        "iso": "6400",
+        "aperture": "f/1.78",
+        "shutter": "2s",
+        "camera": "Apple iPhone 16 Pro",
+        "lens": "iPhone 16 Pro back triple camera 6.765mm f/1.78",
+        "focal": "6.76mm"
+      }
+    },
+    "photography/IMG_3705": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/IMG_3705.jpg",
+      "w": 960,
+      "h": 1280,
+      "hash": "dc00ecee41b853bd26abf994302f649f17bb709811724641401801e7fe24e3b8",
+      "tag": "photo-assets",
+      "file": "IMG_3705.jpg",
+      "exif": null
+    },
+    "photography/IMG_3728": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/IMG_3728.jpg",
+      "w": 3024,
+      "h": 4032,
+      "hash": "cbb6a9288eb4a5e44cd20b57eb470bee7eb1cd7fe580296b23a104f221dc1e49",
+      "tag": "photo-assets",
+      "file": "IMG_3728.jpg",
+      "exif": {
+        "takenAt": "2025-08-16T19:01:43.000Z",
+        "iso": "80",
+        "aperture": "f/2.4",
+        "shutter": "1/99",
+        "camera": "Apple iPhone 14",
+        "lens": "iPhone 14 back dual wide camera 1.54mm f/2.4",
+        "focal": "1.54mm"
+      }
+    },
+    "photography/IMG_3880": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/IMG_3880.jpg",
+      "w": 3600,
+      "h": 2400,
+      "hash": "cd9aad4c6b5dc7244c1a84c58c1bde6bfcf5b30d31f61b839ed62880da117737",
+      "tag": "photo-assets",
+      "file": "IMG_3880.jpg",
+      "exif": {
+        "takenAt": "2025-10-25T23:49:59.000Z",
+        "iso": "800",
+        "aperture": "f/5",
+        "shutter": "1/125",
+        "camera": "Canon EOS Rebel SL2",
+        "lens": null,
+        "focal": "27mm"
+      }
+    },
+    "photography/IMG_4016": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/IMG_4016.jpg",
+      "w": 5568,
+      "h": 4176,
+      "hash": "d614270e4f3ad7337a4f07cb8da26740f6ff91a766d1199aef559b8b086ee050",
+      "tag": "photo-assets",
+      "file": "IMG_4016.jpg",
+      "exif": {
+        "takenAt": "2025-08-17T12:59:57.000Z",
+        "iso": "315",
+        "aperture": "f/2.5",
+        "shutter": "1/240",
+        "camera": "Gopro HERO10 Black",
+        "lens": null,
+        "focal": "2.71mm"
+      }
+    },
+    "photography/IMG_4520": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/IMG_4520.jpg",
+      "w": 3024,
+      "h": 4032,
+      "hash": "87ae9e4f0f919ab4699b32a0fa59d67d9d5b7307dfb642df994d52e7404f09ce",
+      "tag": "photo-assets",
+      "file": "IMG_4520.jpg",
+      "exif": {
+        "takenAt": "2023-02-06T10:13:29.000Z",
+        "iso": "125",
+        "aperture": "f/1.8",
+        "shutter": "1/113",
+        "camera": "Apple iPhone 11",
+        "lens": "iPhone 11 back dual wide camera 4.25mm f/1.8",
+        "focal": "4.25mm"
+      }
+    },
+    "photography/IMG_4896": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/IMG_4896.jpg",
+      "w": 3024,
+      "h": 4032,
+      "hash": "d992c60e2d3e815ae6f5d8f9175b15598631951a9ee58940509b7ee280cbcc0b",
+      "tag": "photo-assets",
+      "file": "IMG_4896.jpg",
+      "exif": {
+        "takenAt": "2026-04-15T20:23:26.000Z",
+        "iso": "100",
+        "aperture": "f/2.8",
+        "shutter": "1/99",
+        "camera": "Apple iPhone 16 Pro",
+        "lens": "iPhone 16 Pro back triple camera 15.66mm f/2.8",
+        "focal": "15.66mm"
+      }
+    },
+    "photography/IMG_4898": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/IMG_4898.jpg",
+      "w": 3024,
+      "h": 4032,
+      "hash": "af104a3842aabea67f00e7ed1c03e36cc6eced1e0bf029fb57873b05f8b49185",
+      "tag": "photo-assets",
+      "file": "IMG_4898.jpg",
+      "exif": {
+        "takenAt": "2026-04-15T20:25:03.000Z",
+        "iso": "50",
+        "aperture": "f/2.8",
+        "shutter": "1/977",
+        "camera": "Apple iPhone 16 Pro",
+        "lens": "iPhone 16 Pro back triple camera 15.66mm f/2.8",
+        "focal": "15.66mm"
+      }
+    },
+    "photography/IMG_5296": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/IMG_5296.jpg",
+      "w": 4284,
+      "h": 5712,
+      "hash": "2b3a5f0395f48dd548267123fd55dff5c6a86cbfa20d1f706c1fc4d46e5b817e",
+      "tag": "photo-assets",
+      "file": "IMG_5296.jpg",
+      "exif": {
+        "takenAt": "2026-06-11T18:49:10.000Z",
+        "iso": "125",
+        "aperture": "f/1.78",
+        "shutter": "1/120",
+        "camera": "Apple iPhone 16 Pro",
+        "lens": "iPhone 16 Pro back triple camera 6.765mm f/1.78",
+        "focal": "6.76mm"
+      }
+    },
+    "photography/IMG_5754_1": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/IMG_5754_1.jpg",
+      "w": 5847,
+      "h": 3899,
+      "hash": "3545a4d0f4b6324bcda43a60505c55b5dcd5f5f53220c93380615ce93ea2fd77",
+      "tag": "photo-assets",
+      "file": "IMG_5754_1.jpg",
+      "exif": null
+    },
+    "photography/IMG_5810_1": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/IMG_5810_1.jpg",
+      "w": 6960,
+      "h": 4640,
+      "hash": "d479bcb4cafcfca0ca34d09e6a192bdcb5753137550a1236de4d112e0be99106",
+      "tag": "photo-assets",
+      "file": "IMG_5810_1.jpg",
+      "exif": null
+    },
+    "photography/IMG_5812": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/IMG_5812.jpg",
+      "w": 3024,
+      "h": 4032,
+      "hash": "b1e9556fb419cb55272df2e569f3f2e088ba33ca32423b80784aa8ccaddde6f2",
+      "tag": "photo-assets",
+      "file": "IMG_5812.jpg",
+      "exif": {
+        "takenAt": "2024-05-07T15:04:38.000Z",
+        "iso": "500",
+        "aperture": "f/1.8",
+        "shutter": "1/49",
+        "camera": "Apple iPhone 11",
+        "lens": "iPhone 11 back dual wide camera 4.25mm f/1.8",
+        "focal": "4.25mm"
+      }
+    },
+    "photography/IMG_5982": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/IMG_5982.jpg",
+      "w": 4032,
+      "h": 3024,
+      "hash": "304aa010e9677822de409e0c4f25301c8c2ed45436c48c7228196cf021cce7bf",
+      "tag": "photo-assets",
+      "file": "IMG_5982.jpg",
+      "exif": {
+        "takenAt": "2024-06-07T21:10:58.000Z",
+        "iso": "32",
+        "aperture": "f/1.8",
+        "shutter": "1/685",
+        "camera": "Apple iPhone 11",
+        "lens": "iPhone 11 back dual wide camera 4.25mm f/1.8",
+        "focal": "4.25mm"
+      }
+    },
+    "photography/IMG_6165": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/IMG_6165.jpg",
+      "w": 4284,
+      "h": 5712,
+      "hash": "232d96daf0d9fe372a09d70d33fc5b780cc386ee052685f92e3bd44c550c2367",
+      "tag": "photo-assets",
+      "file": "IMG_6165.jpg",
+      "exif": {
+        "takenAt": "2026-08-31T15:34:12.000Z",
+        "iso": "200",
+        "aperture": "f/1.78",
+        "shutter": "1/60",
+        "camera": "Apple iPhone 16 Pro",
+        "lens": "iPhone 16 Pro back triple camera 6.765mm f/1.78",
+        "focal": "6.76mm"
+      }
+    },
+    "photography/IMG_6432": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/IMG_6432.jpg",
+      "w": 4032,
+      "h": 3024,
+      "hash": "93a8468f7871792d5b57ac546a2d83cd429963843aa2bceee2533f9f0e068905",
+      "tag": "photo-assets",
+      "file": "IMG_6432.jpg",
+      "exif": {
+        "takenAt": "2024-06-20T17:43:05.000Z",
+        "iso": "32",
+        "aperture": "f/1.8",
+        "shutter": "1/3984",
+        "camera": "Apple iPhone 11",
+        "lens": "iPhone 11 back dual wide camera 4.25mm f/1.8",
+        "focal": "4.25mm"
+      }
+    },
+    "photography/IMG_6477": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/IMG_6477.jpg",
+      "w": 4032,
+      "h": 3024,
+      "hash": "9204e7e2468d043562c64a717ae256e0798d418dc289bbec4860a212ff4678c9",
+      "tag": "photo-assets",
+      "file": "IMG_6477.jpg",
+      "exif": {
+        "takenAt": "2024-06-22T20:38:21.000Z",
+        "iso": "32",
+        "aperture": "f/1.8",
+        "shutter": "1/616",
+        "camera": "Apple iPhone 11",
+        "lens": "iPhone 11 back dual wide camera 4.25mm f/1.8",
+        "focal": "4.25mm"
+      }
+    },
+    "photography/IMG_6491": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/IMG_6491.jpg",
+      "w": 3024,
+      "h": 4032,
+      "hash": "074a874fa59afb2e1ab3665bfd238afd9f83087fd71a54713ff0460e41ba8c4c",
+      "tag": "photo-assets",
+      "file": "IMG_6491.jpg",
+      "exif": {
+        "takenAt": "2024-06-22T21:14:23.000Z",
+        "iso": "32",
+        "aperture": "f/1.8",
+        "shutter": "1/426",
+        "camera": "Apple iPhone 11",
+        "lens": "iPhone 11 back dual wide camera 4.25mm f/1.8",
+        "focal": "4.25mm"
+      }
+    },
+    "photography/IMG_6691": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/IMG_6691.jpg",
+      "w": 1536,
+      "h": 2048,
+      "hash": "4ca1f138c1aba1b43b1ae2112e27bdcee1b7a2743b8d57025004f8f03ce31776",
+      "tag": "photo-assets",
+      "file": "IMG_6691.jpg",
+      "exif": {
+        "takenAt": "2025-06-20T22:34:44.000Z",
+        "iso": "3200",
+        "aperture": "f/1.5",
+        "shutter": "1/2",
+        "camera": "Apple iPhone 13 Pro",
+        "lens": "iPhone 13 Pro back triple camera 5.7mm f/1.5",
+        "focal": "5.7mm"
+      }
+    },
+    "photography/IMG_6696": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/IMG_6696.jpg",
+      "w": 2048,
+      "h": 1536,
+      "hash": "436a0bbd04f83a044e4b65753e17e534c4adeb4ab3187fce2bde6aa8e05a40ab",
+      "tag": "photo-assets",
+      "file": "IMG_6696.jpg",
+      "exif": {
+        "takenAt": "2025-06-20T23:10:03.000Z",
+        "iso": "800",
+        "aperture": "f/1.5",
+        "shutter": "1/5",
+        "camera": "Apple iPhone 13 Pro",
+        "lens": "iPhone 13 Pro back triple camera 5.7mm f/1.5",
+        "focal": "5.7mm"
+      }
+    },
+    "photography/IMG_6804": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/IMG_6804.jpg",
+      "w": 4032,
+      "h": 3024,
+      "hash": "b578d02f6527ff3fcafeb68baa4a052bd3380287f76b38e13a1f45c8c2d4df72",
+      "tag": "photo-assets",
+      "file": "IMG_6804.jpg",
+      "exif": {
+        "takenAt": "2024-08-15T21:09:14.000Z",
+        "iso": "500",
+        "aperture": "f/1.8",
+        "shutter": "1/58",
+        "camera": "Apple iPhone 11",
+        "lens": "iPhone 11 back dual wide camera 4.25mm f/1.8",
+        "focal": "4.25mm"
+      }
+    },
+    "photography/IMG_6806": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/IMG_6806.jpg",
+      "w": 2048,
+      "h": 1536,
+      "hash": "3cac115a48f8f29309a74f15af95e5a551a5caafbe9100ae3dce0ff36da0919e",
+      "tag": "photo-assets",
+      "file": "IMG_6806.jpg",
+      "exif": {
+        "takenAt": "2025-06-21T15:55:47.000Z",
+        "iso": "50",
+        "aperture": "f/1.5",
+        "shutter": "1/5882",
+        "camera": "Apple iPhone 13 Pro",
+        "lens": "iPhone 13 Pro back triple camera 5.7mm f/1.5",
+        "focal": "5.7mm"
+      }
+    },
+    "photography/IMG_6832": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/IMG_6832.jpg",
+      "w": 1536,
+      "h": 2048,
+      "hash": "222a318b0de150e403b62d5d585d9132b39b1b0be004ec8cfc9d5a7ebef024f9",
+      "tag": "photo-assets",
+      "file": "IMG_6832.jpg",
+      "exif": {
+        "takenAt": "2025-06-21T18:30:55.000Z",
+        "iso": "50",
+        "aperture": "f/1.5",
+        "shutter": "1/2571",
+        "camera": "Apple iPhone 13 Pro",
+        "lens": "iPhone 13 Pro back triple camera 5.7mm f/1.5",
+        "focal": "5.7mm"
+      }
+    },
+    "photography/IMG_6842": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/IMG_6842.jpg",
+      "w": 3024,
+      "h": 4032,
+      "hash": "0670a668acb7e97522a87ed2b57ce488065ce3d1d8b15c2365f16df3e7ad8a36",
+      "tag": "photo-assets",
+      "file": "IMG_6842.jpg",
+      "exif": {
+        "takenAt": "2024-01-06T00:52:15.000Z",
+        "iso": "1600",
+        "aperture": "f/1.78",
+        "shutter": "1/20",
+        "camera": "Apple iPhone 15 Pro Max",
+        "lens": "iPhone 15 Pro Max back triple camera 6.86mm f/1.78",
+        "focal": "6.86mm"
+      }
+    },
+    "photography/IMG_6856": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/IMG_6856.jpg",
+      "w": 1536,
+      "h": 2048,
+      "hash": "beed3d36bb53464f77fd5a27856b6a94f26663756d9bef50d427cdd1bcf94875",
+      "tag": "photo-assets",
+      "file": "IMG_6856.jpg",
+      "exif": {
+        "takenAt": "2025-06-22T08:46:25.000Z",
+        "iso": "40",
+        "aperture": "f/1.5",
+        "shutter": "1/121",
+        "camera": "Apple iPhone 13 Pro",
+        "lens": "iPhone 13 Pro back triple camera 5.7mm f/1.5",
+        "focal": "5.7mm"
+      }
+    },
+    "photography/IMG_6946": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/IMG_6946.jpg",
+      "w": 1536,
+      "h": 2048,
+      "hash": "555941235990b38aca5377e2f9b9136a7489d206c7d849cff51328a6478b7572",
+      "tag": "photo-assets",
+      "file": "IMG_6946.jpg",
+      "exif": {
+        "takenAt": "2025-06-22T16:11:30.000Z",
+        "iso": "50",
+        "aperture": "f/1.5",
+        "shutter": "1/1089",
+        "camera": "Apple iPhone 13 Pro",
+        "lens": "iPhone 13 Pro back triple camera 5.7mm f/1.5",
+        "focal": "5.7mm"
+      }
+    },
+    "photography/IMG_6973": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/IMG_6973.jpg",
+      "w": 1536,
+      "h": 2048,
+      "hash": "c34d2a53d1fb530af75dc9f15fcc177e69683a52985cdbd35db2de9a3dca4aac",
+      "tag": "photo-assets",
+      "file": "IMG_6973.jpg",
+      "exif": {
+        "takenAt": "2025-06-23T09:59:21.000Z",
+        "iso": "100",
+        "aperture": "f/1.5",
+        "shutter": "1/120",
+        "camera": "Apple iPhone 13 Pro",
+        "lens": "iPhone 13 Pro back triple camera 5.7mm f/1.5",
+        "focal": "5.7mm"
+      }
+    },
+    "photography/IMG_6982": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/IMG_6982.jpg",
+      "w": 4032,
+      "h": 3024,
+      "hash": "3c449948ca2758eb6afc4a1647f0ace8167f144d77c961cf02187eaf990f22f2",
+      "tag": "photo-assets",
+      "file": "IMG_6982.jpg",
+      "exif": {
+        "takenAt": "2024-09-15T14:06:09.000Z",
+        "iso": "32",
+        "aperture": "f/1.8",
+        "shutter": "1/2513",
+        "camera": "Apple iPhone 11",
+        "lens": "iPhone 11 back dual wide camera 4.25mm f/1.8",
+        "focal": "4.25mm"
+      }
+    },
+    "photography/IMG_7891": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/IMG_7891.jpg",
+      "w": 4284,
+      "h": 5712,
+      "hash": "cde2ee8ef55d23dba5c81e6136e33c72b17bc6360b2c747f0f780928b0adac6f",
+      "tag": "photo-assets",
+      "file": "IMG_7891.jpg",
+      "exif": {
+        "takenAt": "2025-01-31T21:01:27.000Z",
+        "iso": "800",
+        "aperture": "f/1.78",
+        "shutter": "1/60",
+        "camera": "Apple iPhone 16 Pro",
+        "lens": "iPhone 16 Pro back triple camera 6.765mm f/1.78",
+        "focal": "6.76mm"
+      }
+    },
+    "photography/IMG_7900": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/IMG_7900.jpg",
+      "w": 3024,
+      "h": 4032,
+      "hash": "547412bcd080888ffbe3201d8102dd3b6c5f6a0e37c0d61ee229e3ff9c1dd49d",
+      "tag": "photo-assets",
+      "file": "IMG_7900.jpg",
+      "exif": {
+        "takenAt": "2025-02-01T17:10:27.000Z",
+        "iso": "1250",
+        "aperture": "f/2.2",
+        "shutter": "1/30",
+        "camera": "Apple iPhone 16 Pro",
+        "lens": "iPhone 16 Pro back triple camera 2.22mm f/2.2",
+        "focal": "2.22mm"
+      }
+    },
+    "photography/IMG_8202": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/IMG_8202.jpg",
+      "w": 4284,
+      "h": 5712,
+      "hash": "07caebffbcd7d1b2e61055e9740ca3a5a690ba90afcde9dfbb7d01139655ac8e",
+      "tag": "photo-assets",
+      "file": "IMG_8202.jpg",
+      "exif": {
+        "takenAt": "2025-03-09T19:11:59.000Z",
+        "iso": "1250",
+        "aperture": "f/1.78",
+        "shutter": "1/30",
+        "camera": "Apple iPhone 16 Pro",
+        "lens": "iPhone 16 Pro back triple camera 6.765mm f/1.78",
+        "focal": "6.76mm"
+      }
+    },
+    "photography/IMG_8208": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/IMG_8208.jpg",
+      "w": 3024,
+      "h": 4032,
+      "hash": "cf13c4c1719c2f477f8ce01e71b2a8c192edf45d132f837c2e19e43157c0a873",
+      "tag": "photo-assets",
+      "file": "IMG_8208.jpg",
+      "exif": {
+        "takenAt": "2025-11-09T14:51:50.000Z",
+        "iso": "640",
+        "aperture": "f/1.6",
+        "shutter": "1/16",
+        "camera": "Apple iPhone 13",
+        "lens": "iPhone 13 back dual wide camera 5.1mm f/1.6",
+        "focal": "5.1mm"
+      }
+    },
+    "photography/IMG_8209": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/IMG_8209.jpg",
+      "w": 4032,
+      "h": 3024,
+      "hash": "0cabcb22f2fffd35788a0ed3233ab05117aa52490a2777d833c8efeeac47a2a5",
+      "tag": "photo-assets",
+      "file": "IMG_8209.jpg",
+      "exif": {
+        "takenAt": "2025-11-09T15:07:32.000Z",
+        "iso": "640",
+        "aperture": "f/1.6",
+        "shutter": "1/16",
+        "camera": "Apple iPhone 13",
+        "lens": "iPhone 13 back dual wide camera 5.1mm f/1.6",
+        "focal": "5.1mm"
+      }
+    },
+    "photography/IMG_8355": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/IMG_8355.jpg",
+      "w": 3024,
+      "h": 4032,
+      "hash": "afd418981a76c14a0c43ec7facd27a4dbacf0f47f09062667b228389811f6dda",
+      "tag": "photo-assets",
+      "file": "IMG_8355.jpg",
+      "exif": {
+        "takenAt": "2025-12-14T19:06:06.000Z",
+        "iso": "1000",
+        "aperture": "f/1.6",
+        "shutter": "1/9",
+        "camera": "Apple iPhone 13",
+        "lens": "iPhone 13 back dual wide camera 5.1mm f/1.6",
+        "focal": "5.1mm"
+      }
+    },
+    "photography/IMG_8397": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/IMG_8397.jpg",
+      "w": 5712,
+      "h": 4284,
+      "hash": "bf52555ab1d45cf53c59c3a6acb762e62ffab2917567be910ee9cc35da8cea4a",
+      "tag": "photo-assets",
+      "file": "IMG_8397.jpg",
+      "exif": {
+        "takenAt": "2025-03-26T20:26:05.000Z",
+        "iso": "1600",
+        "aperture": "f/1.78",
+        "shutter": "1/30",
+        "camera": "Apple iPhone 16 Pro",
+        "lens": "iPhone 16 Pro back triple camera 6.765mm f/1.78",
+        "focal": "6.76mm"
+      }
+    },
+    "photography/IMG_8400": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/IMG_8400.jpg",
+      "w": 5712,
+      "h": 4284,
+      "hash": "0472d39f26039330ee739455b51587362fc1ee810cf96834ad44d2fbb213e6d1",
+      "tag": "photo-assets",
+      "file": "IMG_8400.jpg",
+      "exif": {
+        "takenAt": "2025-03-26T20:26:30.000Z",
+        "iso": "800",
+        "aperture": "f/1.78",
+        "shutter": "1/41",
+        "camera": "Apple iPhone 16 Pro",
+        "lens": "iPhone 16 Pro back triple camera 6.765mm f/1.78",
+        "focal": "6.76mm"
+      }
+    },
+    "photography/IMG_8469": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/IMG_8469.jpg",
+      "w": 3024,
+      "h": 4032,
+      "hash": "0b34b39245eb6eb1889fdbcd5fe555333a8321cdf1a91fa0e7116cc1f171f8a8",
+      "tag": "photo-assets",
+      "file": "IMG_8469.jpg",
+      "exif": {
+        "takenAt": "2025-04-10T20:21:52.000Z",
+        "iso": "64",
+        "aperture": "f/1.78",
+        "shutter": "1/122",
+        "camera": "Apple iPhone 16 Pro",
+        "lens": "iPhone 16 Pro back triple camera 6.765mm f/1.78",
+        "focal": "6.76mm"
+      }
+    },
+    "photography/IMG_8522": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/IMG_8522.jpg",
+      "w": 4284,
+      "h": 5712,
+      "hash": "3c0903ac87c1312bf58fcee2f68ab73cabc00571bc44684317ed9f59789e84c1",
+      "tag": "photo-assets",
+      "file": "IMG_8522.jpg",
+      "exif": {
+        "takenAt": "2025-04-19T21:07:26.000Z",
+        "iso": "800",
+        "aperture": "f/1.78",
+        "shutter": "1/30",
+        "camera": "Apple iPhone 16 Pro",
+        "lens": "iPhone 16 Pro back triple camera 6.765mm f/1.78",
+        "focal": "6.76mm"
+      }
+    },
+    "photography/IMG_8662": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/IMG_8662.jpg",
+      "w": 4284,
+      "h": 5712,
+      "hash": "3ec73c5edf5a08b1a0c16eca943cb3262c92e34d297b2dde1cc276d94a4bdaf3",
+      "tag": "photo-assets",
+      "file": "IMG_8662.jpg",
+      "exif": {
+        "takenAt": "2025-05-14T15:48:35.000Z",
+        "iso": "100",
+        "aperture": "f/1.78",
+        "shutter": "1/3279",
+        "camera": "Apple iPhone 16 Pro",
+        "lens": "iPhone 16 Pro back triple camera 6.765mm f/1.78",
+        "focal": "6.76mm"
+      }
+    },
+    "photography/IMG_8789": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/IMG_8789.jpg",
+      "w": 3024,
+      "h": 4032,
+      "hash": "98497ea591bfdfb425c7280d6c6ecf4eea95d6ad7284ff7140adffb23f0e61e9",
+      "tag": "photo-assets",
+      "file": "IMG_8789.jpg",
+      "exif": {
+        "takenAt": "2025-06-11T22:59:28.000Z",
+        "iso": "1000",
+        "aperture": "f/1.78",
+        "shutter": "1/20",
+        "camera": "Apple iPhone 16 Pro",
+        "lens": "iPhone 16 Pro back triple camera 6.765mm f/1.78",
+        "focal": "6.76mm"
+      }
+    },
+    "photography/IMG_8809": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/IMG_8809.jpg",
+      "w": 4284,
+      "h": 5712,
+      "hash": "a228606261b1b7b5ec6b18fc68d5714460bf3eabfd4c5e56b6790bea58d7f8b0",
+      "tag": "photo-assets",
+      "file": "IMG_8809.jpg",
+      "exif": {
+        "takenAt": "2025-06-15T16:56:59.000Z",
+        "iso": "200",
+        "aperture": "f/1.78",
+        "shutter": "1/85",
+        "camera": "Apple iPhone 16 Pro",
+        "lens": "iPhone 16 Pro back triple camera 6.765mm f/1.78",
+        "focal": "6.76mm"
+      }
+    },
+    "photography/IMG_8869": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/IMG_8869.jpg",
+      "w": 4284,
+      "h": 5712,
+      "hash": "9d79f16d3be1a46623338d65d121cdeab862005b9040ad6b73e78f6012e5a22c",
+      "tag": "photo-assets",
+      "file": "IMG_8869.jpg",
+      "exif": {
+        "takenAt": "2025-06-20T09:19:26.000Z",
+        "iso": "100",
+        "aperture": "f/1.78",
+        "shutter": "1/252",
+        "camera": "Apple iPhone 16 Pro",
+        "lens": "iPhone 16 Pro back triple camera 6.765mm f/1.78",
+        "focal": "6.76mm"
+      }
+    },
+    "photography/IMG_8925": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/IMG_8925.jpg",
+      "w": 1536,
+      "h": 2048,
+      "hash": "53301a89c35257c56e61fcd89fb37eb1f554c5f003a1c897aacfdc00f9fe6a4c",
+      "tag": "photo-assets",
+      "file": "IMG_8925.jpg",
+      "exif": {
+        "takenAt": "2025-06-20T20:08:13.000Z",
+        "iso": "80",
+        "aperture": "f/1.78",
+        "shutter": "1/920",
+        "camera": "Apple iPhone 16 Pro",
+        "lens": "iPhone 16 Pro back triple camera 6.765mm f/1.78",
+        "focal": "6.76mm"
+      }
+    },
+    "photography/IMG_8951": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/IMG_8951.jpg",
+      "w": 2048,
+      "h": 1536,
+      "hash": "90b4f1a3df2865768fb6c04f62aa2fff374e2d11da76c59694684544936f3108",
+      "tag": "photo-assets",
+      "file": "IMG_8951.jpg",
+      "exif": {
+        "takenAt": "2025-06-20T23:10:13.000Z",
+        "iso": "1600",
+        "aperture": "f/1.78",
+        "shutter": "1/5",
+        "camera": "Apple iPhone 16 Pro",
+        "lens": "iPhone 16 Pro back triple camera 6.765mm f/1.78",
+        "focal": "6.76mm"
+      }
+    },
+    "photography/IMG_8952": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/IMG_8952.jpg",
+      "w": 4032,
+      "h": 3024,
+      "hash": "9ab3e9743cdf07d6052d60bf2221f85e9119b055b634d085d7781f1b8dc781c1",
+      "tag": "photo-assets",
+      "file": "IMG_8952.jpg",
+      "exif": {
+        "takenAt": "2025-06-20T23:10:18.000Z",
+        "iso": "1250",
+        "aperture": "f/1.78",
+        "shutter": "1/5",
+        "camera": "Apple iPhone 16 Pro",
+        "lens": "iPhone 16 Pro back triple camera 6.765mm f/1.78",
+        "focal": "6.76mm"
+      }
+    },
+    "photography/IMG_9065": {
+      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/IMG_9065.jpg",
+      "w": 1536,
+      "h": 2048,
+      "hash": "c1f7e46febbef85c307ff37dfee9bb03121db7bbdbbb54f91d737013a754cad3",
+      "tag": "photo-assets",
+      "file": "IMG_9065.jpg",
+      "exif": {
+        "takenAt": "2025-06-22T09:10:42.000Z",
+        "iso": "400",
+        "aperture": "f/2.2",
+        "shutter": "1/77",
+        "camera": "Apple iPhone 16 Pro",
+        "lens": "iPhone 16 Pro back triple camera 2.22mm f/2.2",
+        "focal": "2.22mm"
+      }
+    }
+  }
+}

@@ -28,6 +28,58 @@ Astro fingerprints and optimizes it automatically. Prefer wide, darker shots for
 `hero`/`cover`, since the entry title is drawn over them. Leaving the field out
 renders an on-brand placeholder, so partial content still looks intentional.
 
+## Full-resolution originals (photography lightbox)
+
+Grid and mosaic thumbnails use the co-located `image` and go through
+`astro:assets` as above. The lightbox "large view" and "Download original" link
+are served from a **GitHub Release** instead, so multi-megabyte originals never
+enter `dist/` or git history. See `research-image-hosting/` for why.
+
+Adding a photo with a full-res original:
+
+1. Co-locate the small version next to the entry and set `image: ./frame.jpg` as
+   usual. Keep it reasonably sized; the build caps rendered widths anyway.
+2. Put the original in a local folder and run:
+
+   ```sh
+   node scripts/publish-assets.mjs --dir ~/path/to/originals
+   ```
+
+   This uploads each file to the `photo-assets` Release and records its URL,
+   pixel size, and EXIF (date, ISO, aperture, shutter, camera, lens, focal
+   length) in `src/data/asset-manifest.json`, rolling to `photo-assets-2` when a
+   release fills up. Re-runs skip files whose contents are unchanged. Add
+   `--dry-run` to preview.
+3. Set `full:` on the entry to the manifest key the script printed, for example:
+
+   ```yaml
+   image: ./frame.jpg
+   full: photography/DSC07080
+   ```
+
+4. Commit the `asset-manifest.json` change together with the entry. The build
+   fails loudly if a `full:` key is missing from the manifest.
+
+Notes:
+
+- The exposure readout (date, ISO, aperture, shutter, camera, lens, focal
+  length) comes from the manifest EXIF for entries that set `full:`, otherwise
+  from the co-located `image` file's EXIF, read at build time. Any value written
+  explicitly in frontmatter still wins over both. So the readout no longer
+  depends on the small co-located export keeping its EXIF.
+- `astro:assets` strips EXIF and the ICC profile from the built grid thumbnails.
+  That is cosmetic here: nothing reads EXIF off the delivered thumbnail, and the
+  "Download original" link serves the untouched Release asset with everything
+  intact. Convert Display-P3 / Adobe RGB exports to sRGB before import so the
+  thumbnail colour matches.
+- The large view is delivered through [wsrv.nl](https://wsrv.nl) for on-the-fly
+  resize, `output=webp` only (wsrv returns 400 for `output=avif`). No AVIF on
+  this path; the in-repo grid still gets AVIF.
+- wsrv strips ICC/EXIF but auto-rotates, matching the current `astro:assets`
+  behaviour, so it is colour-neutral, not a regression.
+- Release deep links break if the repo or account is renamed. The manifest makes
+  that a find-and-replace, but it is a manual step.
+
 ## Videos: the webm plus mp4 pairing rule
 
 All videos live in `public/videos/`. Every clip must be shipped as **two files

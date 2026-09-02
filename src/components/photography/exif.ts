@@ -6,9 +6,19 @@ export interface PhotoExif {
   aperture: string | null;
   shutter: string | null;
   camera: string | null;
+  lens: string | null;
+  focal: string | null;
 }
 
-const EMPTY: PhotoExif = { takenAt: null, iso: null, aperture: null, shutter: null, camera: null };
+const EMPTY: PhotoExif = {
+  takenAt: null,
+  iso: null,
+  aperture: null,
+  shutter: null,
+  camera: null,
+  lens: null,
+  focal: null,
+};
 
 const cache = new Map<string, Promise<PhotoExif>>();
 
@@ -35,6 +45,8 @@ async function parse(absImagePath: string): Promise<PhotoExif> {
         'ExposureTime',
         'Make',
         'Model',
+        'LensModel',
+        'FocalLength',
       ],
     });
   } catch {
@@ -48,6 +60,8 @@ async function parse(absImagePath: string): Promise<PhotoExif> {
     aperture: fmtAperture(raw.FNumber),
     shutter: fmtShutter(raw.ExposureTime),
     camera: fmtCamera(raw.Make, raw.Model),
+    lens: fmtLens(raw.LensModel),
+    focal: fmtFocal(raw.FocalLength),
   };
 }
 
@@ -105,4 +119,14 @@ function fmtCamera(make: unknown, model: unknown): string | null {
 
   if (brand && new RegExp(`^${brand}\\b`, 'i').test(body)) return body;
   return brand ? `${brand} ${body}` : body;
+}
+
+function fmtLens(value: unknown): string | null {
+  const s = typeof value === 'string' ? value.trim() : '';
+  return s && s !== '----' && s !== '0.0 mm f/0.0' ? s : null;
+}
+
+function fmtFocal(value: unknown): string | null {
+  const n = Array.isArray(value) ? Number(value[0]) : Number(value);
+  return Number.isFinite(n) && n > 0 ? `${trimNum(n)}mm` : null;
 }
