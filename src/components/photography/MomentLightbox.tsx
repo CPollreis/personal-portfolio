@@ -1,5 +1,8 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { withBase } from '../../config/paths';
+import { wsrv, wsrvSrcSet } from '../../data/wsrv';
+
+const LARGE_WIDTHS = [1600, 2400, 3200];
 
 export interface Moment {
   title?: string;
@@ -20,6 +23,9 @@ export interface Moment {
   ratio: string;
   /** Optimized image URL, if a real asset exists. */
   src?: string;
+  /** Raw full-resolution original (GitHub Release). Drives the large view via
+   *  wsrv.nl and the "Download original" link; absent -> `src` is used. */
+  downloadUrl?: string;
   /** Looping clip (public/ path) for kind: video moments. */
   video?: string;
   /** CSS background used by the placeholder tile (must match the grid). */
@@ -41,6 +47,7 @@ const prefersReducedMotion = () =>
 export default function MomentLightbox({ moments }: Props) {
   const [index, setIndex] = useState<number | null>(null);
   const [closing, setClosing] = useState(false);
+  const [recovery, setRecovery] = useState(0);
   const sourceRect = useRef<DOMRect | null>(null);
   const openedIndex = useRef<number | null>(null);
   const lastFocused = useRef<HTMLElement | null>(null);
@@ -56,6 +63,10 @@ export default function MomentLightbox({ moments }: Props) {
     setClosing(false);
     setIndex(i);
   }, []);
+
+  useEffect(() => {
+    setRecovery(0);
+  }, [index]);
 
   // Delegate clicks from the static grid tiles.
   useEffect(() => {
@@ -154,6 +165,15 @@ export default function MomentLightbox({ moments }: Props) {
   // webm-first sibling (see src/scripts/footage.ts / Hero.astro): Firefox on
   // macOS can fail the H.264 decoder, so prefer the .webm when we have an .mp4.
   const videoWebm = m.video?.endsWith('.mp4') ? m.video.replace(/\.mp4$/, '.webm') : null;
+  let largeSrc = m.downloadUrl ? wsrv(m.downloadUrl, { w: 2400, q: 82 }) : m.src;
+  let largeSrcSet = m.downloadUrl ? wsrvSrcSet(m.downloadUrl, LARGE_WIDTHS, 82) : undefined;
+  if (m.downloadUrl && recovery === 1) {
+    largeSrc = `${wsrv(m.downloadUrl, { w: 2400, q: 82 })}&retry=1`;
+    largeSrcSet = undefined;
+  } else if (m.downloadUrl && recovery >= 2) {
+    largeSrc = m.downloadUrl;
+    largeSrcSet = undefined;
+  }
   // Crossfade media content only when browsing away from the opened frame,
   // so the FLIP flight itself never double-animates.
   const browsing = index !== openedIndex.current;
@@ -229,12 +249,21 @@ export default function MomentLightbox({ moments }: Props) {
                     type={m.video.endsWith('.mp4') ? 'video/mp4' : 'video/webm'}
                   />
                 </video>
-              ) : m.src ? (
-                <img src={m.src} alt={m.title ?? ''} className="absolute inset-0 h-full w-full object-cover" />
+              ) : largeSrc ? (
+                <img
+                  src={largeSrc}
+                  srcSet={largeSrcSet}
+                  sizes="(min-width: 768px) min(100vw, calc((100dvh - 14rem) * 1.5)), 100vw"
+                  alt={m.title ?? ''}
+                  className="absolute inset-0 h-full w-full object-cover"
+                  onError={() => {
+                    if (m.downloadUrl && recovery < 2) setRecovery((s) => s + 1);
+                  }}
+                />
               ) : (
                 <span className="absolute inset-0" style={{ background: m.backdrop }} aria-hidden="true" />
               )}
-              {!m.src && !m.video && (
+              {!largeSrc && !m.video && (
                 <span className="absolute bottom-3 left-3 font-mono text-[0.6rem] uppercase tracking-[0.18em] text-white/35">
                   {m.kind === 'video' ? 'Reel placeholder' : 'Frame placeholder'}
                 </span>
@@ -258,6 +287,21 @@ export default function MomentLightbox({ moments }: Props) {
               </span>
             )}
           </div>
+
+          {m.downloadUrl && (
+            <a
+              href={m.downloadUrl}
+              download
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-2 inline-flex items-center gap-1.5 self-start font-mono text-[0.65rem] uppercase tracking-[0.14em] text-white/45 transition-colors hover:text-white/80"
+            >
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M8 2v9m0 0L4.5 7.5M8 11l3.5-3.5M3 13.5h10" stroke="currentColor" strokeWidth="1.3" />
+              </svg>
+              Download original
+            </a>
+          )}
         </div>
       </div>
 

@@ -93,6 +93,8 @@ const photography = defineCollection({
       fps: z.string().optional(),
       quality: z.string().optional(),
       image: image().optional(),
+      /** asset-manifest.json key for the full-res original (GitHub Release); lightbox large view + download, falls back to `image`. */
+      full: z.string().optional(),
       /** Looping clip for `kind: video` moments (public/ path, e.g. '/videos/clip.mp4'). A co-hosted .webm sibling is tried first for Firefox. */
       video: z.string().optional(),
       ratio: z.enum(['1/1', '4/3', '3/4', '3/2', '2/3', '16/9', '9/16']).default('3/2'),
