@@ -303,6 +303,16 @@
     border: 1px solid var(--color-line);
     width: 100%;
   }
+  .prose-hud .katex {
+    color: var(--color-ink);
+    font-size: 1.05em;
+  }
+  .prose-hud .katex-display {
+    margin: 0;
+    padding-block: 0.4rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
 
   /* ENTRY BODY - the held-frame rhythm used by build log entries.
      A <Step> photograph holds its half of the screen while that step's words
@@ -324,6 +334,13 @@
   /* Steps set their own rhythm; kill the generic prose stack margin on them. */
   .entry-body > .entry-step {
     margin-top: 0;
+  }
+  /* When an entry opens straight into a Step (no lead-in paragraph), the first
+     heading has nothing above it to divide from, so drop its top rule. */
+  .entry-body > .entry-step:first-child .entry-step-body > h2:first-child {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: 0;
   }
 
   .entry-step {

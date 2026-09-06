@@ -5,10 +5,19 @@ import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import starlight from '@astrojs/starlight';
 import tailwindcss from '@tailwindcss/vite';
+import { unified } from '@astrojs/markdown-remark';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
 
 // https://astro.build/config
 export default defineConfig({
   site: 'https://calebpollreis.com',
+  markdown: {
+    processor: unified({
+      remarkPlugins: [remarkMath],
+      rehypePlugins: [rehypeKatex],
+    }),
+  },
   // Old tab URLs from the multi-page era land on their one-page section.
   // /timeline is retired; it lands on the home page. /photography is retired
   // too: the archive grid itself now lives in the home page's section.
