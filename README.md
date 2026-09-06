@@ -2,6 +2,8 @@
 
 Personal portfolio built with Astro: **https://calebpollreis.com**.
 
+<video src="https://github.com/CPollreis/personal-portfolio/raw/main/.github/readme.mp4" autoplay loop muted playsinline controls width="100%"></video>
+
 ## Dev locally
 
 ```bash
