@@ -74,7 +74,7 @@ const showCoverPlate = isMedia && Boolean(heroImg) && !/<Step\b/.test(project.bo
         </div>
         <h1 class="font-display text-4xl font-semibold leading-tight md:text-5xl">{title}</h1>
         {
-          links.repo && (
+          links.repo && repoLabel && (
             <a
               href={links.repo}
               target="_blank"
@@ -82,7 +82,7 @@ const showCoverPlate = isMedia && Boolean(heroImg) && !/<Step\b/.test(project.bo
               class="mt-3 inline-flex items-center gap-1.5 font-mono text-sm text-muted transition-colors hover:text-ink"
             >
               <SocialIcon label="GitHub" class="h-4 w-4" />
-              {repoLabel ?? 'GitHub'}
+              {repoLabel}
             </a>
           )
         }

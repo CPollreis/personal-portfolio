@@ -3,7 +3,7 @@ title: Rocket League RL Bot
 date: 2024-12-05
 kind: Reinforcement Learning
 stack: [Python, PyTorch, RLGym]
-summary: "An offline Rocket League bot being trained with reinforcement learning, in progress: custom reward shaping and training loop in PyTorch, using a mocked Unreal Engine environment for sample-efficient training."
+summary: "An offline Rocket League bot trained with reinforcement learning, in progress: a from-scratch PPO implementation with GAE, custom reward shaping, and a PyTorch training loop, trained against a headless physics engine for sample efficiency."
 order: 1
 featured: true
 links:
@@ -17,45 +17,199 @@ import Step from '../../components/content/Step.astro';
     pass it: <Step figure={shot} caption="What the picture shows">
     The picture then stays put while these words scroll past it. */}
 
-Reinforcement learning only really clicks when you watch an agent learn
-something you didn't explicitly teach it. So I'm training an offline Rocket
-League bot with **RLGym** and **PyTorch**, and doing it the hard way: my own
-reward shaping and my own training loop.
-
 <Step>
 
-## The setup
+## First principles derivation
 
-- **Environment:** RLGym exposes Rocket League as a Gym-style RL environment:
-  car and ball state in, controller actions out.
-- **Sample efficiency:** training leverages a **mocked Unreal Engine
-  environment**, so the agent can collect experience much faster than the real
-  game loop would allow.
-- **Learning:** a custom training loop in PyTorch, built to make experimenting
-  with reward functions fast.
+### Notation
+
+Every symbol used in this section, for reference while reading.
+
+**Setup**
+
+- $t$: one time step in an episode; $T$ is the final step
+- $s_t$, $a_t$, $r_t$: the state, action, and reward at step $t$
+- $\tau$: a trajectory, meaning every state and action across one full episode
+- $\gamma$: discount factor in $(0, 1)$; rewards further ahead count for less
+- $G_t$: discounted return, the discounted sum of rewards from step $t$ onward
+
+**Policy and value**
+
+- $\pi_\theta$: the policy, the network that picks actions, with weight/parameters $\theta$
+- $\pi_\theta(a_t \mid s_t)$: probability the policy gives to action $a_t$ in state $s_t$
+- $V_\phi$: the value function, or critic, with weight/parameters $\phi$
+- $V_\phi(s_t)$: its estimate of the return from state $s_t$
+- $A_t$: advantage, how much better than average an action was; $\hat{A}_t$ is the estimate used in training
+- $\delta_t$: temporal-difference residual, the cheap one-step advantage estimate
+- $\lambda$: GAE input in $[0, 1]$ that trades bias against variance
+- $L^{VF}(\phi)$: value-function loss; $L^{PG}(\theta)$: policy-gradient objective
+
+**PPO**
+
+- $\theta_{\text{old}}$: the policy's parameters when the current batch was collected
+- $\rho_t(\theta)$: importance ratio $\pi_\theta / \pi_{\theta_{\text{old}}}$; a value of $1$ means the policy has not moved
+- $\epsilon$: clip width; keeps $\rho_t$ within $[1 - \epsilon,\ 1 + \epsilon]$
+- $L^{CLIP}(\theta)$: PPO's clipped training objective
+- $\mathbb{E}_t[\,\cdot\,]$: an average over sampled time steps
+
+Reinforcement learning maps cleanly onto the physical world. An **agent** acts
+inside an **environment** toward a goal, in **episodes** split into time steps.
+At each step $t$ the agent observes a state $s_t$, takes an action $a_t$, and
+receives a reward $r_t$ for the progress that action made. A full episode is a
+**trajectory** of every state visited and every action taken:
+
+$$
+\tau = (s_0,\ a_0,\ s_1,\ a_1,\ \dots,\ s_T)
+$$
+
+The objective is to maximize the **discounted return** from each step, where
+$\gamma \in (0, 1)$ makes rewards further in the future count for less, in an
+exponentially decaying way:
+
+$$
+G_t = \sum_{k=0}^{T-t} \gamma^{k}\, r_{t+k}
+$$
+
+The **policy** $\pi_\theta$ is the network being trained, with weight/parameters
+$\theta$. Feed it a state and it returns a probability distribution over
+actions; the agent samples from that distribution to act. Learning means
+nudging the probability of an action up or down by how good the action turned
+out to be.
+
+"How good" is the **advantage** $A_t$: how much better than average this
+action was, compared to just picking at random from the current policy.
+Estimating that needs a baseline, so a second network, the **value function**
+$V_\phi$ with its own weight/parameters $\phi$, estimates the expected return from a
+state, independent of what comes next. The policy is the **actor**, the value
+function is the **critic**. The critic is trained by regression onto the
+observed return:
+
+$$
+L^{VF}(\phi) = \big(V_\phi(s_t) - G_t\big)^2
+$$
+
+The cheapest advantage estimate is the one-step **temporal-difference
+residual**:
+
+$$
+\delta_t = r_t + \gamma\, V_\phi(s_{t+1}) - V_\phi(s_t)
+$$
+
+It has low variance but is biased by the critic's error. Summing real rewards
+to the end of the episode instead (the Monte Carlo estimate) is the opposite:
+unbiased, but high variance because it trusts every noisy reward. **Generalized
+advantage estimation** interpolates between the two with a second input
+$\lambda$:
+
+$$
+\hat{A}_t = \sum_{k=0}^{T-t} (\gamma\lambda)^{k}\, \delta_{t+k}
+$$
+
+$\lambda$ near 0 leans on the critic (low variance, more bias); $\lambda$ near
+1 leans on raw rewards (low bias, more variance).
+
+The base policy-gradient objective pushes up the log-probability of an action,
+weighted by its advantage:
+
+$$
+L^{PG}(\theta) = \mathbb{E}_t\big[\log \pi_\theta(a_t \mid s_t)\, \hat{A}_t\big]
+$$
+
+To reuse one batch of experience for several epochs, **PPO** corrects for the
+policy having moved since the batch was collected, using an importance ratio:
+
+$$
+\rho_t(\theta) = \frac{\pi_\theta(a_t \mid s_t)}{\pi_{\theta_{\text{old}}}(a_t \mid s_t)}
+$$
+
+Left unconstrained, that ratio lets a single batch move the policy too far and
+destabilize training. PPO's contribution is to **clip** it into a trust region
+of width $\epsilon$ and take the pessimistic term:
+
+$$
+L^{CLIP}(\theta) = \mathbb{E}_t\Big[\min\big(\rho_t\, \hat{A}_t,\ \operatorname{clip}(\rho_t,\ 1-\epsilon,\ 1+\epsilon)\, \hat{A}_t\big)\Big]
+$$
+
+Taking the minimum of the clipped and unclipped terms means one batch can only
+improve the policy so much before the gradient flattens out. The full training
+objective maximizes $L^{CLIP}$, minimizes the value loss, and optionally adds a
+small entropy bonus to encourage exploration.
+
+### Sources
+
+- Schulman et al., [Proximal Policy Optimization Algorithms](https://arxiv.org/pdf/1707.06347) (2017)
+- Schulman et al., [High-Dimensional Continuous Control Using Generalized Advantage Estimation](https://arxiv.org/pdf/1506.02438) (2015)
+- Schulman et al., [Trust Region Policy Optimization](https://arxiv.org/pdf/1502.05477) (2015)
 
 </Step>
 
 <Step>
 
-## Reward shaping is the whole game
+## Context and problem statement
 
-Left with only "score a goal," an agent almost never stumbles into reward. The
-real work is designing rewards that guide without dictating: incentives for
-moving toward the ball and making contact, shaped so they can be annealed away
-as the policy improves. Getting that curriculum right is the core of the
-project.
+Rocket League is car soccer, and almost all of its skill ceiling comes from
+movement: boost management, aerials, wave-dashes, reading a bouncing ball.
+That makes it a rich continuous-control problem rather than a game-theory
+problem.
+
+The **state** is the physics of the car and
+ball, positions, velocities, orientations, and boost, and the **action** is
+the controller: accel/reverse, steer, pitch, yaw, roll, jump, and boost.
+The **reward** is nearly absent. A goal happens once every few thousand steps,
+so an agent left with only "score a goal" almost never stumbles into any
+signal at all.
+
+The goal of this project is an **offline agent**, trained without ever
+touching the live game loop, that is good enough to play a real 1v1 against
+friends. The hard parts are exploration under sparse reward and the
+sample cost of a real-time 3D game. Shaping rewards that help early
+without capping how good the policy can eventually get is another.
 
 </Step>
 
 <Step>
 
-## Status
+## My implementation
 
-WIP. The environment and training loop are running; the current phase is
-iterating on reward design and watching what the agent discovers. It's already
-been the best hands-on lesson in how sensitive RL is to reward and
-hyperparameter choices, lessons that map directly onto controls work on the
-car.
+**Environment.** RLGym wraps Rocket League as a Gym-style loop: car and ball
+state in, controller actions out. For training I run against a headless
+reimplementation of the game's physics rather than the real client, so
+rollouts collect experience far faster than real time and many can run in
+parallel.
+
+**Networks.** The actor and critic are separate multilayer perceptrons over
+the flattened state vector. The actor outputs the parameters of a distribution
+over the mostly continuous action space; the critic outputs a single scalar
+value estimate.
+
+**Algorithm.** PPO with GAE. Rollout workers collect fixed-length segments,
+GAE turns the rewards and value estimates into advantages $\hat{A}_t$ and
+return targets, then several epochs of minibatch updates run on the clipped
+objective. $\gamma$, $\lambda$, and $\epsilon$ are the main inputs.
+
+**Reward shaping.** A weighted sum of terms: distance to the ball, velocity
+toward the ball, ball velocity toward the opponent goal, boost pickup, and the
+sparse goal reward. The dense terms are annealed down over training so they
+guide the early policy and then get out of its way.
+
+**Training loop.** Written from scratch in PyTorch so every reward term and
+every PPO diagnostic is logged separately, and so changing the reward function
+doesn't mean fighting a framework's abstractions.
+
+</Step>
+
+<Step>
+
+## Results
+
+COMING SOON
+
+</Step>
+
+<Step>
+
+## Future improvements
+
+COMING SOON
 
 </Step>
