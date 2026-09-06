@@ -5,6 +5,7 @@ import Button from '../../components/ui/Button.astro';
 import VideoEmbed from '../../components/content/VideoEmbed.astro';
 import CoordinateAxis from '../../components/hud/CoordinateAxis.astro';
 import HeaderMedia from '../../components/layout/HeaderMedia.astro';
+import SocialIcon from '../../components/ui/SocialIcon.astro';
 import EntryKeyNav from '../../components/content/EntryKeyNav.astro';
 import Step from '../../components/content/Step.astro';
 import { withBase } from '../../config/paths';
@@ -23,6 +24,9 @@ const { project, prev, next } = Astro.props;
 const { Content } = await render(project);
 const { title, kind, stack, summary, links, cover, video, date, hero, heroVideo } = project.data;
 const dateStr = date.toISOString().slice(0, 7);
+const repoLabel = links.repo
+  ?.replace(/^https?:\/\/(www\.)?github\.com\//, '')
+  .replace(/\/$/, '');
 const heroImg = hero ?? cover;
 const isMedia = project.id.startsWith('raw-');
 const hasHeroMedia = !isMedia && Boolean(heroVideo || heroImg);
@@ -69,6 +73,19 @@ const showCoverPlate = isMedia && Boolean(heroImg) && !/<Step\b/.test(project.bo
           <span class="hud-label tabular">{dateStr}</span>
         </div>
         <h1 class="font-display text-4xl font-semibold leading-tight md:text-5xl">{title}</h1>
+        {
+          links.repo && (
+            <a
+              href={links.repo}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="mt-3 inline-flex items-center gap-1.5 font-mono text-sm text-muted transition-colors hover:text-ink"
+            >
+              <SocialIcon label="GitHub" class="h-4 w-4" />
+              {repoLabel ?? 'GitHub'}
+            </a>
+          )
+        }
         <p class="mt-5 text-lg text-muted">{summary}</p>
 
         {
@@ -84,18 +101,11 @@ const showCoverPlate = isMedia && Boolean(heroImg) && !/<Step\b/.test(project.bo
         }
 
         {
-          (links.repo || links.demo) && (
+          links.demo && (
             <div class="mt-8 flex flex-wrap gap-3">
-              {links.repo && (
-                <Button href={links.repo} external>
-                  Source
-                </Button>
-              )}
-              {links.demo && (
-                <Button href={links.demo} variant="ghost" external>
-                  Live demo
-                </Button>
-              )}
+              <Button href={links.demo} variant="ghost" external>
+                Live demo
+              </Button>
             </div>
           )
         }
