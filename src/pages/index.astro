@@ -35,6 +35,7 @@ const projectEntries = projects.map((p) => ({
   summary: p.data.summary,
   date: p.data.date,
   cover: p.data.cover,
+  coverVideo: p.data.coverVideo,
 }));
 
 const fsaeEntries = fsaePosts.map((p) => ({
@@ -45,6 +46,7 @@ const fsaeEntries = fsaePosts.map((p) => ({
   summary: p.data.summary,
   date: p.data.date,
   cover: p.data.cover,
+  coverVideo: undefined as string | undefined,
 }));
 
 const feedSections = [
@@ -160,6 +162,9 @@ const fmtDate = (d: Date) =>
     .toUpperCase();
 
 const thumbFrame = 'border border-faint/50 transition-colors group-hover:border-faint';
+
+/* webm-first sibling for a public/ .mp4 path; see MomentFrame.astro. */
+const webmSibling = (mp4: string) => (mp4.endsWith('.mp4') ? mp4.replace(/\.mp4$/, '.webm') : null);
 ---
 
 <Base padTop={false}>
@@ -285,7 +290,26 @@ const thumbFrame = 'border border-faint/50 transition-colors group-hover:border-
                 href={sec.entries[0].href}
                 class="group grid gap-6 md:grid-cols-[3fr_2fr] md:items-center"
               >
-                {sec.entries[0].cover ? (
+                {sec.entries[0].coverVideo ? (
+                  <div class={thumbFrame}>
+                    <video
+                      data-scrollplay
+                      class="aspect-video w-full object-cover"
+                      autoplay
+                      muted
+                      loop
+                      playsinline
+                      preload="metadata"
+                      tabindex="-1"
+                      aria-label={sec.entries[0].title}
+                    >
+                      {webmSibling(sec.entries[0].coverVideo) && (
+                        <source src={withBase(webmSibling(sec.entries[0].coverVideo)!)} type="video/webm" />
+                      )}
+                      <source src={withBase(sec.entries[0].coverVideo)} type="video/mp4" />
+                    </video>
+                  </div>
+                ) : sec.entries[0].cover ? (
                   <div class={thumbFrame}>
                     <Image
                       src={sec.entries[0].cover}
@@ -331,7 +355,26 @@ const thumbFrame = 'border border-faint/50 transition-colors group-hover:border-
                 {sec.entries.slice(1).map((e, i) => (
                   <li>
                     <a href={e.href} class="group block">
-                      {e.cover ? (
+                      {e.coverVideo ? (
+                        <div class={thumbFrame}>
+                          <video
+                            data-scrollplay
+                            class="aspect-video w-full object-cover"
+                            autoplay
+                            muted
+                            loop
+                            playsinline
+                            preload="metadata"
+                            tabindex="-1"
+                            aria-label={e.title}
+                          >
+                            {webmSibling(e.coverVideo) && (
+                              <source src={withBase(webmSibling(e.coverVideo)!)} type="video/webm" />
+                            )}
+                            <source src={withBase(e.coverVideo)} type="video/mp4" />
+                          </video>
+                        </div>
+                      ) : e.cover ? (
                         <div class={thumbFrame}>
                           <Image
                             src={e.cover}

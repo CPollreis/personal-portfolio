@@ -6,12 +6,15 @@ stack: [Python, PyTorch, RLGym]
 summary: "An offline Rocket League bot trained with reinforcement learning, in progress: a from-scratch PPO implementation with GAE, custom reward shaping, and a PyTorch training loop, trained against a headless physics engine for sample efficiency."
 order: 1
 featured: true
+coverVideo: /videos/rl_thumbnail.mp4
+heroVideo: /videos/rl_thumbnail.mp4
 links:
   repo: https://github.com/CPollreis/rocket-league-bot
 draft: false
 ---
 
 import Step from '../../components/content/Step.astro';
+import LocalVideo from '../../components/content/LocalVideo.astro';
 
 {/* Each section below is a Step. To give one a held frame, import the photo and
     pass it: <Step figure={shot} caption="What the picture shows">
@@ -202,7 +205,7 @@ doesn't mean fighting a framework's abstractions.
 
 ## Results
 
-COMING SOON
+<LocalVideo src="/videos/rl_video.mp4" title="Rocket League RL bot gameplay" />
 
 </Step>
 
