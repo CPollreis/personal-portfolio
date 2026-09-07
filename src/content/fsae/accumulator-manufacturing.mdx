@@ -3,12 +3,19 @@ title: Building the Accumulator, Safely
 date: 2024-07-14
 subsystem: manufacturing
 season: 2024 Season
-summary: "Manufacturing the HV accumulator: qualifying every cell through tab testing, assembling segments, and the harnessing and safety discipline that a 400V pack demands."
-tags: [Accumulator, HV safety, Tab testing, Harnessing]
+summary: "Manufacturing the HV accumulator: qualifying every cell through tab testing, assembling segments, the BMS bring-up, and the harnessing and safety discipline that a 400V pack demands."
+cover: ../../assets/buildlog/IMG_5300.jpg
+hero: ../../assets/buildlog/IMG_5300.jpg
+tags: [Accumulator, HV safety, Tab testing, Harnessing, BMS]
 draft: false
 ---
 
 import Step from '../../components/content/Step.astro';
+import tabRig from '../../assets/buildlog/IMG_5643.jpg';
+import harnessStaged from '../../assets/buildlog/IMG_5912.jpg';
+import bmsPanel from '../../assets/buildlog/IMG_5189.jpg';
+import bmsModules from '../../assets/buildlog/IMG_5190.jpg';
+import packContainer from '../../assets/buildlog/IMG_5300.jpg';
 
 {/* Each section below is a Step. To give one a held frame, import the photo and
     pass it: <Step figure={tabRig} caption="Tab test rig under load">
@@ -19,7 +26,7 @@ car, and building one is as much about process as it is about parts. This entry
 covers how we manufacture the pack: qualifying cells, assembling segments, and
 the high-voltage safety habits that make it routine instead of scary.
 
-<Step>
+<Step figure={tabRig} caption="Tab test rig at the workbench: the ADC front end wired up next to the logging laptop">
 
 ## Qualifying every cell
 
@@ -32,6 +39,9 @@ To make the data trustworthy I wrote a **Python script that reads current
 measurements from the high current supply through an ADC**, logging every test
 so a marginal tab is a number in a spreadsheet, not a judgment call at the
 bench.
+
+{/* TODO: Caleb to add the code here: the Python script for battery cell tab
+    testing, and the C project that reads the ADC outputs. */}
 
 </Step>
 
@@ -47,7 +57,7 @@ waiting for competition.
 
 </Step>
 
-<Step>
+<Step figure={harnessStaged} caption="Harness and pack hardware staged before the build: busbars, sense leads, and connectors laid out and labeled">
 
 ## HV and LV harnessing
 
@@ -59,6 +69,25 @@ labeled and strain-relieved before the lid goes on, since the inside of a sealed
 accumulator is the last place you want a mystery.
 
 </Step>
+
+<Step figure={bmsPanel} caption="BMS control panel: firmware versions across the centralized CAN group modules before commissioning">
+
+## Commissioning the BMS
+
+A pack is not done when the lid closes; it is done when the BMS agrees. Each
+centralized CAN group module gets its firmware checked and flashed to a common
+version, then addressed and configured so the master has a clean picture of
+every segment. The CAN module log is the record that all of them answered.
+
+Only then does the pack get its first controlled energize: precharge, contactor
+close, and a full sweep of cell voltages and temperatures read back over CAN
+against what a handheld meter says at the taps.
+
+</Step>
+
+<Step figure={bmsModules} caption="Configured CAN group modules reporting in" />
+
+<Step figure={packContainer} caption="Accumulator container closed up, HV pack ready for the car" />
 
 <Step>
 
