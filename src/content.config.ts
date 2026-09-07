@@ -43,6 +43,8 @@ const projects = defineCollection({
       stack: z.array(z.string()).default([]),
       summary: z.string(),
       cover: image().optional(),
+      /** Looping clip used as the feed thumbnail (public/ path, e.g. '/videos/clip.mp4'); wins over `cover`. */
+      coverVideo: z.string().optional(),
       /** Full-bleed image behind the entry title (falls back to `cover`). */
       hero: image().optional(),
       /** Full-bleed looping clip behind the entry title (public/ path, e.g. '/videos/clip.mp4'); wins over `hero`/`cover`. */

@@ -1,0 +1,40 @@
+---
+import CornerBrackets from '../hud/CornerBrackets.astro';
+import { withBase } from '../../config/paths';
+
+interface Props {
+  /** A `public/` path, e.g. `/videos/rl_video.mp4`. */
+  src: string;
+  /** Accessible label for the player. */
+  title?: string;
+  /** Optional `public/` path to a poster image shown before playback. */
+  poster?: string;
+}
+
+const { src, title = 'Video', poster } = Astro.props;
+
+/* public/ paths need the base prefix; see HeaderMedia.astro. */
+const video = withBase(src);
+const posterUrl = poster ? withBase(poster) : undefined;
+/* Offer a sibling .webm first when one exists: Firefox's macOS H.264 decoder
+   can fail after client-side navigation (see src/scripts/footage.ts). A missing
+   .webm just falls through to the .mp4. */
+const videoWebm = video.endsWith('.mp4') ? video.replace(/\.mp4$/, '.webm') : undefined;
+---
+
+<div class="not-prose relative my-8 border border-line bg-black">
+  <div class="aspect-video">
+    <video
+      class="h-full w-full"
+      controls
+      playsinline
+      preload="metadata"
+      poster={posterUrl}
+      aria-label={title}
+    >
+      {videoWebm && <source src={videoWebm} type="video/webm" />}
+      <source src={video} type={video.endsWith('.webm') ? 'video/webm' : 'video/mp4'} />
+    </video>
+  </div>
+  <CornerBrackets size={14} inset={-1} color="var(--color-cyan)" />
+</div>
