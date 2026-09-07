@@ -303,6 +303,35 @@
     border: 1px solid var(--color-line);
     width: 100%;
   }
+  .prose-hud table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+  .prose-hud thead th {
+    color: var(--color-ink);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    text-align: left;
+    border-bottom: 1px solid var(--color-line);
+  }
+  .prose-hud th,
+  .prose-hud td {
+    padding: 0.5rem 0.9rem 0.5rem 0;
+    border-bottom: 1px solid var(--color-line);
+    vertical-align: top;
+  }
+  .prose-hud tbody tr:last-child td {
+    border-bottom: 0;
+  }
+  .prose-hud td:first-child {
+    color: var(--color-ink);
+  }
   .prose-hud .katex {
     color: var(--color-ink);
     font-size: 1.05em;

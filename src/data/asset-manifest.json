@@ -89,23 +89,6 @@
         "focal": "16mm"
       }
     },
-    "photography/DSC02474": {
-      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC02474.jpg",
-      "w": 1616,
-      "h": 1080,
-      "hash": "135bfd110b78125e1651a7c605a92a4f65ed8933d155245f2d3498a5eb5591e2",
-      "tag": "photo-assets",
-      "file": "DSC02474.jpg",
-      "exif": {
-        "takenAt": "2019-03-27T02:45:13.000Z",
-        "iso": "6400",
-        "aperture": "f/3.5",
-        "shutter": "1/10",
-        "camera": "Sony ILCE-6400",
-        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
-        "focal": "16mm"
-      }
-    },
     "photography/DSC02557": {
       "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC02557.jpg",
       "w": 1616,
@@ -565,40 +548,6 @@
         "focal": "29mm"
       }
     },
-    "photography/DSC03696": {
-      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC03696.jpg",
-      "w": 1080,
-      "h": 1616,
-      "hash": "7dcd54a566b93e96ce3f609636180e37f80a88bc2e84686efb67333b7fbe2d0d",
-      "tag": "photo-assets",
-      "file": "DSC03696.jpg",
-      "exif": {
-        "takenAt": "2019-03-27T22:05:00.000Z",
-        "iso": "200",
-        "aperture": "f/8",
-        "shutter": "1/200",
-        "camera": "Sony ILCE-6400",
-        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
-        "focal": "29mm"
-      }
-    },
-    "photography/DSC03702": {
-      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC03702.jpg",
-      "w": 1616,
-      "h": 1080,
-      "hash": "65834eaa7b866a30df814e23f6b670ddcd8de266bd2a8fe129319d3c2d5a946b",
-      "tag": "photo-assets",
-      "file": "DSC03702.jpg",
-      "exif": {
-        "takenAt": "2019-03-27T22:05:54.000Z",
-        "iso": "200",
-        "aperture": "f/8",
-        "shutter": "1/400",
-        "camera": "Sony ILCE-6400",
-        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
-        "focal": "16mm"
-      }
-    },
     "photography/DSC03765": {
       "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC03765.jpg",
       "w": 1616,
@@ -767,23 +716,6 @@
         "camera": "Sony ILCE-6400",
         "lens": "E PZ 16-50mm F3.5-5.6 OSS",
         "focal": "29mm"
-      }
-    },
-    "photography/DSC04113": {
-      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/DSC04113.jpg",
-      "w": 1080,
-      "h": 1616,
-      "hash": "2f39049db36573eab913ef478b7e89eb449c40604b410cc53cb14e3f029e8ede",
-      "tag": "photo-assets",
-      "file": "DSC04113.jpg",
-      "exif": {
-        "takenAt": "2019-03-28T13:23:26.000Z",
-        "iso": "100",
-        "aperture": "f/4.5",
-        "shutter": "1/8",
-        "camera": "Sony ILCE-6400",
-        "lens": "E PZ 16-50mm F3.5-5.6 OSS",
-        "focal": "27mm"
       }
     },
     "photography/DSC04142": {
@@ -1194,23 +1126,6 @@
         "focal": "4.25mm"
       }
     },
-    "photography/IMG_3268": {
-      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/IMG_3268.jpg",
-      "w": 3024,
-      "h": 4032,
-      "hash": "7705de9f1f9196858b03b022959be9abc46e32e0c01697d8f8a2fc4bc87bba9b",
-      "tag": "photo-assets",
-      "file": "IMG_3268.jpg",
-      "exif": {
-        "takenAt": "2025-08-27T17:31:09.000Z",
-        "iso": "125",
-        "aperture": "f/2.4",
-        "shutter": "1/120",
-        "camera": "Apple iPhone 12 Pro",
-        "lens": "iPhone 12 Pro back triple camera 1.54mm f/2.4",
-        "focal": "1.54mm"
-      }
-    },
     "photography/IMG_3269": {
       "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/IMG_3269.jpg",
       "w": 4032,
@@ -1320,23 +1235,6 @@
         "camera": "Gopro HERO10 Black",
         "lens": null,
         "focal": "2.71mm"
-      }
-    },
-    "photography/IMG_4520": {
-      "url": "https://github.com/CPollreis/personal-portfolio/releases/download/photo-assets/IMG_4520.jpg",
-      "w": 3024,
-      "h": 4032,
-      "hash": "87ae9e4f0f919ab4699b32a0fa59d67d9d5b7307dfb642df994d52e7404f09ce",
-      "tag": "photo-assets",
-      "file": "IMG_4520.jpg",
-      "exif": {
-        "takenAt": "2023-02-06T10:13:29.000Z",
-        "iso": "125",
-        "aperture": "f/1.8",
-        "shutter": "1/113",
-        "camera": "Apple iPhone 11",
-        "lens": "iPhone 11 back dual wide camera 4.25mm f/1.8",
-        "focal": "4.25mm"
       }
     },
     "photography/IMG_4896": {

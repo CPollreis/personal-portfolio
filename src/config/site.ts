@@ -13,7 +13,7 @@ export const site = {
   /** Link-preview blurb. Front-loaded, because Featured and Discord both cut
      it off around 160 characters. */
   description:
-    'Autonomous systems lead on a Formula SAE electric race car, perception intern at PTx Trimble. Firmware, driverless autonomy, and the photos from the paddock.',
+    'My personal portfolio, showcasing my FSAE work, personal projects, and my favourite photos!',
   url: 'https://calebpollreis.com',
   locale: 'en',
   email: 'calebpollreis@gmail.com',
