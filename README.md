@@ -2,7 +2,9 @@
 
 Personal portfolio built with Astro: **https://calebpollreis.com**.
 
-<video src="https://github.com/CPollreis/personal-portfolio/raw/main/.github/readme.mp4" autoplay loop muted playsinline controls width="100%"></video>
+<video src="https://github.com/user-attachments/assets/9f1c277d-bc17-4d38-9ffe-931069d3fefc" autoplay loop muted playsinline controls width="100%"></video>
+
+
 
 ## Dev locally
 
