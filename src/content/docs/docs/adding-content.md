@@ -74,12 +74,70 @@ Sorting is automatic: the feed by `date` (newest first) and photography by
    no figure is a full-width text band. Full rules:
    [Entry pages: the held-frame body](/docs/architecture/#entry-pages-the-held-frame-body).
 
+   For a schematic or a long document, two wider components sit between Steps:
+
+   ```mdx
+   import DiagramViewer from '../../components/content/DiagramViewer.astro';
+   import DocEmbed from '../../components/content/DocEmbed.astro';
+   import pipeline from '../../assets/diagrams/dv/software-pipeline.svg?raw';
+
+   <DiagramViewer svg={pipeline} title="ROS 2 workspace graph" caption="..." />
+   <DocEmbed src="/dv/driverless-systems-review.pdf" title="Design review" meta="46 slides · PDF" />
+   ```
+
+   `<DiagramViewer>` inlines an SVG into a pan/zoom stage: drag to pan, pinch or
+   Cmd/Ctrl + scroll to zoom, double-click to zoom in, plus zoom/fit/fullscreen
+   buttons. Plain scrolling is never trapped. Import the SVG with `?raw`.
+   `<DocEmbed>` frames a PDF from `public/` with open and download links, and
+   falls back to a link card on phones, where browsers refuse inline PDFs. Both
+   sit in the same 68ch column as the prose, so their edges line up with the
+   words above and below them.
+
+   **Exporting a draw.io page for `<DiagramViewer>`:**
+
+   ```sh
+   /Applications/draw.io.app/Contents/MacOS/draw.io --export --format svg \
+     --page-index 1 --border 24 --theme light -o diagram.svg source.drawio
+   node scripts/drawio-svg.mjs diagram.svg
+   ```
+
+   Export light (it keeps the author's colour coding; `--theme dark` swaps in
+   draw.io's own garish dark variants), then let the script do three things the
+   SVG needs before it can be inlined:
+
+   - Drop the `<image>` raster fallback beside every `<foreignObject>`. No
+     browser uses it and it is ~97% of the file (4.6 MB becomes 45 KB).
+   - Strip the `html:` namespace prefix. The HTML parser ignores prefixed tags,
+     so `<html:br />` stops breaking lines and labels render run-together.
+   - Re-tone the palette for the dark stage: hue and role are preserved and
+     only lightness moves, so a blue box stays blue and a green box stays
+     green, on a dark panel with light text.
+
 4. (Optional) Add a `cover` image (co-locate the file and reference it,
    e.g. `cover: ./can-trace.jpg`). The cover doubles as the entry's **thumbnail
    on the home page card**; without one, an on-brand placeholder frame renders
    instead. A `hero` image or `heroVideo` (`public/` path) sits behind the
    entry page title. Set `draft: true` to keep it out of the build until it is
    ready.
+
+## A new media entry (the numbered ones)
+
+Some build-log entries are a frame or a clip rather than an article. They render
+without the hero, tags and summary chrome, and they carry a number instead of a
+written title: `/fsae/raw-003`.
+
+The number is not in the filename. `src/config/media.ts` holds an ordered list
+of media entry ids, and position in that list decides both the URL and the
+`number` prop the MDX body receives (`{props.number}`). So:
+
+1. Add `src/content/fsae/<descriptive-slug>.mdx` as usual.
+2. Add `'<descriptive-slug>'` to `mediaOrder` in `src/config/media.ts`, in the
+   position you want it to appear.
+
+Reordering or removing one is an edit to that list, never a file rename. Drafts
+keep their place in the list but do not consume a number, so the numbers a
+reader sees are always 1..n with no gaps; publishing a draft slots it in and
+renumbers the rest automatically.
 
 ## A new project
 

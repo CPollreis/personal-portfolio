@@ -28,6 +28,12 @@ const fsae = defineCollection({
       tags: z.array(z.string()).default([]),
       /** Optional YouTube/Vimeo URL rendered as an embed in the post header. */
       video: z.url().optional(),
+      /** Repository this entry is about; rendered under the title like a project's. */
+      links: z
+        .object({
+          repo: z.url().optional(),
+        })
+        .default({}),
       draft: z.boolean().default(false),
     }),
 });
