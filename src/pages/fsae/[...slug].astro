@@ -2,37 +2,49 @@
 import { getCollection, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import SubsystemBadge from '../../components/fsae/SubsystemBadge.astro';
+import SocialIcon from '../../components/ui/SocialIcon.astro';
 import VideoEmbed from '../../components/content/VideoEmbed.astro';
 import HeaderMedia from '../../components/layout/HeaderMedia.astro';
 import EntryKeyNav from '../../components/content/EntryKeyNav.astro';
 import Step from '../../components/content/Step.astro';
 import { subsystems } from '../../config/fsae';
+import { fsaeRefs, isMediaEntry } from '../../config/media';
 import { withBase } from '../../config/paths';
 
 export async function getStaticPaths() {
   const posts = (await getCollection('fsae', ({ data }) => !data.draft)).sort(
     (a, b) => b.data.date.getTime() - a.data.date.getTime(),
   );
+  const refs = fsaeRefs(posts.map((p) => p.id));
   return posts.map((post, i) => ({
-    params: { slug: post.id },
-    props: { post, newer: posts[i - 1] ?? null, older: posts[i + 1] ?? null },
+    params: { slug: refs.get(post.id)!.slug },
+    props: {
+      post,
+      newer: posts[i - 1] ?? null,
+      older: posts[i + 1] ?? null,
+      refs,
+      mediaNo: refs.get(post.id)!.number,
+    },
   }));
 }
 
-const { post, newer, older } = Astro.props;
+const { post, newer, older, refs, mediaNo } = Astro.props;
 const { Content } = await render(post);
 const meta = subsystems[post.data.subsystem];
 const dateStr = post.data.date.toISOString().slice(0, 10);
 const heroImg = post.data.hero ?? post.data.cover;
-const isMedia = post.id.startsWith('raw-');
+const repoLabel = post.data.links.repo
+  ?.replace(/^https?:\/\/(www\.)?github\.com\//, '')
+  .replace(/\/$/, '');
+const isMedia = isMediaEntry(post.id);
 const hasHeroMedia = !isMedia && Boolean(post.data.heroVideo || heroImg);
 const showCoverPlate = isMedia && Boolean(heroImg) && !/<Step\b/.test(post.body ?? '');
 ---
 
 <Base title={post.data.title} description={post.data.summary}>
   <EntryKeyNav
-    prevHref={older ? withBase(`/fsae/${older.id}`) : undefined}
-    nextHref={newer ? withBase(`/fsae/${newer.id}`) : undefined}
+    prevHref={older ? withBase(`/fsae/${refs.get(older.id)!.slug}`) : undefined}
+    nextHref={newer ? withBase(`/fsae/${refs.get(newer.id)!.slug}`) : undefined}
     backHref={withBase('/#fsae')}
   />
   <div class="pointer-events-none fixed inset-x-0 top-0 z-50">
@@ -68,6 +80,19 @@ const showCoverPlate = isMedia && Boolean(heroImg) && !/<Step\b/.test(post.body 
         <h1 class="font-display text-4xl font-semibold leading-tight md:text-5xl">
           {post.data.title}
         </h1>
+        {
+          post.data.links.repo && repoLabel && (
+            <a
+              href={post.data.links.repo}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="mt-3 inline-flex items-center gap-1.5 font-mono text-sm text-muted transition-colors hover:text-ink"
+            >
+              <SocialIcon label="GitHub" class="h-4 w-4" />
+              {repoLabel}
+            </a>
+          )
+        }
         <p class="mt-5 text-lg text-muted">{post.data.summary}</p>
         {
           !isMedia && post.data.tags.length > 0 && (
@@ -91,7 +116,7 @@ const showCoverPlate = isMedia && Boolean(heroImg) && !/<Step\b/.test(post.body 
 
     <div class="prose-hud entry-body mt-12">
       {showCoverPlate && <Step figure={heroImg} alt={post.data.title} />}
-      <Content />
+      <Content number={mediaNo} />
     </div>
 
     <div class="container-hud max-w-3xl">
@@ -101,7 +126,7 @@ const showCoverPlate = isMedia && Boolean(heroImg) && !/<Step\b/.test(post.body 
       >
         {older ? (
           <a
-            href={withBase(`/fsae/${older.id}`)}
+            href={withBase(`/fsae/${refs.get(older.id)!.slug}`)}
             class="flex items-center gap-2 transition-colors hover:text-ink"
           >
             <span aria-hidden="true">←</span> Prev
@@ -111,7 +136,7 @@ const showCoverPlate = isMedia && Boolean(heroImg) && !/<Step\b/.test(post.body 
         )}
         {newer ? (
           <a
-            href={withBase(`/fsae/${newer.id}`)}
+            href={withBase(`/fsae/${refs.get(newer.id)!.slug}`)}
             class="flex items-center gap-2 transition-colors hover:text-ink"
           >
             Next <span aria-hidden="true">→</span>

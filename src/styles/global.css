@@ -360,6 +360,20 @@
   @media (min-width: 768px) {
     .entry-body > :not(.entry-step) { padding-inline: 2rem; }
   }
+  /* Embedded instruments (pan/zoom diagrams, documents, trees) copy the Step
+     body's box exactly, so their edges line up with the words above and below
+     rather than floating wider than the column. */
+  .entry-body > .entry-embed {
+    max-width: 68ch;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+  @media (min-width: 768px) {
+    .entry-body > .entry-embed { padding-inline: 2rem; }
+  }
+  @media (min-width: 1024px) {
+    .entry-body > .entry-embed { padding-inline: clamp(2rem, 5%, 4rem); }
+  }
   /* Steps set their own rhythm; kill the generic prose stack margin on them. */
   .entry-body > .entry-step {
     margin-top: 0;

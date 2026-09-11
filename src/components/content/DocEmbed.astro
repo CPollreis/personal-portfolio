@@ -1,0 +1,139 @@
+---
+import CornerBrackets from '../hud/CornerBrackets.astro';
+import { withBase } from '../../config/paths';
+
+interface Props {
+  src: string;
+  title: string;
+  meta?: string;
+  height?: string;
+}
+
+const { src, title, meta, height = 'clamp(26rem, 80vh, 52rem)' } = Astro.props;
+const href = withBase(src);
+const file = src.split('/').pop();
+---
+
+<div class="entry-embed not-prose">
+  <figure class="doc" style={`--doc-h:${height}`}>
+    <div class="doc-bar">
+      <span class="doc-title">{title}</span>
+      <div class="doc-meta">
+        {meta && <span>{meta}</span>}
+        <a href={href} target="_blank" rel="noopener">Open</a>
+        <a href={href} download={file}>Download</a>
+      </div>
+    </div>
+    <div class="doc-stage">
+      <object data={`${href}#view=FitH&pagemode=none&navpanes=0`} type="application/pdf" title={title}>
+        <iframe src={`${href}#view=FitH&pagemode=none`} title={title}></iframe>
+      </object>
+      <div class="doc-fallback">
+        <p>{title}</p>
+        <a href={href} target="_blank" rel="noopener">Open the PDF &rarr;</a>
+      </div>
+    </div>
+    <CornerBrackets size={12} inset={-1} color="var(--color-indigo)" />
+  </figure>
+</div>
+
+<style>
+  .doc {
+    position: relative;
+    margin: 0.5rem auto 1rem;
+    border: 1px solid var(--color-line);
+    background: var(--color-surface);
+  }
+
+  .doc-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    border-bottom: 1px solid var(--color-line);
+    padding: 0.6rem 0.9rem;
+  }
+
+  .doc-title,
+  .doc-meta {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+
+  .doc-meta {
+    display: flex;
+    gap: 0.9rem;
+  }
+
+  .doc-meta a {
+    color: var(--color-muted);
+    text-decoration: none;
+    border-bottom: 1px solid var(--color-line);
+    transition: color var(--dur-micro) var(--ease-out-hud),
+      border-color var(--dur-micro) var(--ease-out-hud);
+  }
+
+  .doc-meta a:hover {
+    color: var(--color-ink);
+    border-color: var(--color-indigo);
+  }
+
+  .doc-stage {
+    height: var(--doc-h);
+    background: #2a2a2e;
+  }
+
+  .doc-stage object,
+  .doc-stage iframe {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  .doc-fallback {
+    display: none;
+    height: 100%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 2rem 1.25rem;
+    text-align: center;
+  }
+
+  .doc-fallback p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--color-muted);
+  }
+
+  .doc-fallback a {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    color: var(--color-ink);
+    text-decoration: none;
+    border-bottom: 1px solid var(--color-indigo);
+  }
+
+  /* Mobile browsers refuse to render PDFs inline, so hand over a link instead. */
+  @media (max-width: 767px) {
+    .doc-stage {
+      height: auto;
+      background: transparent;
+    }
+
+    .doc-stage object {
+      display: none;
+    }
+
+    .doc-fallback {
+      display: flex;
+    }
+  }
+</style>

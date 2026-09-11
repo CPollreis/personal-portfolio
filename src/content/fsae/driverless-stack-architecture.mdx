@@ -3,71 +3,273 @@ title: Standing Up the Driverless Program
 date: 2026-06-10
 subsystem: autonomous
 season: 2026 Season
-summary: "Year one as Autonomous Systems Lead: reading the driverless ruleset like a spec, architecting a C++/ROS 2 monorepo for the Jetson Orin, and securing the sensors that will let the car see. Target: driverless by 2028."
+summary: "Year one as Driverless System Officer: the team research, rules digest, vehicle and software architecture, team structure, design review and budget behind a driverless car for 2028."
 cover: ../../assets/buildlog/IMG_5039.jpg
 hero: ../../assets/buildlog/IMG_5039.jpg
-tags: [ROS 2, C++, Jetson Orin, architecture]
+tags: [ROS 2, C++, Jetson Orin, architecture, rules, budget]
+links:
+  repo: https://github.com/UMSAE-Formula-Electric/cortex
 draft: false
 ---
 
 import Step from '../../components/content/Step.astro';
+import DiagramViewer from '../../components/content/DiagramViewer.astro';
+import DocEmbed from '../../components/content/DocEmbed.astro';
 import sensorUnits from '../../assets/buildlog/IMG_5039.jpg';
-
-{/* Each section below is a Step. To give one a held frame, import the photo and
-    pass it: <Step figure={repoLayout} caption="Package layout in the monorepo">
-    The picture then stays put while these words scroll past it. */}
-
-Our car does not drive itself yet. That's the honest headline, and it's also the
-point: **the team's goal is a driverless car by 2028**, and this season my job
-as Autonomous Systems Lead (DSO) has been to make sure the foundation we lay
-now doesn't have to be torn up later.
+import rulesMatrix from '../../assets/diagrams/dv/rules-matrix.svg?raw';
+import vehicleHw from '../../assets/diagrams/dv/vehicle-hw.svg?raw';
+import softwarePipeline from '../../assets/diagrams/dv/software-pipeline.svg?raw';
+import teamProcess from '../../assets/diagrams/dv/team-process.svg?raw';
 
 <Step>
 
-## Rules first, architecture second
+## The plan
 
-Before writing a line of stack code, I studied the FSAE driverless ruleset and
-how FSG runs its driverless events, because compliance requirements decide
-architecture: where the emergency brake authority lives, what the autonomous
-system master switch has to do, and what the car must prove before it's allowed
-to move without a driver. Designing around those constraints from day one is
-much cheaper than retrofitting them.
+- **Retrofit the existing FSAE Electric car.** Every team that reached a
+  driverless competition in under a year started from a running EV.
+- **Target FSAE 2028**, two years ahead of SAE's 2030 mandate.
+- **Build order: acceleration, autocross, trackdrive, skidpad.** 150 of the
+  250 dynamic points are speed-independent, so reliability outranks pace.
+- **Compute on the NVIDIA Jetson Orin**, with one C++/ROS 2 monorepo:
+  packages grouped by pipeline stage, one shared interface package, colcon and
+  Docker. Closest references are AMZ's `fsd_skeleton` and QUT's
+  `QUTMS_Driverless`.
+- **Budget of $28,234 CAD** across 56 line items, $18,233 of it rules-critical.
+  The Gross-Funk remote emergency system is the longest lead item, so it gets
+  ordered first regardless of what else is settled.
 
 </Step>
 
 <Step>
 
-## The monorepo
+## Team research
 
-The software home for all of it is a **C++/ROS 2 monorepo targeting the NVIDIA
-Jetson Orin**. I architected the repository and build infrastructure: package
-layout, build tooling, and the project structure that lets 10+ software members
-work in parallel without stepping on each other.
+How long it took other Formula Student programs to reach their first driverless
+competition, and what each of them started from. This set the 2028 target and
+the decision to retrofit rather than build a new platform.
+
+| Team | Months to first driverless competition |
+| --- | --- |
+| KA-RaceIng (KIT) | 7 to 8 |
+| e-gnition Hamburg | 9 |
+| Chalmers | 10 to 11 |
+| TUfast (TUM) | 12 |
+| DUT Delft, MIT | 12 to 14 |
+| AMZ (ETH Zurich) | 12 to 18 |
+| KTH | 18 to 20 |
+| Carnegie Mellon | about 20 |
+| Toronto (UTFR) | 24 to 30 |
+| QUT | 29 to 31 |
 
 </Step>
+
+<Step>
+
+## Rules digest
+
+Every driverless rule that constrains a design decision, mapped onto the
+subsystem that has to satisfy it, in columns for mechanical, electrical,
+software and inspection gating.
+
+</Step>
+
+<DiagramViewer
+  svg={rulesMatrix}
+  title="Rules digest by subsystem"
+  caption="FSAE Driverless supplement and FSG specification, read as design constraints."
+/>
+
+<Step>
+
+## Vehicle architecture
+
+Where the sensors, compute and actuators sit on the car, and how the shutdown
+circuit, remote stop system and emergency brake supply are wired together.
+
+</Step>
+
+<DiagramViewer
+  svg={vehicleHw}
+  title="Vehicle architecture and actuator power supply"
+  caption="Sensing and actuation over CAN, mission selection, and the shutdown circuit."
+/>
+
+<Step>
+
+## Software architecture
+
+The ROS 2 workspace layout and topic graph: camera and LiDAR drivers into
+perception, then SLAM, then planning, with the MCU interface closing the loop
+back onto the car.
+
+</Step>
+
+<DiagramViewer
+  svg={softwarePipeline}
+  title="ROS 2 workspace and topic graph"
+  caption="Workspace boundaries and the topics that cross them."
+/>
+
+<Step>
+
+## Team structure
+
+Who owns which stage of the pipeline, what each role is responsible for, and
+the development loop from simulation through hardware in the loop to track
+testing. The mechanical and electrical interface box is still unassigned.
+
+</Step>
+
+<DiagramViewer
+  svg={teamProcess}
+  title="Team structure and software process"
+  caption="Roles, responsibilities and open gaps. Names removed for publication."
+/>
+
+<Step>
+
+## Repository layout
+
+The structure the planning repo recommends for the monorepo, synthesised from
+QUT (layout), AMZ (layering) and CMU (dev environment). Packages are grouped by
+pipeline stage, `umsae_msgs` is the one interface package everything else
+depends on, and the simulator adapter can be excluded from car builds.
+
+</Step>
+
+<div class="entry-embed">
+
+```text
+umsae-driverless/                      # one repo = one colcon workspace
+├── README.md                          # what/why, quickstart, links to docs/
+├── LICENSE
+├── .gitignore                         # build/ install/ log/ bags/ *.engine ...
+├── .gitmodules                        # external ROS packages as submodules
+├── .clang-format                      # C++ style (pick one, never argue again)
+├── .pre-commit-config.yaml            # clang-format, black, isort, whitespace
+├── pyproject.toml                     # black/isort/ruff config
+├── dependencies.repos                 # optional: vcstool alternative to submodules
+│
+├── .github/
+│   └── workflows/
+│       ├── pre_commit.yaml            # lint on every PR
+│       ├── build.yaml                 # colcon build + colcon test in the dev image
+│       └── image.yaml                 # build+push dev image to GHCR on main
+│
+├── docker/
+│   ├── Dockerfile.base                # FROM osrf/ros:jazzy-desktop, rosdep install
+│   ├── Dockerfile.overlay             # user setup + workspace, dev tools
+│   ├── docker-compose.yml             # dev, sim, (optional) ml profiles
+│   ├── cyclonedds.xml                 # pinned DDS config
+│   └── Makefile                       # make dev / make sim / make build
+│
+├── docs/
+│   ├── onboarding.md                  # zero-to-running-sim guide (test on a fresh laptop)
+│   ├── architecture.md                # pipeline diagram, topic map, frames/TF tree
+│   └── conventions.md                 # naming, style, branch/PR rules
+│
+├── src/
+│   ├── common/
+│   │   ├── umsae_msgs/                # THE interface package: Cone, ConeArrayWithCovariance,
+│   │   │                              #   CarState, ControlCommand, Mission, ...
+│   │   │                              #   (start by copying eufs_msgs vocabulary)
+│   │   └── umsae_common/              # shared utils, params, py/cpp helpers
+│   │
+│   ├── perception/
+│   │   ├── lidar_pipeline/            # ground removal, clustering, cone candidates
+│   │   ├── camera_pipeline/           # YOLO(TensorRT) cone detection + depth assoc
+│   │   └── perception_bringup/        # launch + params only
+│   │
+│   ├── estimation/                    # (QUT folds this into "navigation")
+│   │   ├── state_estimation/          # wheel odom + IMU + GNSS fusion (try robot_localization first)
+│   │   ├── slam/                      # cone map + localization (try Nav2/existing SLAM first)
+│   │   └── estimation_bringup/
+│   │
+│   ├── planning/
+│   │   ├── path_planner/              # centerline from cones (Delaunay; see ft-fsd-path-planning)
+│   │   └── planning_bringup/
+│   │
+│   ├── control/
+│   │   ├── controllers/               # pure pursuit first, MPC later
+│   │   └── control_bringup/
+│   │
+│   ├── hardware/
+│   │   ├── canbus/                    # CAN <-> ROS bridge, generated from the team DBC
+│   │   ├── sensors/                   # vendor driver configs/wrappers (drivers themselves = submodules)
+│   │   └── actuation/                 # steering/brake/throttle interfaces, EBS state machine
+│   │
+│   ├── operations/
+│   │   ├── vehicle_bringup/           # mission launches: acceleration, skidpad,
+│   │   │                              #   autocross, trackdrive, inspection
+│   │   ├── vehicle_urdf/              # robot description + TF
+│   │   └── recording/                 # rosbag recorder + topics_to_record.yaml
+│   │
+│   └── sim/
+│       └── sim_interface/             # adapter to eufs_sim/FSDS; excluded from car builds
+│
+└── tools/                             # non-ROS: CLI helpers, dataset scripts,
+                                       #   Foxglove layouts, track generators
+```
+
+</div>
 
 <Step figure={sensorUnits} caption="First batch of sensor units laid out for fitting: LiDARs, cameras, and the compute to run them">
 
-## Hardware we don't have to buy
+## Sponsored hardware
 
-Driverless perception is expensive, so I ran targeted sponsorship outreach and
-secured about **$30k in sponsored hardware**: LiDARs, cameras, and auxiliary
-sensors. That's the difference between designing the perception stack around
-the sensors we want versus the sensors we could afford.
+Targeted sponsorship outreach secured about **$30k in sponsored hardware**:
+LiDARs, cameras and auxiliary sensors.
 
 </Step>
 
 <Step>
 
-## Keeping ten people rowing together
+## Design review
 
-The least glamorous work matters most at this stage: I'm building a team
-documentation dashboard with visual aids covering sensor mounting, wire harness
-routing, and subsystem interfaces, so knowledge survives graduation cycles and
-new members ramp up in weeks instead of months.
+The deck I presented to the team: dynamic events, system architecture across
+all three disciplines, the perception to estimation to controls pipeline and a
+simplified version to ship first, the DSO role and driverless systems form, the
+remote stop system, power supply schematic, monitoring and startup flowcharts,
+and the CAN signal set.
 
-Next milestones: perception prototyping on the Orin with the sponsored sensor
-suite, and simulation infrastructure so the stack can fail safely long before
-the car does. These posts will follow it, honestly, all the way to 2028.
+</Step>
+
+<DocEmbed
+  src="/dv/driverless-systems-review.pdf"
+  title="Driverless systems design review"
+  meta="46 slides · PDF"
+/>
+
+<Step>
+
+## Budgeting
+
+56 line items in CAD, each tagged with priority, lead time and whether it is
+sponsorable. LiDAR, cameras and GNSS/INS sit at $0 because they are covered by
+the sponsorship asks rather than the cash budget.
+
+| Priority | Cost (CAD) | Line items |
+| --- | --- | --- |
+| Critical | $18,233 | 30 |
+| High | $9,111 | 20 |
+| Medium | $342 | 4 |
+| Low | $548 | 2 |
+| Total | $28,234 | 56 |
+
+</Step>
+
+<DocEmbed
+  src="/dv/driverless-budget.pdf"
+  title="Driverless budget"
+  meta="5 pages · PDF"
+  height="clamp(24rem, 70vh, 44rem)"
+/>
+
+<Step>
+
+## Next
+
+Perception prototyping on the Orin, simulation infrastructure, and team
+documentation. These posts will follow the program to 2028.
 
 </Step>

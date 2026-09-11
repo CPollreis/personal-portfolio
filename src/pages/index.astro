@@ -14,6 +14,7 @@ import { momentBackdrop } from '../components/photography/backdrop';
 import { archiveShape } from '../components/photography/archiveGrid';
 import { readPhotoExif, type PhotoExif } from '../components/photography/exif';
 import { subsystems, type Subsystem } from '../config/fsae';
+import { fsaeRefs } from '../config/media';
 import { site, positions, socials } from '../config/site';
 import { withBase } from '../config/paths';
 import { assetUrl, assetRecord, type AssetExif } from '../data/assets';
@@ -38,8 +39,9 @@ const projectEntries = projects.map((p) => ({
   coverVideo: p.data.coverVideo,
 }));
 
+const fsaeRefMap = fsaeRefs(fsaePosts.map((p) => p.id));
 const fsaeEntries = fsaePosts.map((p) => ({
-  href: withBase(`/fsae/${p.id}`),
+  href: withBase(`/fsae/${fsaeRefMap.get(p.id)!.slug}`),
   subsystem: p.data.subsystem as Subsystem | null,
   code: subsystems[p.data.subsystem].code,
   title: p.data.title,
