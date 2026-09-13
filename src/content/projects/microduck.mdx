@@ -1,0 +1,65 @@
+---
+title: Microduck, a Sim-to-Real Biped
+date: 2026-09-12
+kind: Embodied AI · Reinforcement Learning
+stack: [Python, Isaac Lab, Isaac Sim, PyTorch]
+cover: ./microduck.png
+summary: "Just ordered: a Pollen Robotics Microduck, the $399 open-source walking biped that Hugging Face (soon Nvidia, pending the acquisition) sells. Plan is to train locomotion policies in the community Isaac Lab port first, then move to Nvidia's own Isaac Sim / Isaac GR00T tooling as it matures."
+order: 4
+featured: true
+draft: false
+---
+
+import Step from '../../components/content/Step.astro';
+
+<Step>
+
+## What it is
+
+**Microduck** is a 25 cm, sub-800 g biped from Pollen Robotics: 15 servos,
+a camera, an 8x8 ToF depth sensor, two IMUs, and a grasping beak, all driven
+by learned policies, neural nets trained in simulation and run on-device at
+50 Hz rather than hand-tuned gaits. It walks, crouches, recovers from a fall,
+and can even roller-skate. Pollen open-sourced the entire stack: sim
+environments, training code, and the trained policies themselves.
+
+Hugging Face acquired Pollen Robotics in 2025, and on September 2, 2026,
+Nvidia signed a definitive agreement to acquire Hugging Face for $12.9B,
+which makes Microduck, oddly, an Nvidia robot in waiting even though the
+board itself runs a Rockchip RK3566, not Jetson silicon. Pre-orders opened
+August 27, 2026 and reportedly cleared 10,000 units almost immediately.
+Mine is in that backlog.
+
+</Step>
+
+<Step>
+
+## The plan
+
+Nothing has arrived yet, so this entry is the plan, not results:
+
+- **Start in sim.** The community has already ported Microduck's tasks
+  (locomotion, ball-kick, two-robot rally) to **Isaac Lab 3.0** on the newer
+  Newton/MJWarp physics backend. That's the fastest path to a working policy
+  before the hardware even ships, and it's the same RL loop (PPO over a
+  physics sim, sim-to-real transfer) as the [Rocket League
+  bot](/projects/rocket-league-rl-bot), just on a real robot instead of a
+  headless game engine.
+- **Sim-to-real.** Once the robot lands, the goal is deploying a policy
+  trained purely in sim straight onto the hardware, and seeing how much the
+  gap actually costs.
+- **Move up the Nvidia stack.** Longer term, since Microduck is about to sit
+  inside Nvidia's robotics org, the plan is to follow it there: rebuild the
+  training environment on Nvidia's own **Isaac Sim** and eventually
+  **Isaac GR00T** tooling as that ecosystem absorbs Hugging Face's robots,
+  rather than staying on the community Isaac Lab port indefinitely.
+
+</Step>
+
+<Step>
+
+## Future improvements
+
+COMING SOON
+
+</Step>

@@ -409,6 +409,8 @@
      is always the same fraction of its half rather than a fixed inset. */
   .entry-step-fig {
     padding: 6% 1.25rem;
+    /* Depth for the inward tilt below; without it rotateY has nothing to rotate into. */
+    perspective: 1400px;
   }
   @media (min-width: 1024px) {
     .entry-step-fig { padding: 10%; }
@@ -425,6 +427,33 @@
     width: 100%;
     height: auto;
     border: 1px solid var(--color-line);
+  }
+
+  /* Every entry photo opens a lightbox on click. Reset the button chrome so
+     it reads as the plain image it wraps. */
+  .entry-frame-trigger {
+    all: unset;
+    display: block;
+    width: 100%;
+    cursor: zoom-in;
+    transform-style: preserve-3d;
+    transition: transform var(--dur-slow) var(--ease-out-hud);
+  }
+  /* Figures alternate sides with their <Step> (see nth-of-type above); tilting
+     each toward the column beside it reads as leaning in toward the reader's
+     text, i.e. toward the center of the page, rather than a generic wobble. */
+  .entry-step:nth-of-type(odd) .entry-frame-trigger:hover,
+  .entry-step:nth-of-type(odd) .entry-frame-trigger:focus-visible {
+    transform: rotateY(8deg) scale(1.015);
+  }
+  .entry-step:nth-of-type(even) .entry-frame-trigger:hover,
+  .entry-step:nth-of-type(even) .entry-frame-trigger:focus-visible {
+    transform: rotateY(-8deg) scale(1.015);
+  }
+  /* Centered plate photos have no side to lean from, so it's a plain lift. */
+  .entry-plate .entry-frame-trigger:hover,
+  .entry-plate .entry-frame-trigger:focus-visible {
+    transform: scale(1.012);
   }
   /* Set by <Step> when the source is taller than it is wide. */
   @media (min-width: 1024px) {
@@ -663,6 +692,61 @@
 ::view-transition-new(root) {
   animation-duration: 220ms;
   animation-timing-function: var(--ease-out-hud);
+}
+
+/* IMAGE LIGHTBOX
+   One shared overlay, built lazily by Step.astro's script on first click. */
+.img-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4vh 4vw;
+  background: color-mix(in srgb, var(--color-bg) 92%, transparent);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--dur-base) var(--ease-out-hud);
+}
+.img-lightbox.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+.img-lightbox-img {
+  display: block;
+  max-width: 92vw;
+  max-height: 88vh;
+  width: auto;
+  height: auto;
+  border: 1px solid var(--color-line);
+  background: var(--color-surface);
+  transform: scale(0.97);
+  transition: transform var(--dur-base) var(--ease-out-hud);
+}
+.img-lightbox.is-open .img-lightbox-img {
+  transform: scale(1);
+}
+.img-lightbox-close {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  display: flex;
+  height: 2.25rem;
+  width: 2.25rem;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-line);
+  background: var(--color-surface);
+  color: var(--color-muted);
+  cursor: pointer;
+  transition:
+    color var(--dur-micro) var(--ease-out-hud),
+    border-color var(--dur-micro) var(--ease-out-hud);
+}
+.img-lightbox-close:hover {
+  border-color: var(--color-indigo);
+  color: var(--color-ink);
 }
 
 /* MOTION SAFETY */
