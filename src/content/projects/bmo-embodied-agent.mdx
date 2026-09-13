@@ -13,6 +13,9 @@ draft: false
 ---
 
 import Step from '../../components/content/Step.astro';
+import DiagramViewer from '../../components/content/DiagramViewer.astro';
+import agentPipeline from '../../assets/diagrams/bmo/agent-pipeline.svg?raw';
+import hardware from '../../assets/diagrams/bmo/hardware.svg?raw';
 
 {/* Each section below is a Step. To give one a held frame, import the photo and
     pass it: <Step figure={shot} caption="What the picture shows">
@@ -36,6 +39,22 @@ see versus what can be summarized before it ever reaches the prompt.
 
 <Step>
 
+## Hardware
+
+Everything runs on one board: the Pi 5 hosts the Ollama runtime plus Whisper,
+Piper and openWakeWord, with a USB mic and speaker for voice I/O, a CSI camera
+for vision, and Wi-Fi for search and Steam streaming.
+
+</Step>
+
+<DiagramViewer
+  svg={hardware}
+  title="BMO hardware"
+  caption="Raspberry Pi 5 as the single compute hub for mic, speaker, camera, storage and network."
+/>
+
+<Step>
+
 ## Ears, voice, and eyes
 
 - **Whisper** handles voice input, so you talk to BMO like you'd talk to a
@@ -45,6 +64,23 @@ see versus what can be summarized before it ever reaches the prompt.
   grounded in what's actually happening in the room.
 
 </Step>
+
+<Step>
+
+## Agent pipeline
+
+Wait, Listen, Think, Speak. The Think stage is a small tool-calling loop: a
+lightweight router model decides whether a tool is needed before the main
+model generates a response, pulling in the camera, a system-time check, or a
+DuckDuckGo search as retrieval context.
+
+</Step>
+
+<DiagramViewer
+  svg={agentPipeline}
+  title="Agent pipeline and tool loop"
+  caption="Wait/Listen/Think/Speak, with the RAG tool loop nested in the Think stage's tool-routing decision."
+/>
 
 <Step>
 
