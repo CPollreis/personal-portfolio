@@ -1,0 +1,88 @@
+---
+title: Trip Mapper
+date: 2026-09-12
+kind: Travel Tooling
+stack: [Astro, React, TypeScript, MapLibre GL]
+cover: ./trip-mapper-map.png
+summary: "A trip planner that reads one JSON file and generates a day-coded map, a full itinerary, a booking checklist, and a Google My Maps import, with a live-reloading local UI for planning against the map as you edit."
+order: 5
+featured: true
+links:
+  repo: https://github.com/CPollreis/trip-mapper
+draft: false
+---
+
+import Step from '../../components/content/Step.astro';
+import mapShot from './trip-mapper-map.png';
+
+{/* Each section below is a Step. To give one a held frame, import the photo and
+    pass it: <Step figure={shot} caption="What the picture shows">
+    The picture then stays put while these words scroll past it. */}
+
+<Step figure={mapShot} caption="Every stop across a 13-day Toronto trip, colour-coded by day, with the itinerary panel driving the same map live">
+
+## What it does
+
+Trip Mapper turns one JSON file into a full trip: a **day-coded map**, a
+readable **itinerary**, a **booking checklist**, and a **Google My Maps**
+import, all generated from the same source. Editing the trip file and
+watching the map redraw live is the whole workflow: no separate planning app,
+no manually re-pinning a map every time an afternoon changes.
+
+A trip file is two arrays. `places[]` is the *what*, a venue with its
+coordinates, listed once. `days[].items[]` is the *when*, a time slot that
+points at a place. Splitting them means a spot you visit twice only needs one
+set of coordinates. Every place also carries a `source.confidence`: `confirmed`
+when a caption or location tag names the venue outright, `inferred` when it's
+worked out from context and then verified, `unresolved` when a source is real
+but nothing could be pinned, in which case it stays off the map entirely and
+drops into a generated `unresolved.md` instead of silently guessing.
+
+</Step>
+
+<Step>
+
+## How it's built
+
+The renderer is **Astro + React with MapLibre GL** for the map, **TypeScript**
+for the schema, validation, and route logic underneath it. `npm run dev`
+builds, serves, and live-reloads: edit the trip file in one window, watch the
+pins and routes redraw in the other.
+
+**Routing is honest about what it can't measure.** The only free routing
+service with a hosted "walking" and "cycling" profile silently substitutes car
+routing for both, so its durations are useless for anything but driving. What
+it does give honestly is road distance, which beats a straight line by a wide
+margin. So every non-driving leg takes that road distance and applies a
+mode-specific speed (walk, transit, bike each get their own km/h and a fixed
+overhead), while driving keeps the routed duration outright.
+
+**The 13-day color ramp is computed in OKLCH**, not HSL, so each day reads as
+a perceptually even step from warm at arrival to cool at departure rather than
+a ramp where the yellows glare and the blues go muddy.
+
+**Validation runs as a pure pass over the trip file**: duplicate place ids,
+unknown `placeId` references, malformed times, overlapping items on the same
+day, out-of-chronological-order items, and places that fall outside the
+destination city's bounds (or, with no bounds file, that sit implausibly far
+from the rest of the trip) all surface as errors or warnings before anything
+renders.
+
+**Personal data has its own enforcement, not just convention.** A gitignored
+`resources/private.json` overlays real addresses and exact coordinates onto
+the committed trip file at build time. On top of that, `scripts/scan-personal.mjs`
+scans every tracked file (and, separately, commit messages) for emails, phone
+numbers, booking/confirmation codes, and card numbers, the last checked with
+an actual Luhn pass so a real card fails closed instead of a false-positive
+digit string. It redacts what it finds by default and only prints the matched
+text with `--show`, since the repo, and therefore its CI logs, is public.
+
+</Step>
+
+<Step>
+
+## Future improvements
+
+COMING SOON
+
+</Step>

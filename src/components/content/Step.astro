@@ -20,12 +20,14 @@ const hasWords = Astro.slots.has('default');
   figure && !hasWords ? (
     <section class="entry-plate">
       <figure class:list={['entry-frame', portrait && 'entry-frame--portrait']}>
-        <Image
-          src={figure}
-          alt={alt ?? caption ?? ''}
-          widths={[640, 960, 1280, 1600]}
-          sizes="(min-width: 1024px) 62vw, 92vw"
-        />
+        <button type="button" class="entry-frame-trigger" data-zoomable aria-label="View larger image">
+          <Image
+            src={figure}
+            alt={alt ?? caption ?? ''}
+            widths={[640, 960, 1280, 1600, 2400]}
+            sizes="(min-width: 1024px) 62vw, 92vw"
+          />
+        </button>
         {caption && <figcaption>{caption}</figcaption>}
       </figure>
     </section>
@@ -33,12 +35,14 @@ const hasWords = Astro.slots.has('default');
     <section class="entry-step">
       <div class="entry-step-fig">
         <figure class:list={['entry-frame', portrait && 'entry-frame--portrait']}>
-          <Image
-            src={figure}
-            alt={alt ?? caption ?? ''}
-            widths={[420, 640, 960, 1280]}
-            sizes="(min-width: 1024px) 40vw, 84vw"
-          />
+          <button type="button" class="entry-frame-trigger" data-zoomable aria-label="View larger image">
+            <Image
+              src={figure}
+              alt={alt ?? caption ?? ''}
+              widths={[420, 640, 960, 1280, 1920]}
+              sizes="(min-width: 1024px) 40vw, 84vw"
+            />
+          </button>
           {caption && <figcaption>{caption}</figcaption>}
         </figure>
       </div>
@@ -54,3 +58,58 @@ const hasWords = Astro.slots.has('default');
     </section>
   )
 }
+
+<script>
+  function openLightbox(img: HTMLImageElement) {
+    let overlay = document.getElementById('img-lightbox') as HTMLDivElement | null;
+    if (!overlay) {
+      overlay = document.createElement('div');
+      overlay.id = 'img-lightbox';
+      overlay.className = 'img-lightbox';
+      overlay.setAttribute('role', 'dialog');
+      overlay.setAttribute('aria-modal', 'true');
+      overlay.innerHTML = `
+        <button type="button" class="img-lightbox-close" aria-label="Close">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M3 3 13 13M13 3 3 13" stroke="currentColor" stroke-width="1.5" />
+          </svg>
+        </button>
+        <img class="img-lightbox-img" alt="" />
+      `;
+      document.body.appendChild(overlay);
+
+      const close = () => {
+        overlay!.classList.remove('is-open');
+        document.body.style.overflow = '';
+        lastTrigger?.focus();
+      };
+      overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) close();
+      });
+      overlay.querySelector('.img-lightbox-close')!.addEventListener('click', close);
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && overlay!.classList.contains('is-open')) close();
+      });
+    }
+
+    const big = overlay.querySelector('.img-lightbox-img') as HTMLImageElement;
+    big.srcset = img.srcset;
+    big.src = img.currentSrc || img.src;
+    big.sizes = '92vw';
+    big.alt = img.alt || '';
+    overlay.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+    (overlay.querySelector('.img-lightbox-close') as HTMLButtonElement)?.focus();
+  }
+
+  let lastTrigger: HTMLElement | null = null;
+
+  document.addEventListener('click', (e) => {
+    const trigger = (e.target as HTMLElement).closest<HTMLElement>('[data-zoomable]');
+    if (!trigger) return;
+    const img = trigger.querySelector('img');
+    if (!img) return;
+    lastTrigger = trigger;
+    openLightbox(img);
+  });
+</script>
