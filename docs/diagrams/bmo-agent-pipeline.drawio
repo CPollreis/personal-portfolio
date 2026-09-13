@@ -1,0 +1,186 @@
+<mxfile host="app.diagrams.net" version="24.7.5">
+  <diagram name="BMO Agent Pipeline" id="bmo-agent-pipeline">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2400" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <mxCell id="bg" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#1b1b20;strokeColor=none;movable=0;resizable=0;locked=1;" vertex="1" parent="1">
+          <mxGeometry x="-60" y="-120" width="2200" height="830" as="geometry" />
+        </mxCell>
+
+        <!-- Stage headers -->
+        <mxCell id="hdr_wait" value="Wait" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=20;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="20" width="180" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="hdr_listen" value="Listen" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=20;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="320" y="20" width="180" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="hdr_think" value="Think (with RAG tool loop)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=20;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="600" y="20" width="1000" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="hdr_speak" value="Speak" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=20;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1780" y="20" width="180" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Wait -->
+        <mxCell id="wait_proc" value="openWakeWord&#10;Listen for wake word" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e91e8c;strokeColor=#a10f61;fontColor=#ffffff;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="40" y="110" width="180" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="wait_out" value="&quot;Hey BMO&quot;" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fillColor=#ffd966;strokeColor=#d6a300;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="40" y="230" width="180" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Listen -->
+        <mxCell id="listen_proc" value="Whisper&#10;Transcribe speech" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e91e8c;strokeColor=#a10f61;fontColor=#ffffff;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="320" y="110" width="180" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="listen_out" value="Silence + Transcribed" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fillColor=#ffd966;strokeColor=#d6a300;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="320" y="230" width="180" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Think / RAG loop -->
+        <mxCell id="decision" value="Do I have any tools&#10;for this?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f8cbe0;strokeColor=#d6598f;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="600" y="195" width="160" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="router_model" value="gemma3:1b&#10;(router)" style="rounded=1;arcSize=50;whiteSpace=wrap;html=1;fillColor=#e8622c;strokeColor=#b84a1f;fontColor=#ffffff;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="820" y="230" width="140" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="toolbox_time" value="Time tool" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f4a300;strokeColor=#c17f00;fontColor=#ffffff;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1020" y="140" width="140" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="toolbox_camera" value="Camera tool" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f4a300;strokeColor=#c17f00;fontColor=#ffffff;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1020" y="220" width="140" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="toolbox_search" value="Search tool" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f4a300;strokeColor=#c17f00;fontColor=#ffffff;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1020" y="300" width="140" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="act_time" value="Get the system time" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#7c5cd6;strokeColor=#5b3fae;fontColor=#ffffff;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1220" y="140" width="170" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="act_camera" value="Take photo &amp;&#10;swap model" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#7c5cd6;strokeColor=#5b3fae;fontColor=#ffffff;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1220" y="220" width="170" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="act_search" value="Search Duck-Duck-Go" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#7c5cd6;strokeColor=#5b3fae;fontColor=#ffffff;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1220" y="300" width="170" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="moondream" value="moondream&#10;(vision model)" style="rounded=1;arcSize=50;whiteSpace=wrap;html=1;fillColor=#e8622c;strokeColor=#b84a1f;fontColor=#ffffff;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1220" y="400" width="170" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="internet" value="Internet" style="ellipse;whiteSpace=wrap;html=1;fillColor=#4f81bd;strokeColor=#2c5c99;fontColor=#ffffff;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1460" y="400" width="110" height="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="gen_response" value="Ollama &#183; gemma3:4b&#10;Generate response" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e91e8c;strokeColor=#a10f61;fontColor=#ffffff;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="1500" y="110" width="180" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- Speak -->
+        <mxCell id="speak_proc" value="Piper&#10;Read out response" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e91e8c;strokeColor=#a10f61;fontColor=#ffffff;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="1780" y="110" width="180" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="speak_out" value="Finished reading" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fillColor=#ffd966;strokeColor=#d6a300;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="1780" y="230" width="180" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Edges: main spine -->
+        <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#6c9bd1;strokeWidth=2;endArrow=block;" edge="1" parent="1" source="wait_proc" target="wait_out">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#6c9bd1;strokeWidth=2;endArrow=block;" edge="1" parent="1" source="wait_out" target="listen_proc">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#6c9bd1;strokeWidth=2;endArrow=block;" edge="1" parent="1" source="listen_proc" target="listen_out">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#6c9bd1;strokeWidth=2;endArrow=block;" edge="1" parent="1" source="listen_out" target="decision">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- RAG loop -->
+        <mxCell id="e5" value="route" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#6c9bd1;strokeWidth=2;endArrow=block;fontSize=11;" edge="1" parent="1" source="decision" target="router_model">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#6c9bd1;strokeWidth=2;endArrow=block;" edge="1" parent="1" source="router_model" target="toolbox_time">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#6c9bd1;strokeWidth=2;endArrow=block;" edge="1" parent="1" source="router_model" target="toolbox_camera">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e8" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#6c9bd1;strokeWidth=2;endArrow=block;" edge="1" parent="1" source="router_model" target="toolbox_search">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e9" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#6c9bd1;strokeWidth=2;endArrow=block;" edge="1" parent="1" source="toolbox_time" target="act_time">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e10" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#6c9bd1;strokeWidth=2;endArrow=block;" edge="1" parent="1" source="toolbox_camera" target="act_camera">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e11" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#6c9bd1;strokeWidth=2;endArrow=block;" edge="1" parent="1" source="toolbox_search" target="act_search">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e12" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#6c9bd1;strokeWidth=2;endArrow=block;" edge="1" parent="1" source="act_camera" target="moondream">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e13" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#6c9bd1;strokeWidth=2;endArrow=block;" edge="1" parent="1" source="act_search" target="internet">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Loop-backs into the decision node (this is the RAG retrieval loop), stacked along the bottom so the lines don't cross the tool/action boxes -->
+        <mxCell id="e14" value="time" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#999999;strokeWidth=2;endArrow=block;dashed=1;fontSize=10;exitX=0.5;exitY=1;entryX=0.3;entryY=1;" edge="1" parent="1" source="act_time" target="decision">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1305" y="560" />
+              <mxPoint x="640" y="560" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e15" value="Actions" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#999999;strokeWidth=2;endArrow=block;dashed=1;fontSize=10;exitX=0.5;exitY=1;entryX=0.5;entryY=1;" edge="1" parent="1" source="moondream" target="decision">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1305" y="595" />
+              <mxPoint x="680" y="595" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e16" value="search results" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#999999;strokeWidth=2;endArrow=block;dashed=1;fontSize=10;exitX=0.5;exitY=1;entryX=0.7;entryY=1;" edge="1" parent="1" source="internet" target="decision">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1515" y="630" />
+              <mxPoint x="720" y="630" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="e17" value="no tools needed" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#6c9bd1;strokeWidth=2;endArrow=block;fontSize=11;exitX=0.5;exitY=0;entryX=0.5;entryY=0;" edge="1" parent="1" source="decision" target="gen_response">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="680" y="90" />
+              <mxPoint x="1590" y="90" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e18" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#6c9bd1;strokeWidth=2;endArrow=block;" edge="1" parent="1" source="gen_response" target="speak_proc">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e19" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#6c9bd1;strokeWidth=2;endArrow=block;" edge="1" parent="1" source="speak_proc" target="speak_out">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Big loop back: end of Speak -> start of Wait -->
+        <mxCell id="e20" value="listening again" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#6c9bd1;strokeWidth=2;endArrow=block;fontSize=11;exitX=0.5;exitY=0;entryX=0.5;entryY=0;" edge="1" parent="1" source="speak_out" target="wait_proc">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1870" y="-40" />
+              <mxPoint x="130" y="-40" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

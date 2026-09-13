@@ -1,0 +1,78 @@
+<mxfile host="app.diagrams.net" version="24.7.5">
+  <diagram name="BMO Hardware" id="bmo-hardware">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="640" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <mxCell id="bg" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#1b1b20;strokeColor=none;movable=0;resizable=0;locked=1;" vertex="1" parent="1">
+          <mxGeometry x="0" y="0" width="980" height="580" as="geometry" />
+        </mxCell>
+
+        <mxCell id="shell" value="BMO shell" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#999999;dashed=1;verticalAlign=top;fontSize=14;fontColor=#999999;" vertex="1" parent="1">
+          <mxGeometry x="40" y="40" width="560" height="500" as="geometry" />
+        </mxCell>
+
+        <mxCell id="pi" value="Raspberry Pi 5&#10;(Ollama runtime: gemma3:4b / gemma3:1b,&#10;Whisper, Piper, openWakeWord, moondream)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=13;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="230" y="260" width="240" height="100" as="geometry" />
+        </mxCell>
+
+        <mxCell id="mic" value="USB Microphone" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e91e8c;strokeColor=#a10f61;fontColor=#ffffff;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="80" y="100" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="speaker" value="Speaker / Amp" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e91e8c;strokeColor=#a10f61;fontColor=#ffffff;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="80" y="420" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="camera" value="Pi Camera Module&#10;(CSI ribbon)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e91e8c;strokeColor=#a10f61;fontColor=#ffffff;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="270" y="90" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="storage" value="microSD / NVMe SSD&#10;(quantized model weights)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f4a300;strokeColor=#c17f00;fontColor=#ffffff;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="250" y="440" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="power" value="USB-C PD power&#10;(27W)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#7c5cd6;strokeColor=#5b3fae;fontColor=#ffffff;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="460" y="440" width="140" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wifi" value="Wi-Fi / Ethernet" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#7c5cd6;strokeColor=#5b3fae;fontColor=#ffffff;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="480" y="260" width="150" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="internet" value="Internet&#10;(DuckDuckGo search)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#4f81bd;strokeColor=#2c5c99;fontColor=#ffffff;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="740" y="120" width="150" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="tv" value="TV / Monitor&#10;(Steam streaming client)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#4f81bd;strokeColor=#2c5c99;fontColor=#ffffff;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="740" y="290" width="180" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e1" value="audio in" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#6c9bd1;strokeWidth=2;endArrow=block;fontSize=11;exitX=0.5;exitY=1;entryX=0;entryY=0.3;" edge="1" parent="1" source="mic" target="pi">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="160" y="290" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e2" value="audio out (Piper TTS)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#6c9bd1;strokeWidth=2;endArrow=block;fontSize=11;" edge="1" parent="1" source="pi" target="speaker">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" value="video frames (moondream)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#6c9bd1;strokeWidth=2;endArrow=block;fontSize=11;" edge="1" parent="1" source="camera" target="pi">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" value="model weights" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#6c9bd1;strokeWidth=2;startArrow=block;endArrow=block;fontSize=11;" edge="1" parent="1" source="pi" target="storage">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#6c9bd1;strokeWidth=2;endArrow=block;" edge="1" parent="1" source="power" target="pi">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" value="network" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#6c9bd1;strokeWidth=2;startArrow=block;endArrow=block;fontSize=11;" edge="1" parent="1" source="pi" target="wifi">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" value="search queries" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#6c9bd1;strokeWidth=2;startArrow=block;endArrow=block;fontSize=11;" edge="1" parent="1" source="wifi" target="internet">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e8" value="Steam game streaming" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#6c9bd1;strokeWidth=2;endArrow=block;fontSize=11;" edge="1" parent="1" source="wifi" target="tv">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
