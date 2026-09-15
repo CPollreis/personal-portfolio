@@ -30,10 +30,12 @@ cloud. Everything runs at home.
 
 ## The brain
 
-The core is a **quantized Qwen 3 LLM running on a Raspberry Pi 5**. Getting a
-modern language model to be useful on a Pi is a project in constraints:
-quantization, context budgeting, and deciding what the model actually needs to
-see versus what can be summarized before it ever reaches the prompt.
+The core is a **quantized Qwen3 4B Instruct model running on a Raspberry Pi
+5**, squeezed down to roughly **2GB of VRAM** with **2-bit quantization**,
+running at about **2.40 tok/s**. I initially wanted to run Qwen3 14B, but
+decided I'd rather keep VRAM headroom free for future projects than max out
+the model size, so this turned into an exercise in quantizing as aggressively
+as I could while still getting usable output.
 
 </Step>
 
@@ -41,9 +43,9 @@ see versus what can be summarized before it ever reaches the prompt.
 
 ## Hardware
 
-Everything runs on one board: the Pi 5 hosts the Ollama runtime plus Whisper,
-Piper and openWakeWord, with a USB mic and speaker for voice I/O, a CSI camera
-for vision, and Wi-Fi for search and Steam streaming.
+Everything is designed to run on one board: the Pi 5 will host the Ollama
+runtime plus Whisper, Piper and openWakeWord, with a USB mic and speaker for
+voice I/O, a CSI camera for vision, and Wi-Fi for search and Steam streaming.
 
 </Step>
 
@@ -69,10 +71,10 @@ for vision, and Wi-Fi for search and Steam streaming.
 
 ## Agent pipeline
 
-Wait, Listen, Think, Speak. The Think stage is a small tool-calling loop: a
-lightweight router model decides whether a tool is needed before the main
-model generates a response, pulling in the camera, a system-time check, or a
-DuckDuckGo search as retrieval context.
+Wait, Listen, Think, Speak. The Think stage is a small tool-calling loop: the
+same quantized model runs twice, once to decide whether a tool is needed, then
+again to generate the response, pulling in the camera, a system-time check, or
+a DuckDuckGo search as retrieval context.
 
 </Step>
 
@@ -97,9 +99,10 @@ experiments.
 
 ## Status
 
-WIP. The voice loop and local inference run today; ongoing work is tightening
-latency and making the camera context genuinely useful rather than decorative.
-It's also my personal testbed for the same question my FSAE work asks:
-how much intelligence can you run on a small computer at the edge?
+WIP. The quantized model and voice/tool loop work on my dev machine, but the
+Raspberry Pi 5 itself hasn't arrived yet, so getting it running on the actual
+target hardware is the current blocker. It's also my personal testbed for the
+same question my FSAE work asks: how much intelligence can you run on a small
+computer at the edge?
 
 </Step>
